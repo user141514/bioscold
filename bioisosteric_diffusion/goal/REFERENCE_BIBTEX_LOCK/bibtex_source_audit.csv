@@ -1,0 +1,19 @@
+citation_key,source_type,verification_method,doi_or_identifier,peer_reviewed,year_match,notes
+Zdrazil2023,journal,NAR database issue DOI,10.1093/nar/gkad1064,YES,NO,"Key=2023; publication year=2024; ChEMBL version-year convention"
+Hussain2010,journal,JCIM DOI,10.1021/ci900450m,YES,YES,MMP algorithm paper
+Griffen2011,journal,J Med Chem DOI,10.1021/jm200452d,YES,YES,MMP medicinal chemistry paper
+Patani1996,journal,Chem Rev DOI,10.1021/cr950066q,YES,YES,Classic bioisosterism review
+Wirth2012,journal,NAR DOI,10.1093/nar/gks1059,YES,NO,"Key=2012; publication year=2013; database-release convention"
+Polishchuk2020,journal,J Cheminform DOI,10.1186/s13321-020-00431-w,YES,YES,CReM toolkit
+Huang2025,journal,Manuscript reference lock,10.1016/j.medidd.2025.100231,YES,YES,NeBULA platform
+Ertl2020,journal,JCIM DOI,10.1021/acs.jcim.0c00290,YES,YES,Peer-reviewed descriptor/neural-network bioisostere paper
+Kim2025,preprint,arXiv eprint,2403.02706,NO,YES,"DeepBioisostere; retained with preprint caveat"
+Masunaga2026,journal,Springer DOI,10.1007/s11227-026-08232-y,YES,YES,GraphBioisostere
+Dwork2001,conference,WWW10 DOI,10.1145/371920.372165,YES,YES,Classic rank aggregation paper
+Cormack2009,conference,SIGIR DOI,10.1145/1571941.1572114,YES,YES,Reciprocal rank fusion
+Baell2010,journal,J Med Chem DOI,10.1021/jm901137j,YES,YES,PAINS filters
+Brenk2008,journal,ChemMedChem DOI,10.1002/cmdc.200700139,YES,YES,Brenk alerts
+Helmke2025,journal,RSC DOI,10.1039/d5md00686d,YES,YES,Off-target activity profile evidence
+Geirhos2020,journal,Nature Machine Intelligence DOI,10.1038/s42256-020-00257-z,YES,YES,Shortcut learning framework
+Pedregosa2011,journal,JMLR standard reference,JMLR 12:2825-2830,YES,YES,scikit-learn
+Landrum2026,software,RDKit website,https://www.rdkit.org/,NA,YES,"Software citation; accessed 2026-05-31"

@@ -1,0 +1,19 @@
+citation_key,reference_number,sections,context,claim_supported,status
+Zdrazil2023,1,"1;2;3.2",ChEMBL37K data source,Benchmark data provenance,VERIFIED
+Hussain2010,2,"1;2;3.2",MMP bond-cleavage rules,MMP extraction methodology,VERIFIED
+Griffen2011,3,"1;2;3.2",MMP extraction methodology,MMP extraction methodology,VERIFIED
+Patani1996,4,2,Bioisosteric replacement concept,Background,VERIFIED
+Wirth2012,5,2,SwissBioisostere database,Rule/database tool context,VERIFIED
+Polishchuk2020,6,2,CReM context-aware replacement,Rule/generation tool context,VERIFIED
+Huang2025,7,"2;5.5",NeBULA platform,Database-driven platform context,VERIFIED
+Ertl2020,8,2,Descriptor-based neural network,Learning-method context,VERIFIED
+Kim2025,9,"2;5.5",DeepBioisostere generative model,Generative-method context with preprint caveat,VERIFIED_WITH_CAVEAT
+Masunaga2026,10,"2;5.5",GraphBioisostere GNN,Learning-method context,VERIFIED
+Dwork2001,11,2,Classical Borda count,Rank aggregation background,VERIFIED
+Cormack2009,12,2,Reciprocal rank fusion,Rank fusion alternative,VERIFIED
+Baell2010,13,"2;3.2;3.7",PAINS alerts,Computational alert filters,VERIFIED
+Brenk2008,14,"2;3.2;3.7",Brenk alerts,Computational alert filters,VERIFIED
+Helmke2025,15,"2;3.7;5.4",Off-target activity profiles,Generic computational risk motivation,VERIFIED
+Geirhos2020,16,"3.5;5.3",Shortcut learning framework,Mechanistic interpretation,VERIFIED
+Pedregosa2011,17,3.4,scikit-learn library,Software implementation,VERIFIED
+Landrum2026,18,3.4,RDKit software,Molecular descriptor calculation support,VERIFIED

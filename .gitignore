@@ -1,0 +1,57 @@
+.aider*
+
+# Agent/editor state
+.claude/
+.codex/
+.idea/
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+*.pyo
+
+# Local environments and secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Logs and transient outputs
+*.log
+*.tmp
+*.bak
+
+# Large model/data artifacts
+*.onnx
+*.pth
+*.pt
+*.pkl
+*.joblib
+*.db
+*.db.gz
+*.sqlite
+*.sqlite3
+*.tar
+*.tar.gz
+*.zip
+*.rar
+*.7z
+*.parquet
+*.feather
+*.h5
+*.hdf5
+*.npy
+*.npz
+
+# Large generated data directories
+chembl_data/
+chembl_data_3d/
+chembl_data_sample/
+data/
+processed_data/
+packed_data/
+runs/
+results/
+test_data/
+golden_test_data/
+v2_result/
+qm9/

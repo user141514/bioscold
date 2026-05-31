@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+*.manifest
+*.spec
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Conda
+.conda/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Model files (large binaries)
+*.pth
+*.onnx
+*.pt
+*.bin
+*.safetensors
+*.ckpt
+
+# Data
+*.csv
+*.tsv
+!paper_s4gen_number_consistency_check.csv
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project-specific
+.claude-flow/
+.pytest_cache/

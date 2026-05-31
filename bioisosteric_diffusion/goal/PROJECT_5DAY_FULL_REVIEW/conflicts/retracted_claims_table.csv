@@ -1,0 +1,13 @@
+claim_id,original_claim,retracted_date,replacement_claim,evidence_source,risk_level
+C1,D4S28 blind 0.7120 = generalization failure,2026-05-29,"D4S28 blind failure = one-hot feature alignment BUG. Fixed blind = 0.8851.",D4S28R_FINAL_LOCK/01_alignment_bug_explanation.md,LOW
+C2,D4S30 USR shape features = breakthrough,2026-05-29,"USR provides zero net benefit (delta -0.011). Safe features alone achieve 0.906.",D4S30_shape_augmented/D4S30_AUDIT_VERDICT.md,MEDIUM
+C3,Fragment-level routing can improve scorer safety,2026-05-29,"Fragment-level routing IMPOSSIBLE: 0 val/blind old_fragment overlap. All routing strategies rejected.",D4S28R_FINAL_LOCK/03_route_rejection.md,LOW
+C4,fragment-level fallback 0.9067 = optimal,2026-05-29,"Route audit: val→blind delta r=-0.7371 (NEGATIVE). Val deltas do NOT predict blind deltas.",D4S28R_FINAL_LOCK/03_route_rejection.md,HIGH
+C5,D4S28R 82-feature set = best deployable,2026-05-29,"D4S31 77-feature set (drop prior_ranks) beats 82 features by +0.039 blind, with 590 fewer hits lost.",D4S31_FINAL_LOCK/01_ablation_findings.md,MEDIUM
+C6,All safe features are safe for generalization,2026-05-29,"Per-query rank features (5 prior_ranks) are NOT safe. They encode query-local ordering that does not transfer.",D4S31_FINAL_LOCK/03_feature_diff.md,MEDIUM
+C7,More features => better generalization,2026-05-29,"Dropping 5 features improved blind Top10 by +0.039 AND reduced lost hits from 596 to 6.",D4S31_FINAL_LOCK/02_final_metrics.md,LOW
+C8,D4S27 similarity-transfer priors can improve ranking,2026-05-29,"Max delta Top10 = 0.000000. Priors rescue 689 queries but lose 3000+. No deployable gain.",A_improve/report.md,MEDIUM
+C9,Query-level gate can route ambiguous queries,2026-05-29,"Gate AUC ~0.5. Query-level features (entropy, margin, support) cannot discriminate rescue queries.",A_improve/report.md,HIGH
+C10,D4S32 query router is deployable,2026-05-29,"Router val AUC=0.61 (too weak). Blind prediction crashed (KeyError: n_positives not in index).",D4S32_query_router/d4s32_router.py,HIGH
+C11,S4 Nature/NMI polish is the canonical manuscript,2026-05-29,"Rejected. S4GEN v2 uses S3TEXT as primary. Nature/NMI draft discarded.",routeA_paper_s4gen_general_journal_polish/MAIN_DECISION_LOG.md,MEDIUM
+C12,Current Methods section is adequate,2026-05-29,"Methods is severely incomplete. Lacks: candidate matrix definition, feature family documentation, prior_ranks removal rationale, bootstrap CI methodology, pipeline topology diagram.",This review,HIGH

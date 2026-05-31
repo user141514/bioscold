@@ -1,0 +1,23 @@
+method,split,top10,mrr,delta_vs_baseline,95ci_low,95ci_high,lost_hits,rescued,net_gain,verdict
+Baseline blend (0.95*MLP+0.05*HGB),val_eval,0.8340,0.4263,reference,-,-,-,-,-,reference
+Baseline blend (0.95*MLP+0.05*HGB),blind,0.8558,0.4842,reference,0.8499,0.8619,-,-,-,reference
+Borda(DE HGB),blind,0.8384,0.4176,-0.0174,-,-,-,-,-,fixed rank-fusion baseline
+Rank-only MLP reranker,blind,0.8402,0.4741,-0.0156,-,-,-,-,-,MRR secondary evidence
+D4S27 similarity-transfer prior,val_eval,0.8340,-,0.000000,-,-,-,-,-,FAILED - no gain
+D4S27 Oracle(blend|cont|backoff),val_eval,0.8855,-,+0.051514,-,-,-,-,-,ceiling if perfect selector existed
+D4S28 HistGB OOF (5-fold CV),val_eval,0.9374,-,+0.1034,-,-,85,1468,+1383,VALIDATED - no leakage
+D4S28 HistGB (alignment bug - INVALID),blind,0.7120,-,-0.1438,-,-,-,-,-,INVALID - feature alignment bug
+D4S28R scorer_all (fixed),blind,0.8851,-,+0.0293,0.8795,0.8904,596,987,+391,DEPLOYABLE but risky
+D4S28R cluster_route,blind,0.8591,-,+0.0033,-,-,-,-,-,REJECTED - worse than scorer_all
+D4S28R attachment_route,blind,0.8845,-,+0.0287,-,-,-,-,-,REJECTED - slightly worse than scorer_all
+D4S30 safe features only (no USR),blind,0.9059,-,+0.05,-,-,-,-,-,first verifiable blind improvement
+D4S30 safe features + USR,blind,0.8949,-,-0.011 vs safe-only,-,-,-,-,-,USR NEGATIVE contribution
+D4S31 drop prior_ranks (77 feat),blind,0.924328,-,+0.068555,0.9198303,0.9288979,101,1016,+915,BEST DEPLOYABLE; rescue/lost by query_id merge vs ScoreBlend
+D4S31 Val OOF,val_eval,0.9391,-,+0.105,-,-,-,-,-,val reference
+D4S32 query router,val,AUC=0.61,-,-,-,-,-,-,-,FAILED - too weak; blind crashed
+Oracle(DE HGB) - diagnostic bound,blind,0.8686,-,+0.0302 vs Borda,-,-,-,-,-,not a ceiling for feature-augmented models
+D4S27 cont_prior standalone,val_eval,0.6093,-,-0.2247,-,-,-,-,-,degradation
+D4S27 backoff standalone,val_eval,0.6199,-,-0.2141,-,-,-,-,-,degradation
+A4C G2 covered alert rate,workflow,0.4685,-,-,-,-,-,-,-,coverage=1.0000; Borda-only high alert
+A4C G3 covered alert rate,workflow,0.0967,-,-,-,-,-,-,-,coverage=1.0000; DE-retained moderate alert
+A4C G4 total lower-bound alert rate,workflow,0.0099,-,-,-,-,-,-,-,coverage=0.0563; covered_alert_rate=0.176; unknown_rate=0.9437

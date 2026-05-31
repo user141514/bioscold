@@ -1,0 +1,14 @@
+{
+  "outputs": {
+    "dataset_statistics": "E:\\zuhui\\bioisosteric_diffusion\\goal\\PROJECT_5DAY_FULL_REVIEW\\jcim_major_revision\\jcim_dataset_statistics.csv",
+    "full_secondary_metrics": "E:\\zuhui\\bioisosteric_diffusion\\goal\\PROJECT_5DAY_FULL_REVIEW\\jcim_major_revision\\jcim_full_secondary_metrics_with_ci.csv",
+    "paired_bootstrap_key_deltas": "E:\\zuhui\\bioisosteric_diffusion\\goal\\PROJECT_5DAY_FULL_REVIEW\\jcim_major_revision\\jcim_paired_bootstrap_key_deltas.csv",
+    "rescue_lost_bootstrap": "E:\\zuhui\\bioisosteric_diffusion\\goal\\PROJECT_5DAY_FULL_REVIEW\\jcim_major_revision\\jcim_rescue_lost_bootstrap.csv",
+    "query_level_audit": "E:\\zuhui\\bioisosteric_diffusion\\goal\\PROJECT_5DAY_FULL_REVIEW\\jcim_major_revision\\jcim_query_level_82_77_scoreblend_audit.csv"
+  },
+  "notes": [
+    "Fixed model definitions reused from D4S31 scripts; no hyperparameter tuning performed.",
+    "The 77-feature scorer remains post-audit because prior_ranks removal was prompted by blind diagnostics.",
+    "Bootstrap resamples query_id-level rows, not candidate rows."
+  ]
+}

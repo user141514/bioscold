@@ -1,0 +1,4 @@
+method,Top10,MRR,split_type
+baseline_blend,0.834019,0.426308,query-OOF
+safe_only_query_OOF,1.0,1.0,query-OOF
+safe_only_fragment_OOF,1.0,1.0,old-fragment-OOF

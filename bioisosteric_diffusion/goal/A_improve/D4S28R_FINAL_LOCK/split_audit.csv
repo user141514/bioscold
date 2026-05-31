@@ -1,0 +1,8 @@
+check,value,status
+val_candidate_count,150.0,OK
+blind_candidate_smiles_count,150.0,OK
+val_blind_candidate_overlap,150.0,NOTE: some overlap expected (same chemical space)
+train_old_fragments,8.0,OK
+val_old_fragments,8.0,OK
+old_fragment_exact_match,0.0,CLEAN: 0 exact overlap (similarity-transfer only)
+val_positive_rate,0.0107,OK (1.07% positive)

@@ -1,0 +1,4 @@
+split,candidate_rows,queries,positive_rows,unique_candidate_smiles,unique_old_fragments,unique_attachment_signatures,unique_transform_identities,candidate_per_query_min,candidate_per_query_median,candidate_per_query_max,positive_set_size_min,positive_set_size_median,positive_set_size_max,single_positive_queries,multi_positive_queries
+train,16497750,109985,181483,150,109,5,351,150,150.0,150,1,1.0,23,73870,36115
+development,2006250,13375,21408,150,8,5,27,150,150.0,150,1,1.0,17,8686,4689
+secondary_blind,2002050,13347,20082,150,19,5,63,150,150.0,150,1,1.0,10,9377,3970
