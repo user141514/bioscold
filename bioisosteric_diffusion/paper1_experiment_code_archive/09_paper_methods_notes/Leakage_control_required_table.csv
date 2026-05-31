@@ -1,0 +1,7 @@
+Layer,Mechanism,Verified
+Transform-heldout split,Partition unique (f_old,σ) pairs; zero overlap train/eval,Yes
+Feature-level,All statistics (priors/PMI/z-score) from training split only,Yes
+Categorical alignment,Frozen schema; fit on dev; unseen→OTHER; shape assertion,Yes
+Overlap verification,Zero (f_old,σ) overlap all split pairs; zero query overlap canonical/blind,Yes
+Label-free features,All 77 features computable without ground-truth labels,Yes
+One-shot protocol,Single train on dev set; apply once to blind; no iterative refinement,Yes (with post-audit caveat)

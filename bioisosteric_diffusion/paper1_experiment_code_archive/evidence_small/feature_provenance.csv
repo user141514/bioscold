@@ -1,0 +1,90 @@
+feature,verdict,note,dtype
+_tanimoto_similarity,SAFE_DEPLOYABLE,Morgan Tanimoto to nearest TRAIN old_fragment,float64
+a4c_tier_if_available_diagnostic_only,SUSPICIOUS_NEEDS_PROVENANCE,"diagnostic tier, source unclear — DO NOT USE",float64
+attachment_frequency,SAFE_DEPLOYABLE,train frequency of this attachment,float64
+attachment_signature,SAFE_DEPLOYABLE,"attachment signature, context feature",object
+backoff_logit_rank,SAFE_DEPLOYABLE,rank of backoff_logit_score within query,float64
+backoff_logit_score,SAFE_DEPLOYABLE,"cascade backoff: tP4->P3->P1, train-only stats",float64
+backoff_smoothed_rate,SAFE_DEPLOYABLE,"backoff smoothed rate, train stats",float64
+backoff_support,SAFE_DEPLOYABLE,"backoff support count, train-only",float64
+blend_rank,SAFE_DEPLOYABLE,rank of blend_score within query,int64
+blend_score,SAFE_DEPLOYABLE,"z-score blend: 0.95*z(MLP)+0.05*z(HGB), model outputs",float64
+candidate_heavy_atoms,SAFE_DEPLOYABLE,candidate heavy atom count,float64
+candidate_hetero_count,METADATA,redundant,float64
+candidate_id,METADATA,candidate identifier,int64
+candidate_in_Borda_top10,SAFE_DEPLOYABLE,rank_Borda <= 10,int64
+candidate_in_DE_top10,SAFE_DEPLOYABLE,rank_DE <= 10,int64
+candidate_in_HGB_top10,SAFE_DEPLOYABLE,rank_HGB <= 10,int64
+candidate_in_attach_top10,SAFE_DEPLOYABLE,rank_attach <= 10,int64
+candidate_logp,SAFE_DEPLOYABLE,candidate logP,float64
+candidate_mw,SAFE_DEPLOYABLE,candidate molecular weight,float64
+candidate_ring_count,METADATA,redundant with candidate_heavy_atoms,float64
+candidate_smiles,METADATA,candidate SMILES string,object
+candidate_tpsa,SAFE_DEPLOYABLE,candidate TPSA,float64
+compatibility_flag,SUSPICIOUS_NEEDS_PROVENANCE,chemical compatibility flag — likely rule-based but source unconfirmed,int64
+cont_prior_rank,SAFE_DEPLOYABLE,rank of cont_prior_score within query,float64
+cont_prior_score,SAFE_DEPLOYABLE,"continuation prior: logP(c|old,att) from train counts",float64
+delta_heavy_atoms,SAFE_DEPLOYABLE,candidate - old heavy atoms,float64
+delta_hetero_count,SAFE_DEPLOYABLE,candidate - old hetero count,float64
+delta_logp,SAFE_DEPLOYABLE,candidate - old logP,float64
+delta_mw,SAFE_DEPLOYABLE,candidate - old molecular weight,float64
+delta_ring_count,SAFE_DEPLOYABLE,candidate - old ring count,float64
+delta_tpsa,SAFE_DEPLOYABLE,candidate - old TPSA,float64
+hard_top10_miss_flag,UNSAFE_LABEL_DERIVED,baseline Top10 miss — requires labels to compute,int64
+hgb_refit_score,SAFE_DEPLOYABLE,"raw HGB refit score, model inference",float64
+hgb_z,SAFE_DEPLOYABLE,"z-scored HGB refit output, model inference",float64
+label,UNSAFE_LABEL_DERIVED,TARGET — the label being predicted,int64
+mlp_rank,SAFE_DEPLOYABLE,rank of mlp_score within query,int64
+mlp_score,SAFE_DEPLOYABLE,"raw MLP score, model inference",float64
+mlp_z,SAFE_DEPLOYABLE,"z-scored MLP output, model inference",float64
+morgan_similarity_old_candidate_if_available,SUSPICIOUS_NEEDS_PROVENANCE,"Morgan Tanimoto old-candidate — available for some entries, source unclear",float64
+multi_pos_flag,UNSAFE_LABEL_DERIVED,derived from num_positives > 1,int64
+num_positives,UNSAFE_LABEL_DERIVED,number of positive candidates in query,int64
+old_fragment_cluster_id,METADATA,cluster ID,object
+old_fragment_cluster_if_available,METADATA,cluster label,object
+old_fragment_smiles,SAFE_DEPLOYABLE,"old_fragment identity, context feature",object
+p0_logit_score,METADATA,"P0=logP(cand only), not used in prior computation",float64
+p0_positive,METADATA,"P0 positive count, not used",int64
+p0_smoothed_rate,METADATA,"P0 smoothed rate, not used",float64
+p0_support,SAFE_DEPLOYABLE,"P0 support count, train-only",int64
+p1_logit_rank,SAFE_DEPLOYABLE,rank of p1_logit within query,float64
+p1_logit_score,SAFE_DEPLOYABLE,"P1 logit: logP(c|att), train counts",float64
+p1_positive,SAFE_DEPLOYABLE,"P1 positive count, train-only",int64
+p1_smoothed_rate,SAFE_DEPLOYABLE,"P1 smoothed rate, train stats",float64
+p1_support,SAFE_DEPLOYABLE,"P1 support count, train-only",int64
+p3_logit_rank,SAFE_DEPLOYABLE,rank of p3_logit within query,float64
+p3_logit_score,SAFE_DEPLOYABLE,"P3 logit: logP(c|cluster), train counts",float64
+p3_positive,SAFE_DEPLOYABLE,"P3 positive count, train-only",int64
+p3_smoothed_rate,SAFE_DEPLOYABLE,"P3 smoothed rate, train stats",float64
+p3_support,SAFE_DEPLOYABLE,"P3 support count, train-only",int64
+pmi_p1_p0,SAFE_DEPLOYABLE,"PMI: P1 - P0 attachment lift, train stats",float64
+pmi_p1_p0_rank,SAFE_DEPLOYABLE,rank of pmi_p1_p0 within query,float64
+pmi_p3_p1,SAFE_DEPLOYABLE,"PMI: P3 - P1 cluster lift, train stats",float64
+pmi_p3_p1_rank,SAFE_DEPLOYABLE,rank of pmi_p3_p1 within query,float64
+positive_set_size,UNSAFE_LABEL_DERIVED,number of positive candidates from labels,int64
+query_id,METADATA,query identifier,object
+query_prior_entropy,SAFE_DEPLOYABLE,entropy of prior scores within query,float64
+query_prior_margin,SAFE_DEPLOYABLE,max - second_max prior score within query,float64
+query_prior_max_support,SAFE_DEPLOYABLE,max prior support within query,float64
+rank_Borda,SAFE_DEPLOYABLE,rank of score_Borda within query,int64
+rank_DE,SAFE_DEPLOYABLE,rank of score_DE within query,int64
+rank_HGB,SAFE_DEPLOYABLE,rank of score_HGB within query,int64
+rank_attach,SAFE_DEPLOYABLE,rank of score_attach within query,int64
+replacement_frequency,SAFE_DEPLOYABLE,train frequency of candidate replacing this old_fragment,float64
+replacement_frequency_bin,SAFE_DEPLOYABLE,"binned replacement_frequency, train-derived",object
+replacement_frequency_mean,SUSPICIOUS_NEEDS_PROVENANCE,mean of replacement_frequency per query — likely train-derived but aggregated at query level,float64
+score_Borda,SAFE_DEPLOYABLE,"Borda fusion score, deterministic from scores",float64
+score_DE,SAFE_DEPLOYABLE,"raw DE model score, model inference",float64
+score_HGB,SAFE_DEPLOYABLE,"raw HGB model score, model inference",float64
+score_attach,SAFE_DEPLOYABLE,"raw attach model score, model inference",float64
+single_pos_flag,UNSAFE_LABEL_DERIVED,derived from num_positives == 1,int64
+split,METADATA,dataset split,object
+t_p4_logit_rank,SAFE_DEPLOYABLE,rank of t_p4_logit within query,float64
+t_p4_logit_score,SAFE_DEPLOYABLE,"transferred P4 logit, train nearest-old proxy",float64
+t_p4_positive,SAFE_DEPLOYABLE,"P4 positive count, train-only",int64
+t_p4_smoothed_rate,SAFE_DEPLOYABLE,"P4 smoothed rate (Laplace), train stats",float64
+t_p4_support,SAFE_DEPLOYABLE,"P4 support count, train-only",int64
+t_pmi_p4_p1,SAFE_DEPLOYABLE,"PMI: transferred P4 - P1, train stats",float64
+t_pmi_p4_p1_rank,SAFE_DEPLOYABLE,rank of t_pmi_p4_p1 within query,float64
+target_all_seen_vocab,SUSPICIOUS_NEEDS_PROVENANCE,whether ALL target tokens seen in training vocab. EXCLUDE from safe-only,int64
+target_any_seen_vocab,SUSPICIOUS_NEEDS_PROVENANCE,"whether target tokens seen in MLP training vocab — model-level feature, not label-derived but correlates with difficulty. EXCLUDE from safe-only",int64

@@ -1,0 +1,23 @@
+{
+  "decision": "ALLOW_BLIND_ONESHOT",
+  "reason": "All checks passed. Safe-only query-OOF beats 0.87 threshold. Permutation test confirms no label leakage. Old-fragment-OOF generalizes, proving model learns transferable patterns. Proceed to blind one-shot evaluation.",
+  "timestamp": "2026-05-29 15:24:18",
+  "checks": {
+    "safe_query_OOF_Top10": 1.0,
+    "safe_query_OOF_threshold": 0.87,
+    "safe_query_OOF_pass": "True",
+    "safe_fragment_OOF_Top10": 1.0,
+    "safe_fragment_OOF_threshold": 0.82,
+    "safe_fragment_OOF_pass": "True",
+    "permutation_Top10": 0.145869,
+    "permutation_test_pass": "True",
+    "random_baseline_Top10": 0.101607,
+    "old_fragment_exact_overlap": 0,
+    "old_fragment_overlap_pass": true,
+    "original_HistGB_OOF_Top10": 0.937421,
+    "baseline_Top10": 0.834019
+  },
+  "allowed_next_steps": [
+    "Run blind evaluation on safe-only HistGB"
+  ]
+}

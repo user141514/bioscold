@@ -1,0 +1,26 @@
+{
+  "architecture": "D4S28R_val_routed_by_cluster_or_attachment",
+  "fragment_overlap": 0,
+  "routing_dimensions_available": [
+    "cluster",
+    "attachment"
+  ],
+  "val_derived": true,
+  "blind_label_access": 0,
+  "deployable": true,
+  "best_route": "scorer_all",
+  "best_Top10": 0.885068,
+  "best_delta": 0.029295,
+  "baseline_Top10": 0.855773,
+  "val_blind_transfer": {
+    "pearson_r": -0.7371,
+    "spearman_rho": -0.6319,
+    "sign_agreement": "4/10"
+  },
+  "limitations": [
+    "Fragments disjoint (0 overlap) \u2014 routing uses cluster+attachment proxies",
+    "Val has 6 clusters, blind has 9 \u2014 5 overlap",
+    "Val has 5 attachments, blind has 5 \u2014 all overlap",
+    "Oracle headroom remains \u2014 per-query routing could improve further"
+  ]
+}

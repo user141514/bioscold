@@ -1,0 +1,5 @@
+method,Top10,MRR,delta
+baseline_blend,0.855773,0.484199,0.0
+scorer_all_queries,0.885068,0.449253,0.029295
+fallback_fragment_level,0.906721,0.488318,0.050948
+oracle_per_query,0.929722,0.491081,0.073949

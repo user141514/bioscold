@@ -1,0 +1,8 @@
+method,Top10,MRR,delta_vs_blend
+D4S30_shape_augmented_val_OOF,0.937495,0.611498,0.103477
+D4S30_shape_augmented_blind,0.902525,0.455053,0.046752
+D4S27_blend_val,0.834019,0.426308,0.0
+D4S27_blend_blind,0.855773,0.484199,0.0
+D4S28_HistGB_val_OOF,0.937421,0.612301,0.103402
+D4S28_HistGB_blind,0.711995,0.33609,-0.143778
+USR_only_val,0.342505,0.12945,-0.491514

@@ -1,0 +1,12 @@
+dim_type,dim_val,n_val_queries,val_baseline_Top10,val_scorer_Top10,val_delta,decision
+cluster,cluster_01,1465,1.0,1.0,0.0,FALLBACK
+cluster,cluster_03,3962,0.877839,0.97577,0.09793,USE_SCORER
+cluster,cluster_05,245,1.0,1.0,0.0,FALLBACK
+cluster,cluster_06,3329,0.947432,0.995194,0.047762,USE_SCORER
+cluster,cluster_07,272,1.0,1.0,0.0,FALLBACK
+cluster,cluster_09,4102,0.619454,0.820575,0.201121,USE_SCORER
+attachment,C|C,5791,0.894319,0.975997,0.081678,USE_SCORER
+attachment,C|N,4823,0.749741,0.881194,0.131453,USE_SCORER
+attachment,C|O,2467,0.862991,0.953385,0.090393,USE_SCORER
+attachment,C|S,291,0.783505,0.927835,0.14433,USE_SCORER
+attachment,N|S,3,1.0,1.0,0.0,FALLBACK

@@ -1,0 +1,79 @@
+# Feature Table Required for Paper
+
+## Feature Schema: D4S31 Candidate-Level Scorer
+
+77 features = 82 SAFE - 5 prior_ranks
+
+| family | feature_name | type | source | note |
+|--------|-------------|------|--------|------|
+| model_scores | blend_score | float64 | MLP+HGB z-score blend | pre-D4S baseline score |
+| model_scores | mlp_z | float64 | rank-only MLP | z-normalized per query |
+| model_scores | hgb_z | float64 | HGB refit | z-normalized per query |
+| model_scores | mlp_score | float64 | rank-only MLP | raw score |
+| model_scores | hgb_refit_score | float64 | HGB refit | raw score |
+| model_raw | score_DE | float64 | Dual Encoder | cosine similarity |
+| model_raw | score_HGB | float64 | HGB | raw prediction |
+| model_raw | score_Borda | float64 | Borda(DE,HGB) | rank fusion score |
+| model_raw | score_attach | float64 | Attachment freq | P(c|att) |
+| model_ranks | mlp_rank | int | per-query rank of mlp_score | cross-query stable |
+| model_ranks | blend_rank | int | per-query rank of blend_score | cross-query stable |
+| model_ranks | rank_DE | int | per-query rank of score_DE | cross-query stable |
+| model_ranks | rank_HGB | int | per-query rank of score_HGB | cross-query stable |
+| model_ranks | rank_Borda | int | per-query rank of score_Borda | cross-query stable |
+| model_ranks | rank_attach | int | per-query rank of score_attach | cross-query stable |
+| topk_flags | candidate_in_attach_top10 | bool | attachment-freq top10 | candidate-level |
+| topk_flags | candidate_in_DE_top10 | bool | DE top10 | candidate-level |
+| topk_flags | candidate_in_HGB_top10 | bool | HGB top10 | candidate-level |
+| topk_flags | candidate_in_Borda_top10 | bool | Borda top10 | candidate-level |
+| prior_scores | cont_prior_score | float64 | continuation prior | train-only statistic |
+| prior_scores | backoff_logit_score | float64 | P4→P3→P1 backoff | train-only statistic |
+| prior_scores | t_p4_logit_score | float64 | transferred P4 | similarity-transfer, train-only |
+| prior_scores | p1_logit_score | float64 | P(c|att) prior logit | train-only statistic |
+| prior_scores | p3_logit_score | float64 | P(c|cluster) prior logit | train-only statistic |
+| prior_rates | t_p4_smoothed_rate | float64 | transferred P4 rate | smoothed, train-only |
+| prior_rates | p1_smoothed_rate | float64 | P(c|att) rate | smoothed, train-only |
+| prior_rates | p3_smoothed_rate | float64 | P(c|cluster) rate | smoothed, train-only |
+| prior_rates | backoff_smoothed_rate | float64 | backoff rate | smoothed, train-only |
+| prior_supports | t_p4_support | int | transferred P4 exposure count | train-only |
+| prior_supports | p1_support | int | P1 exposure count | train-only |
+| prior_supports | p3_support | int | P3 exposure count | train-only |
+| prior_supports | p0_support | int | P0 exposure count | train-only |
+| prior_supports | backoff_support | int | backoff exposure count | train-only |
+| prior_positives | t_p4_positive | int | transferred P4 positive count | train-only |
+| prior_positives | p1_positive | int | P1 positive count | train-only |
+| prior_positives | p3_positive | int | P3 positive count | train-only |
+| pmi_scores | t_pmi_p4_p1 | float64 | transferred PMI | logP(tP4) - logP(P1) |
+| pmi_scores | pmi_p3_p1 | float64 | cluster lift | logP(P3) - logP(P1) |
+| pmi_scores | pmi_p1_p0 | float64 | attachment lift | logP(P1) - logP(P0) |
+| pmi_ranks | t_pmi_p4_p1_rank | int | per-query rank of t_pmi | cross-query stable |
+| pmi_ranks | pmi_p3_p1_rank | int | per-query rank of pmi_p3_p1 | cross-query stable |
+| pmi_ranks | pmi_p1_p0_rank | int | per-query rank of pmi_p1_p0 | cross-query stable |
+| mol_descriptors | delta_heavy_atoms | int | candidate - old_fragment | RDKit descriptor |
+| mol_descriptors | delta_ring_count | int | candidate - old_fragment | RDKit descriptor |
+| mol_descriptors | delta_hetero_count | int | candidate - old_fragment | RDKit descriptor |
+| mol_descriptors | delta_mw | float64 | candidate - old_fragment | molecular weight delta |
+| mol_descriptors | delta_logp | float64 | candidate - old_fragment | logP delta |
+| mol_descriptors | delta_tpsa | float64 | candidate - old_fragment | TPSA delta |
+| mol_descriptors | candidate_heavy_atoms | int | candidate only | RDKit descriptor |
+| mol_descriptors | candidate_mw | float64 | candidate only | molecular weight |
+| mol_descriptors | candidate_logp | float64 | candidate only | logP |
+| mol_descriptors | candidate_tpsa | float64 | candidate only | TPSA |
+| sim_freq | _tanimoto_similarity | float64 | Morgan FP (2048-bit) | old-candidate similarity |
+| sim_freq | replacement_frequency | int | train count(c) | global replacement frequency |
+| sim_freq | attachment_frequency | int | train count(c|att) | attachment-conditioned frequency |
+| query_stats | query_prior_entropy | float64 | entropy of prior scores in query | query-level statistic |
+| query_stats | query_prior_margin | float64 | max-min prior score in query | query-level statistic |
+| query_stats | query_prior_max_support | int | max support in query | query-level statistic |
+| categorical | old_fragment_smiles | one-hot | val: 8 cats + OTHER | cat_template aligned |
+| categorical | attachment_signature | one-hot | val: 5 cats + OTHER | cat_template aligned |
+| categorical | replacement_frequency_bin | one-hot | val: 3 cats + OTHER | cat_template aligned |
+
+## DROPPED Features (prior_ranks) — NOT in final model
+
+| family | feature_name | reason_dropped |
+|--------|-------------|----------------|
+| prior_ranks | backoff_logit_rank | per-query rank; fails cross-split transfer |
+| prior_ranks | cont_prior_rank | per-query rank; fails cross-split transfer |
+| prior_ranks | t_p4_logit_rank | per-query rank; fails cross-split transfer |
+| prior_ranks | p1_logit_rank | per-query rank; fails cross-split transfer |
+| prior_ranks | p3_logit_rank | per-query rank; fails cross-split transfer |

@@ -1,0 +1,14 @@
+ablation,n_feats,blind_Top10,delta
+drop_model_ranks,76,0.869709,0.013936
+drop_model_scores,73,0.861017,0.005244
+drop_mol_props,72,0.89301,0.037237
+drop_pmi,76,0.881397,0.025624
+drop_prior_positives,79,0.903724,0.047951
+drop_prior_ranks,77,0.924328,0.068555
+drop_prior_rates,78,0.885068,0.029295
+drop_prior_scores,77,0.89241,0.036637
+drop_prior_supports,77,0.894134,0.038361
+drop_query_stats,79,0.901851,0.046078
+drop_sim_freq,79,0.864913,0.00914
+drop_topk_flags,78,0.885068,0.029295
+ALL_FEATURES,82,0.885068,0.029295
