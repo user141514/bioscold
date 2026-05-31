@@ -1,0 +1,11 @@
+# Claim Boundary Matrix
+
+| Claim | Main Evidence | Manuscript Location | Allowed Interpretation | Boundary / Caveat |
+|-------|---------------|---------------------|------------------------|-------------------|
+| Transform-heldout splitting controls transform-identity leakage | Zero overlap in transform identities across splits | Methods Tables M1-M2 | The benchmark reduces memorization of identical fragment-attachment transforms | Does not eliminate every possible chemical relatedness between splits |
+| Initial 82-feature scorer improves over Score Blend prospectively | Top-10 = 0.8851, 95% CI [0.8796, 0.8903] | Table 1; Results 4.1 | Candidate-level chemical/statistical features add blind-ranking signal | The 82-feature model also introduces more lost queries than the 77-feature post-audit model |
+| Post-audit 77-feature scorer is the strongest locked result in this draft | Top-10 = 0.9243, 95% CI [0.9199, 0.9287]; Delta vs Score Blend = +0.0686, CI [+0.0638, +0.0733] | Table 1; Results 4.1; Discussion 5.1 | Removing non-transferable prior-rank shortcuts yields a stronger locked post-selection model | Not a fully prospective pre-registered feature-selection result |
+| prior_ranks are non-transferable shortcut features | Drop prior_ranks: Delta = +0.0393, CI [+0.0354, +0.0432] vs 82-feature scorer | Table 2; Supplementary Table S4 | Sparse per-query prior ranks can harm transfer under fragment distribution shift | Mechanistic interpretation is analytical and should be prospectively replicated |
+| Borda remains a mechanism anchor | Borda improves over individual base-ranker behavior and motivates complementarity | Results 4.1; Discussion 5.3 | Borda demonstrates DE/HGB complementarity under leakage control | Borda is not the final best method |
+| A4C strata provide triage signals | G2 alert rate 46.85%; G3 9.67%; G4 sparse coverage 5.63% | Table 4; Methods 3.7; Results 4.5 | Provenance groups help organize computational alert burden | Not expert validation, not toxicity prediction, not review-safe production |
+| Structure-derived replacement labels support ranking recovery | ChEMBL MMP-derived positives and query-level Top-10 metrics | Methods 3.1-3.2; Results 4 | The task evaluates recovery of observed structural substitutions | Does not establish activity preservation or prospective bioisostere discovery |
