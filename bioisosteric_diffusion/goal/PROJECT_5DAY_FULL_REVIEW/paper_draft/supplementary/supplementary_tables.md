@@ -1,127 +1,121 @@
-# Supplementary Tables — Verified Evidence Chain
+# Supplementary Tables: Verified Evidence Chain
 
-All rescue/lost values computed by `d4s31_rescue_lost_repair.py` (query_id merge, no positional assignment). All arithmetic verified PASS.
-
----
-
-## Supplementary Table S2. Full MRR Values
-
-**Computation:** `d4s31_lockdown.py` → `qmetrics()` → `MRR` column
-**Status:** ⚠️ MRR not logged by script. Author must extract from qmetrics output or add MRR logging.
-
-| Method | MRR | Source |
-|--------|-----|--------|
-| Attachment-Frequency | [extract from qmetrics] | — |
-| HGB | [extract from qmetrics] | — |
-| Dual Encoder (DE) | [extract from qmetrics] | — |
-| Borda(DE, HGB) | 0.4176 | Paper_S6R_S7_summary.md |
-| MLP (rank-only) | 0.4741 | Paper_S6R_S7_summary.md |
-| Score Blend (MLP + HGB) | 0.4842 | Paper_S6R_S7_summary.md |
-| D4S28R (82-feature) | [extract from qmetrics] | — |
-| D4S31 (77-feature) | [extract from qmetrics] | — |
-| Oracle(DE,HGB) | 0.5433 | Paper_S6R_S7_summary.md |
+All rescue/lost values are computed by query identifier merge rather than positional assignment. The current evidence source for the JCIM-facing revision is `goal/PROJECT_5DAY_FULL_REVIEW/jcim_major_revision/`.
 
 ---
 
-## Supplementary Table S3. Rescue/Lost — query_id Merge Verified
+## Supplementary Table S2. Secondary Blind Metrics Recomputed in the JCIM Evidence Patch
 
-**Script:** `d4s31_rescue_lost_repair.py`
-**Method:** Per-query metrics via `qmetrics()` → merge on `query_id` → compute rescue/lost
-**Verification:** model_hits = ref_hits + rescue − lost for all rows.
+**Computation:** `scripts/jcim_major_revision_patch.py`; output file `jcim_full_secondary_metrics_with_ci.csv`.
 
-### S3a. D4S31 (77-feature) Against All Reference Methods
+| Method | N queries | Top-10 | 95% CI for Top-10 | MRR | 95% CI for MRR |
+|--------|----------:|-------:|------------------:|----:|---------------:|
+| Attachment-Frequency | 13,347 | 0.6019 | [0.5936, 0.6102] | 0.2858 | [0.2799, 0.2914] |
+| DE | 13,347 | 0.8055 | [0.7986, 0.8122] | 0.4174 | [0.4111, 0.4237] |
+| HGB-refit candidate score | 13,347 | 0.8624 | [0.8564, 0.8681] | 0.4662 | [0.4602, 0.4721] |
+| Borda candidate-matrix score | 13,347 | 0.8456 | [0.8391, 0.8516] | 0.4799 | [0.4737, 0.4862] |
+| Score Blend | 13,347 | 0.8558 | [0.8497, 0.8616] | 0.4842 | [0.4779, 0.4904] |
+| Initial 82-feature scorer | 13,347 | 0.8851 | [0.8796, 0.8903] | 0.4529 | [0.4472, 0.4587] |
+| Post-audit 77-feature scorer | 13,347 | 0.9243 | [0.9199, 0.9287] | 0.4769 | [0.4712, 0.4829] |
 
-N = 13,347 queries common to all references. D4S31 model hits = 12,337 (Top-10 = 0.9243).
-
-| Reference | Ref Hits | Ref Top-10 | Rescue | Lost | Net | Expected | Arithmetic |
-|-----------|----------|-----------|--------|------|-----|----------|-----------|
-| ScoreBlend | 11,422 | 0.8558 | 1,016 | 101 | +915 | 12,337 | ✓ PASS |
-| Borda(DE,HGB) | 11,286 | 0.8456 | 1,152 | 101 | +1,051 | 12,337 | ✓ PASS |
-| HGB | 11,510 | 0.8623 | 977 | 150 | +827 | 12,337 | ✓ PASS |
-| DE | 10,751 | 0.8055 | 1,754 | 168 | +1,586 | 12,337 | ✓ PASS |
-| AttFreq | 8,034 | 0.6019 | 4,748 | 445 | +4,303 | 12,337 | ✓ PASS |
-| Oracle(DE,HGB) | 12,010 | 0.8998 | 545 | 218 | +327 | 12,337 | ✓ PASS |
-| BestBase(DE+HGB+AttFreq) | 12,427 | 0.9310 | 410 | 500 | −90 | 12,337 | ✓ PASS |
-
-### S3b. D4S28R Comparison (Separate Script)
-
-D4S28R (82-feature scorer with prior_ranks) was not in the repair script feature set. From `D4S31_FINAL_LOCK/02_final_metrics.md` line 30 and verified arithmetic:
-
-| Reference | Ref Hits | Ref Top-10 | Rescue | Lost | Net | D4S28R Hits | D4S28R Top-10 |
-|-----------|----------|-----------|--------|------|-----|------------|--------------|
-| ScoreBlend | 11,422 | 0.8558 | 987 | 596 | +391 | 11,813 | 0.8851 |
-
-**Arithmetic check:** 11,422 + 987 − 596 = 11,813. 11,813/13,347 = 0.88507 ≈ 0.8851. ✓
-
-### S3c. Key Finding
-
-| Metric | D4S28R (82-feat) | D4S31 (77-feat) | Improvement |
-|--------|-----------------|-----------------|-------------|
-| Lost vs ScoreBlend | 596 | 101 | 5.9× reduction |
-| Net vs ScoreBlend | +391 | +915 | 2.3× improvement |
-| Blind Top-10 | 0.8851 | 0.9243 | +0.0392 |
-
-The prior_ranks removal both improves aggregate accuracy and substantially reduces regression against the Score Blend baseline.
+The HGB-refit and Borda candidate-matrix rows are computed from candidate-matrix score columns and are used for aligned rescue/lost diagnostics. The main paper retains the historical pre-D4S method hierarchy where Score Blend is the strongest pre-D4S baseline and the 77-feature scorer is a post-audit locked result.
 
 ---
 
-## Supplementary Table S4. Additional Ablation Families
+## Supplementary Table S3. Rescue/Lost Analysis by query_id Merge
 
-**Script:** `d4s31_ablation.py`
-**Data:** `d4s31_ablation.csv` (D4S31_FINAL_LOCK)
+**Script:** `scripts/jcim_major_revision_patch.py`; output files `jcim_rescue_lost_bootstrap.csv` and `jcim_query_level_82_77_scoreblend_audit.csv`.
 
-| Family | Count | Description | Blind Top10 | Δ from Full (82-feat) |
-|--------|-------|-------------|-------------|----------------------|
-| Full (82 features) | 82 | All F1–F9 + categorical + prior_ranks | 0.885068 | — |
-| prior_positives | 3 | Per-query count of positive prior observations | 0.903724 | +0.018651 |
-| query_stats | 3 | Per-query summary statistics of candidate score distribution | 0.901851 | +0.016778 |
+### S3a. Post-audit 77-feature scorer vs Score Blend and the initial 82-feature scorer
+
+N = 13,347 common secondary blind queries. The post-audit 77-feature scorer has 12,337 Top-10 hits (Top-10 = 0.9243).
+
+| Reference | Ref Top-10 | Rescue | Lost | Net | Net per query | 95% CI for net per query | Rescue/Lost ratio | 95% CI for ratio |
+|-----------|-----------:|-------:|-----:|----:|--------------:|-------------------------:|------------------:|-----------------:|
+| Score Blend | 0.8558 | 1,016 | 101 | +915 | +0.0686 | [+0.0638, +0.0733] | 10.06 | [8.25, 12.52] |
+| Initial 82-feature scorer | 0.8851 | 626 | 102 | +524 | +0.0393 | [+0.0354, +0.0432] | 6.14 | [5.03, 7.65] |
+
+### S3b. Initial 82-feature scorer vs Score Blend
+
+This comparison is retained to explain why the 77-feature post-audit model is preferable to the initial 82-feature scorer.
+
+| Reference | Ref hits | Ref Top-10 | Rescue | Lost | Net | 82-feature hits | 82-feature Top-10 |
+|-----------|---------:|-----------:|-------:|-----:|----:|----------------:|------------------:|
+| Score Blend | 11,422 | 0.8558 | 987 | 596 | +391 | 11,813 | 0.8851 |
+
+Arithmetic check: 11,422 + 987 - 596 = 11,813, and 11,813/13,347 = 0.8851 after rounding.
+
+### S3c. Key reliability shift
+
+| Metric | Initial 82-feature scorer | Post-audit 77-feature scorer | Change |
+|--------|--------------------------:|------------------------------:|-------:|
+| Lost queries vs Score Blend | 596 | 101 | 5.9-fold reduction |
+| Net queries vs Score Blend | +391 | +915 | 2.3-fold increase |
+| Blind Top-10 | 0.8851 | 0.9243 | +0.0393 |
+
+The post-audit prior_ranks removal improves aggregate accuracy while substantially reducing regressions against the Score Blend baseline. Because the removal was prompted by blind diagnostics, this is reported as a locked post-selection result rather than a fully prospective feature-selection claim.
 
 ---
 
-## Supplementary Table S5. Per-Fragment Top-10 (Blind, 19 Fragments)
+## Supplementary Table S4. Leave-One-Family-Out Ablation
 
-**Script:** `d4s31_lockdown.py` (lines 155–166)
-**Data:** `d4s31_blind_strata.csv` (fresh run 2026-05-30)
+**Source:** `goal/A_improve/D4S31_FINAL_LOCK/01_ablation_findings.md`; cross-checked against `scripts/jcim_major_revision_patch.py` for the paired confidence interval of the main deletion.
 
-| Fragment | n | Score Blend | D4S31 | Δ |
-|----------|---|-------------|-------|-----|
+| Feature family removed | Features removed | Description | Blind Top-10 | Δ from full 82-feature scorer | 95% CI for Δ |
+|------------------------|-----------------:|-------------|-------------:|------------------------------:|-------------:|
+| None: full 82-feature scorer | 0 | All retained feature families plus prior_ranks | 0.8851 | -- | -- |
+| prior_ranks | 5 | Per-query ranks of sparse prior scores | 0.9243 | +0.0393 | [+0.0354, +0.0432] |
+| prior_positives | 3 | Per-query counts of positive prior observations | 0.9037 | +0.0187 | not reported |
+| query_stats | 3 | Per-query summary statistics of candidate score distribution | 0.9019 | +0.0168 | not reported |
+| mol_props | 10 | Molecular property descriptors and deltas | 0.8930 | +0.0079 | not reported |
+| prior_scores | 5 | Sparse prior score transforms | 0.8924 | +0.0073 | not reported |
+| model_ranks | 6 | Base-ranker rank positions | 0.8697 | -0.0154 | not reported |
+| model_scores | 5 | Base-ranker score outputs | 0.8610 | -0.0241 | not reported |
+| sim_freq | 3 | Similarity and frequency descriptors | 0.8649 | -0.0202 | not reported |
+
+Positive Δ means that removing the family improves blind Top-10 relative to the full 82-feature scorer. Only the prior_ranks deletion has a paired bootstrap confidence interval in the current evidence lock.
+
+---
+
+## Supplementary Table S5. Per-Fragment Top-10 on the Secondary Blind Set
+
+**Source:** `goal/A_improve/D4S31_FINAL_LOCK/04_blind_strata.md` and the fresh 2026-05-30 D4S31 lockdown run.
+
+| Fragment | n | Score Blend | Post-audit 77-feature scorer | Δ |
+|----------|--:|------------:|-----------------------------:|--:|
 | *C(=O)NC | 128 | 1.0000 | 1.0000 | 0.0000 |
 | *C(=O)c1ccc(OC)cc1 | 120 | 1.0000 | 1.0000 | 0.0000 |
 | *C(=O)c1ccco1 | 104 | 0.9327 | 1.0000 | +0.0673 |
-| *C1CCCCC1 | 2244 | 0.7197 | 0.7527 | +0.0330 |
-| *CCC | 2112 | 0.8835 | 0.9044 | +0.0208 |
+| *C1CCCCC1 | 2,244 | 0.7197 | 0.7527 | +0.0330 |
+| *CCC | 2,112 | 0.8835 | 0.9044 | +0.0208 |
 | *CCCc1ccccc1 | 216 | 1.0000 | 1.0000 | 0.0000 |
 | *Cc1cccc(OC)c1 | 118 | 1.0000 | 1.0000 | 0.0000 |
 | *Cc1ccccc1Cl | 215 | 1.0000 | 1.0000 | 0.0000 |
 | *Cc1ccccc1OC | 108 | 1.0000 | 1.0000 | 0.0000 |
 | *Cc1ccccn1 | 233 | 0.5708 | 0.5708 | 0.0000 |
 | *Cc1cccnc1 | 158 | 1.0000 | 1.0000 | 0.0000 |
-| *N(C)C | 1648 | 0.6608 | 0.7379 | +0.0771 |
-| *N1CCCCC1 | 1208 | 1.0000 | 1.0000 | 0.0000 |
+| *N(C)C | 1,648 | 0.6608 | 0.7379 | +0.0771 |
+| *N1CCCCC1 | 1,208 | 1.0000 | 1.0000 | 0.0000 |
 | *Nc1ccc(C)cc1 | 234 | 1.0000 | 1.0000 | 0.0000 |
 | *OC(F)(F)F | 253 | 1.0000 | 1.0000 | 0.0000 |
 | *c1ccc(C(C)C)cc1 | 101 | 1.0000 | 1.0000 | 0.0000 |
-| *c1cccc(C)c1 | 1823 | 0.9013 | 0.9611 | +0.0598 |
+| *c1cccc(C)c1 | 1,823 | 0.9013 | 0.9611 | +0.0598 |
 | *c1ccccc1C(F)(F)F | 211 | 1.0000 | 1.0000 | 0.0000 |
-| *c1ccccc1F | 2113 | 0.9035 | 0.9304 | +0.0270 |
+| *c1ccccc1F | 2,113 | 0.9035 | 0.9304 | +0.0270 |
 
-**Summary:** All 19 fragments: D4S31 ≥ Score Blend. Zero negative Δ.
+Summary: all 19 old-fragment strata have non-negative point-estimate Δ relative to Score Blend. These are stratum-level point estimates, not separate per-fragment significance claims.
 
 ---
 
 ## Evidence Provenance
 
-| Table | Script | Run Date | Verified |
-|-------|--------|----------|----------|
-| S2 (MRR) | d4s31_lockdown.py | — | ⚠️ Needs MRR log extraction |
-| S3 (rescue/lost) | d4s31_rescue_lost_repair.py | 2026-05-30 | ✓ All 7 rows PASS |
-| S4 (extra ablation) | d4s31_ablation.py | — | ✓ Verified |
-| S5 (per-fragment) | d4s31_lockdown.py | 2026-05-30 | ✓ Verified |
-| Main Table 1 | d4s31_lockdown.py | 2026-05-30 | ✓ 0.9243, CI, delta=0.0686 |
-| Main Table 2 | d4s31_ablation.py | — | ✓ 4 rows verified |
-| Main Table 3 | d4s31_rescue_lost_repair.py | 2026-05-30 | ✓ All arithmetic PASS |
-| Main Table 4 (A4C) | d4s30_audit.py | — | ⚠️ Not re-run |
-
-### Oracle(DE,HGB) Discrepancy Note
-
-The original extracted results listed Oracle(DE,HGB) = 0.8686. The per-query repair script computes Oracle(DE,HGB) = 0.8998 (12,010/13,347 = per-query DE OR HGB Top10). The discrepancy may be due to different computation methods (per-candidate vs per-query). Author should verify which computation matches the original D4S28R/D4S31 methodology.
+| Item | Script or evidence file | Run date | Status |
+|------|-------------------------|----------|--------|
+| S2 metrics and MRR | `scripts/jcim_major_revision_patch.py` | 2026-05-31 | Verified from `jcim_full_secondary_metrics_with_ci.csv` |
+| S3 rescue/lost | `scripts/jcim_major_revision_patch.py` | 2026-05-31 | Query-id merge; bootstrap by query rows |
+| S4 ablation | `D4S31_FINAL_LOCK/01_ablation_findings.md`; `scripts/jcim_major_revision_patch.py` | 2026-05-31 | Main prior_ranks Δ has paired CI |
+| S5 per-fragment strata | `D4S31_FINAL_LOCK/04_blind_strata.md` | 2026-05-30 | Verified point-estimate table |
+| Main Table 1 | `jcim_full_secondary_metrics_with_ci.csv`; historical baseline lock for selected pre-D4S rows | 2026-05-31 | Values cross-checked in final audit |
+| Main Table 2 | `jcim_paired_bootstrap_key_deltas.csv`; `D4S31_FINAL_LOCK/01_ablation_findings.md` | 2026-05-31 | Main deletion CI verified |
+| Main Table 3 | `jcim_rescue_lost_bootstrap.csv` | 2026-05-31 | Arithmetic verified |
+| Main Table 4 | `d4s30_audit.py` evidence lock | 2026-05-31 | Coverage caveat retained |

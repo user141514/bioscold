@@ -2,7 +2,7 @@
 
 ## Abstract
 
-Matched molecular pair (MMP)-derived fragment replacement ranking is useful for studying observed substitution patterns, but random splits can leak fragment-attachment transforms and empirical priors can become shortcut features. We present a transform-heldout benchmark for closed-vocabulary scaffold-conditioned replacement ranking and a candidate-level histogram gradient-boosted scorer built from base-ranker outputs, train-derived priors, molecular descriptors, and frozen categorical features. On 13,347 secondary blind queries, the initial 82-feature scorer achieves Top-10 = 0.8851 (95% CI [0.8796, 0.8903]), improving over the Score Blend baseline by Delta = 0.0293. A post-audit feature-pruned 77-feature scorer, obtained after removing five sparse prior-rank features identified from blind diagnostics, achieves Top-10 = 0.9243 (95% CI [0.9199, 0.9287]), with a paired Top-10 gain over the 82-feature scorer of Delta = 0.0393 (95% CI [0.0354, 0.0432]) and over Score Blend of Delta = 0.0686 (95% CI [0.0638, 0.0733]). The 77-feature result is therefore a locked post-selection finding that motivates prospective replication rather than a fully prospective feature-selection result. All labels are structure-derived from ChEMBL MMPs and do not establish activity preservation; A4C provenance strata are reported only as unvalidated computational triage signals.
+Matched molecular pair (MMP)-derived fragment replacement ranking is useful for studying observed substitution patterns, but random splits can leak fragment-attachment transforms and empirical priors can become shortcut features. We present a transform-heldout benchmark for closed-vocabulary scaffold-conditioned replacement ranking and a candidate-level histogram gradient-boosted scorer built from base-ranker outputs, train-derived priors, molecular descriptors, and frozen categorical features. On 13,347 secondary blind queries, the initial 82-feature scorer achieves Top-10 = 0.8851 (95% CI [0.8796, 0.8903]), improving over the Score Blend baseline by ΔTop-10 = 0.0293. A post-audit feature-pruned 77-feature scorer, obtained after removing five sparse prior-rank features identified from blind diagnostics, achieves Top-10 = 0.9243 (95% CI [0.9199, 0.9287]), with paired gains of ΔTop-10 = 0.0393 (95% CI [0.0354, 0.0432]) over the 82-feature scorer and ΔTop-10 = 0.0686 (95% CI [0.0638, 0.0733]) over Score Blend. The 77-feature result is therefore a locked post-selection finding that motivates prospective replication rather than a fully prospective feature-selection result. All labels are structure-derived from ChEMBL MMPs and do not establish activity preservation; A4C provenance strata are reported only as unvalidated computational triage signals.
 
 ---
 
@@ -279,7 +279,7 @@ $$
 \left[ y_{ic}\log \widehat{p}_{ic} +(1-y_{ic})\log(1-\widehat{p}_{ic}) \right].
 $$
 
-We choose HistGB for three reasons: (1) mixed-type inputs (continuous, discrete, binary, one-hot) are handled natively; (2) non-linear feature interactions are captured---a high prior score with a large molecular weight delta signals a different replacement context than either alone; (3) built-in feature importance estimates support ablation without manual selection. We do not claim architectural novelty in the classifier itself; the methodological contribution is the leakage-controlled ranking setup, the audited candidate-level feature design, and the explicit separation between prospective evaluation and post-audit feature pruning.
+We choose HistGB for three reasons: (1) mixed-type inputs (continuous, discrete, binary, one-hot) are handled natively; (2) non-linear feature interactions are captured---a high prior score with a large molecular weight difference signals a different replacement context than either alone; (3) built-in feature importance estimates support ablation without manual selection. We do not claim architectural novelty in the classifier itself; the methodological contribution is the leakage-controlled ranking setup, the audited candidate-level feature design, and the explicit separation between prospective evaluation and post-audit feature pruning.
 
 #### 3.4.2 Feature Families with Audit Trail
 
@@ -391,7 +391,7 @@ $$
 = \left[\, \hat{\theta}^*_{(0.025)},\; \hat{\theta}^*_{(0.975)} \,\right]\!.
 $$
 
-For pairwise comparisons, a paired delta bootstrap is used:
+For pairwise comparisons, a paired difference bootstrap is used:
 
 $$
 \hat{\Delta}^*_b = \hat{\theta}^*_b(m) - \hat{\theta}^*_b(b),
@@ -496,7 +496,7 @@ We evaluate all methods on the secondary blind protocol (13,347 queries; Section
 
 ### 4.1 Candidate-Level Scoring Improves Blind Ranking, with a Post-Audit Upgrade
 
-Candidate-level scoring improves blind ranking over the base-ranker fusion baselines, but the evidence hierarchy differs for the 82-feature and 77-feature versions. The initial 82-feature scorer is the prospective candidate-level blind result and achieves Top-10 = 0.8851 on 13,347 secondary blind queries. The post-audit 77-feature scorer, obtained after removing prior_ranks features based on blind diagnostics, achieves Top-10 = 0.9243. It improves over the strongest pre-D4S baseline, the MLP+HGB Score Blend, by Delta = +0.0686 using unrounded query-level hit indicators, with a 95% paired bootstrap CI of [+0.0638, +0.0733]. Because the prior_ranks removal was prompted by blind-set diagnostics, the 77-feature result is reported as a locked post-selection result rather than a fully prospective feature-selection result.
+Candidate-level scoring improves blind ranking over the base-ranker fusion baselines, but the evidence hierarchy differs for the 82-feature and 77-feature versions. The initial 82-feature scorer is the prospective candidate-level blind result and achieves Top-10 = 0.8851 on 13,347 secondary blind queries. The post-audit 77-feature scorer, obtained after removing prior_ranks features based on blind diagnostics, achieves Top-10 = 0.9243. It improves over the strongest pre-D4S baseline, the MLP+HGB Score Blend, by ΔTop-10 = +0.0686 using unrounded query-level hit indicators, with a 95% paired bootstrap CI of [+0.0638, +0.0733]. Because the prior_ranks removal was prompted by blind-set diagnostics, the 77-feature result is reported as a locked post-selection result rather than a fully prospective feature-selection result.
 
 Table 1 places this result in context.
 
@@ -530,9 +530,9 @@ The strongest feature-engineering result is not an added feature family, but the
 
 ---
 
-**Table 2.** Leave-one-family-out ablation. Delta is relative to the full 82-feature configuration. Positive deltas indicate that removing the family *improves* generalization. The CI is shown for the main post-audit deletion; additional families are reported in Supplementary Table S4.
+**Table 2.** Leave-one-family-out ablation. Δ is relative to the full 82-feature configuration. Positive Δ values indicate that removing the family *improves* generalization. The CI is shown for the main post-audit deletion; additional families are reported in Supplementary Table S4.
 
-| Condition | Features Removed | Blind Top-10 | Delta from 82-feature scorer | 95% CI for Delta |
+| Condition | Features Removed | Blind Top-10 | Δ from 82-feature scorer | 95% CI for Δ |
 |-----------|-----------------:|--------------:|-----------------------------:|------------------|
 | Full 82-feature scorer | 0 | 0.8851 | -- | -- |
 | **Drop prior\_ranks (77-feature scorer)** | **5** | **0.9243** | **+0.0393** | **[+0.0354, +0.0432]** |
@@ -567,7 +567,7 @@ The 77-feature scorer gain is not only an aggregate Top-10 improvement; it also 
 
 This is a large reliability improvement over the initial 82-feature scorer. The 82-feature model rescued many baseline misses, but it also introduced 596 lost queries against Score Blend (computed in the 82-feature audit; see Supplementary Table S3). After prior_ranks removal, the 77-feature scorer reduces lost queries from 596 to 101, a 5.9x reduction, while retaining a strong positive net gain. This rescue/lost shift explains why the 77-feature model is preferable to the more aggressive 82-feature model despite using fewer features.
 
-The same conclusion appears at the stratum level: the initial 82-feature scorer degraded five secondary blind old-fragment identities and one ATT:C|S attachment stratum, whereas the post-audit 77-feature scorer has no negative point-estimate delta across the 19 old-fragment identities. The full reference-specific rescue/lost arithmetic and per-fragment values are reported in Supplementary Tables S3 and S5.
+The same conclusion appears at the stratum level: the initial 82-feature scorer degraded five secondary blind old-fragment identities and one ATT:C|S attachment stratum, whereas the post-audit 77-feature scorer has no negative point-estimate Δ across the 19 old-fragment identities. The full reference-specific rescue/lost arithmetic and per-fragment values are reported in Supplementary Tables S3 and S5.
 
 ---
 
@@ -599,7 +599,7 @@ G2 and G3 have complete A4C coverage and separate high-alert exploratory proposa
 
 ### 5.1 Principal Findings
 
-This study makes three central empirical contributions. First, under a leakage-controlled transform-heldout benchmark with 13,347 secondary blind queries, the prospective 82-feature candidate-level scorer achieves Top-10 = 0.8851, and the post-audit feature-pruned 77-feature scorer achieves Top-10 = 0.9243, improving over the Score Blend baseline by Delta = +0.0686 [95% CI: +0.0638, +0.0733] (Table 1). Second, the single most impactful feature-engineering decision is a deletion: removing five per-query prior-rank features improves blind Top-10 by +0.0393 [95% CI: +0.0354, +0.0432] over the 82-feature scorer (Table 2), an effect we trace to shortcut learning on non-transferable rank representations (Section 3.5.2). Because this deletion was identified after blind diagnostics, the ablation result is analytical rather than fully prospective. Third, beyond ranking performance, the dual-mode workflow provides a coverage-limited computational triage layer: provenance labels stratify Exploration Mode proposals by computational alert burden, with complete-coverage G2/G3 rates of 46.85% and 9.67%, while G4 remains too sparsely covered for a reliable group-wide estimate (Table 4).
+This study makes three central empirical contributions. First, under a leakage-controlled transform-heldout benchmark with 13,347 secondary blind queries, the prospective 82-feature candidate-level scorer achieves Top-10 = 0.8851, and the post-audit feature-pruned 77-feature scorer achieves Top-10 = 0.9243, improving over the Score Blend baseline by ΔTop-10 = +0.0686 [95% CI: +0.0638, +0.0733] (Table 1). Second, the single most impactful feature-engineering decision is a deletion: removing five per-query prior-rank features improves blind Top-10 by +0.0393 [95% CI: +0.0354, +0.0432] over the 82-feature scorer (Table 2), an effect we trace to shortcut learning on non-transferable rank representations (Section 3.5.2). Because this deletion was identified after blind diagnostics, the ablation result is analytical rather than fully prospective. Third, beyond ranking performance, the dual-mode workflow provides a coverage-limited computational triage layer: provenance labels stratify Exploration Mode proposals by computational alert burden, with complete-coverage G2/G3 rates of 46.85% and 9.67%, while G4 remains too sparsely covered for a reliable group-wide estimate (Table 4).
 
 The prior_ranks removal was identified during post-audit analysis after blind-set diagnostics revealed fragment-specific degradation in the initial 82-feature configuration. Under a fully prospective protocol, the initial 82-feature scorer would have been the blind-reported model, and the 77-feature configuration would require a fresh blind split or independent replication to serve as a fully prospective model-selection result. We therefore report the 77-feature scorer as a post-audit locked model in this study, not as a fully prospective pre-registered feature-selection result. The mechanistic explanation, shortcut learning driven by the 8-to-19 fragment identity shift, is independently testable because it rests on observable properties of the data and model rather than on a new fitted hyperparameter. Independent replication with a pre-registered feature set would strengthen the generality claim. The complete feature schema, training protocol, and evaluation code are provided to facilitate such replication.
 
@@ -639,7 +639,7 @@ Beyond the open-vocabulary extension and independent replication discussed above
 
 ## 6. Conclusion
 
-We introduced a leakage-controlled benchmark and a candidate-level scoring framework for closed-vocabulary scaffold-conditioned fragment replacement. The post-audit 77-feature scorer achieves Top-10 = 0.9243 on 13,347 secondary blind queries, a Delta = +0.0686 improvement over the Score Blend baseline. The central methodological finding is that the most impactful feature-engineering decision is a deletion: removing five per-query prior-rank features eliminates a non-transferable shortcut, improving blind Top-10 by +0.0393 and reducing Score Blend hit loss by 5.9x relative to the initial 82-feature scorer. Because this deletion was identified after blind diagnostics, the result should be read as a locked post-selection finding that motivates independent prospective replication. The complementary finding, that candidate-level scoring succeeds where query-level routing fails to improve deployment performance, suggests that the predictive signal resides in individual query-candidate interactions rather than in query-level summaries.
+We introduced a leakage-controlled benchmark and a candidate-level scoring framework for closed-vocabulary scaffold-conditioned fragment replacement. The post-audit 77-feature scorer achieves Top-10 = 0.9243 on 13,347 secondary blind queries, a ΔTop-10 = +0.0686 improvement over the Score Blend baseline. The central methodological finding is that the most impactful feature-engineering decision is a deletion: removing five per-query prior-rank features eliminates a non-transferable shortcut, improving blind Top-10 by +0.0393 and reducing Score Blend hit loss by 5.9x relative to the initial 82-feature scorer. Because this deletion was identified after blind diagnostics, the result should be read as a locked post-selection finding that motivates independent prospective replication. The complementary finding, that candidate-level scoring succeeds where query-level routing fails to improve deployment performance, suggests that the predictive signal resides in individual query-candidate interactions rather than in query-level summaries.
 
 The dual-mode workflow translates these ranking outputs into a practical reporting framework. By stratifying Exploration Mode proposals into provenance groups with distinct computational alert profiles, it provides a transparent triage hypothesis for downstream inspection, not a decision rule for medicinal chemistry.
 
@@ -649,27 +649,27 @@ Several limitations define the scope of these contributions. The benchmark uses 
 
 ## Data and Software Availability
 
-The analysis uses ChEMBL37K, a curated subset of ChEMBL33. The processed candidate matrices, train/development/secondary-blind split labels, query-level predictions, bootstrap resampling scripts, feature schemas, and audit tables required to reproduce the reported results will be deposited in a public repository before publication. A frozen commit hash and archival DOI will be provided upon acceptance, subject to the redistribution terms of the underlying ChEMBL-derived data.
+The analysis uses ChEMBL37K, a curated subset of ChEMBL33. A public source-code and evidence archive is available at https://github.com/user141514/paper1/tree/codex/jcim-algorithm-archive, with the curated experiment-code folder at `bioisosteric_diffusion/paper1_experiment_code_archive` and frozen commit `b750de266d6d47e63de0eeaa945cc999e6f3e08c`. The repository includes the analysis scripts, split and feature-schema documentation, query-level audit tables, bootstrap summaries, and small evidence files required to audit the reported numbers. Large processed candidate matrices and any redistribution-restricted ChEMBL-derived artifacts will be deposited or documented separately before publication, subject to the redistribution terms of the underlying ChEMBL-derived data. An archival DOI will be provided upon acceptance.
 
 ---
 
 ## References
 
-1. Zdrazil B, Felix E, Hunter F, et al. The ChEMBL Database in 2023: A Resource for Drug Discovery. *Nucleic Acids Research*, 2024; 52(D1): D1180--D1192.
-2. Hussain J, Rea C. Computationally Efficient Algorithm to Identify Matched Molecular Pairs (MMPs) in Large Data Sets. *Journal of Chemical Information and Modeling*, 2010; 50(3): 339--348.
-3. Griffen E, Leach AG, Robb GR, Warner DJ. Matched Molecular Pairs as a Medicinal Chemistry Tool. *Journal of Medicinal Chemistry*, 2011; 54(22): 7739--7750.
-4. Patani GA, LaVoie EJ. Bioisosterism: A Rational Approach in Drug Design. *Chemical Reviews*, 1996; 96(8): 3147--3176.
-5. Wirth M, Zoete V, Michielin O, Sauer WHB. SwissBioisostere: A Database of Molecular Replacements for Ligand Design. *Nucleic Acids Research*, 2013; 41(D1): D1137--D1143.
-6. Polishchuk P. CReM: Chemically Reasonable Mutations Framework for Structure Generation. *Journal of Cheminformatics*, 2020; 12(1): 28.
-7. Huang S, Wang S, Dong J, Xu M, Yuan S. NeBULA: A web-based novel drug design platform for up-to-date bioisosteric replacement. *Medicine in Drug Discovery*, 2025; 28: 100231. doi:10.1016/j.medidd.2025.100231.
-8. Ertl P. Identification of Bioisosteric Substituents by a Deep Neural Network. *Journal of Chemical Information and Modeling*, 2020; 60(7): 3369--3375. doi:10.1021/acs.jcim.0c00290.
-9. Kim H, Moon S, Zhung W, Kim S, Lim J, Kim WY. DeepBioisostere: Discovering Bioisosteres with Deep Learning for a Fine Control of Multiple Molecular Properties. *arXiv*, 2025; 2403.02706v2. Preprint; not peer-reviewed.
-10. Masunaga S, Furui K, Kengkanna A, Ohue M. GraphBioisostere: General Bioisostere Prediction Model with Deep Graph Neural Network. *The Journal of Supercomputing*, 2026; 82: 132. doi:10.1007/s11227-026-08232-y.
-11. Dwork C, Kumar R, Naor M, Sivakumar D. Rank Aggregation Methods for the Web. *Proceedings of WWW10*, 2001; 613--622.
-12. Cormack GV, Clarke CLA, Buettcher S. Reciprocal Rank Fusion Outperforms Condorcet and Individual Rank Learning Methods. *Proceedings of SIGIR*, 2009; 758--759.
-13. Baell JB, Holloway GA. New Substructure Filters for Removal of Pan Assay Interference Compounds (PAINS). *Journal of Medicinal Chemistry*, 2010; 53(7): 2719--2740.
-14. Brenk R, Schipan A, James D, et al. Lessons Learnt from Assembling Screening Libraries for Drug Discovery for Neglected Diseases. *ChemMedChem*, 2008; 3(3): 435--444.
-15. Helmke PS, Kandler J, Ilie S, Gaskin L, Ecker GF. Data-Driven Assessment of Bioisosteric Replacements and Their Influence on Off-Target Activity Profiles. *RSC Medicinal Chemistry*, 2025; 16: 6048--6058. doi:10.1039/d5md00686d.
-16. Geirhos R, Jacobsen J-H, Michaelis C, et al. Shortcut Learning in Deep Neural Networks. *Nature Machine Intelligence*, 2020; 2(11): 665--673.
-17. Pedregosa F, Varoquaux G, Gramfort A, et al. Scikit-learn: Machine Learning in Python. *Journal of Machine Learning Research*, 2011; 12: 2825--2830.
-18. Landrum G, et al. RDKit: Open-source cheminformatics software. https://www.rdkit.org/; accessed 2026-05-31.
+1. Zdrazil, B.; Felix, E.; Hunter, F.; et al. The ChEMBL Database in 2023: A Resource for Drug Discovery. *Nucleic Acids Res.* **2024**, *52* (D1), D1180-D1192. https://doi.org/10.1093/nar/gkad1064.
+2. Hussain, J.; Rea, C. Computationally Efficient Algorithm to Identify Matched Molecular Pairs (MMPs) in Large Data Sets. *J. Chem. Inf. Model.* **2010**, *50* (3), 339-348. https://doi.org/10.1021/ci900450m.
+3. Griffen, E.; Leach, A. G.; Robb, G. R.; Warner, D. J. Matched Molecular Pairs as a Medicinal Chemistry Tool. *J. Med. Chem.* **2011**, *54* (22), 7739-7750. https://doi.org/10.1021/jm200452d.
+4. Patani, G. A.; LaVoie, E. J. Bioisosterism: A Rational Approach in Drug Design. *Chem. Rev.* **1996**, *96* (8), 3147-3176. https://doi.org/10.1021/cr950066q.
+5. Wirth, M.; Zoete, V.; Michielin, O.; Sauer, W. H. B. SwissBioisostere: A Database of Molecular Replacements for Ligand Design. *Nucleic Acids Res.* **2013**, *41* (D1), D1137-D1143. https://doi.org/10.1093/nar/gks1059.
+6. Polishchuk, P. CReM: Chemically Reasonable Mutations Framework for Structure Generation. *J. Cheminform.* **2020**, *12*, 28. https://doi.org/10.1186/s13321-020-00431-w.
+7. Huang, S.; Wang, S.; Dong, J.; Xu, M.; Yuan, S. NeBULA: A Web-Based Novel Drug Design Platform for Up-to-Date Bioisosteric Replacement. *Med. Drug Discov.* **2025**, *28*, 100231. https://doi.org/10.1016/j.medidd.2025.100231.
+8. Ertl, P. Identification of Bioisosteric Substituents by a Deep Neural Network. *J. Chem. Inf. Model.* **2020**, *60* (7), 3369-3375. https://doi.org/10.1021/acs.jcim.0c00290.
+9. Kim, H.; Moon, S.; Zhung, W.; Kim, S.; Lim, J.; Kim, W. Y. DeepBioisostere: Discovering Bioisosteres with Deep Learning for a Fine Control of Multiple Molecular Properties. *arXiv* **2025**, 2403.02706v2. Preprint; not peer-reviewed.
+10. Masunaga, S.; Furui, K.; Kengkanna, A.; Ohue, M. GraphBioisostere: General Bioisostere Prediction Model with Deep Graph Neural Network. *J. Supercomput.* **2026**, *82*, 132. https://doi.org/10.1007/s11227-026-08232-y.
+11. Dwork, C.; Kumar, R.; Naor, M.; Sivakumar, D. Rank Aggregation Methods for the Web. In *Proceedings of WWW10*; 2001; pp 613-622.
+12. Cormack, G. V.; Clarke, C. L. A.; Buettcher, S. Reciprocal Rank Fusion Outperforms Condorcet and Individual Rank Learning Methods. In *Proceedings of SIGIR*; 2009; pp 758-759.
+13. Baell, J. B.; Holloway, G. A. New Substructure Filters for Removal of Pan Assay Interference Compounds (PAINS). *J. Med. Chem.* **2010**, *53* (7), 2719-2740. https://doi.org/10.1021/jm901137j.
+14. Brenk, R.; Schipani, A.; James, D.; et al. Lessons Learnt from Assembling Screening Libraries for Drug Discovery for Neglected Diseases. *ChemMedChem* **2008**, *3* (3), 435-444. https://doi.org/10.1002/cmdc.200700139.
+15. Helmke, P. S.; Kandler, J.; Ilie, S.; Gaskin, L.; Ecker, G. F. Data-Driven Assessment of Bioisosteric Replacements and Their Influence on Off-Target Activity Profiles. *RSC Med. Chem.* **2025**, *16*, 6048-6058. https://doi.org/10.1039/d5md00686d.
+16. Geirhos, R.; Jacobsen, J.-H.; Michaelis, C.; et al. Shortcut Learning in Deep Neural Networks. *Nat. Mach. Intell.* **2020**, *2* (11), 665-673. https://doi.org/10.1038/s42256-020-00257-z.
+17. Pedregosa, F.; Varoquaux, G.; Gramfort, A.; et al. Scikit-Learn: Machine Learning in Python. *J. Mach. Learn. Res.* **2011**, *12*, 2825-2830.
+18. Landrum, G.; et al. RDKit: Open-Source Cheminformatics Software. https://www.rdkit.org/ (accessed 2026-05-31).
