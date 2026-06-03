@@ -1,0 +1,49 @@
+﻿# V5/Fresh Blind2 Evidence-Lock Manifest
+
+Tag: `v5-fresh-blind2-evidence-lock-20260603`
+Generated: 2026-06-03
+
+This manifest freezes the submission-facing manuscript package and the key V5/Fresh Blind2 evidence files by path and SHA256 hash. Large processed row-score matrices remain referenced by their evidence-directory paths and should be deposited separately if required by the journal or archive policy.
+
+| Path | SHA256 | Size bytes |
+|---|---:|---:|
+| goal/PROJECT_5DAY_FULL_REVIEW/jcim_submission_candidate/main_manuscript.md | 2DC1570806B9C62B29FB3A1FC54D283BE6FEF014A50EE41E3B305A86BBDFB3E7 | 61621 |
+| goal/PROJECT_5DAY_FULL_REVIEW/jcim_submission_candidate/manuscript_v6_aligned.md | 2DC1570806B9C62B29FB3A1FC54D283BE6FEF014A50EE41E3B305A86BBDFB3E7 | 61621 |
+| goal/PROJECT_5DAY_FULL_REVIEW/jcim_submission_candidate/abstract_v6.md | 787DE945D914AA6007E4D4A98210EAA184AA4A364BF7607FDE3FCE52B70AF09F | 1328 |
+| goal/PROJECT_5DAY_FULL_REVIEW/jcim_submission_candidate/supporting_information.md | FB01B37745158634F2A493B2443C3D88C943704EBC589446B39685C28785FDF7 | 21405 |
+| goal/PROJECT_5DAY_FULL_REVIEW/jcim_submission_candidate/data_availability_v6.md | 45C951C4C0271586F7CF26D0682F41B051BB8CA76CF0D5566A4990F0C40CC583 | 1603 |
+| goal/PROJECT_5DAY_FULL_REVIEW/jcim_submission_candidate/final_alignment_checklist.md | 09CBDB369577167477A42FB400B4F7A961FDCEC27A3117E2967734B2617AE86C | 4174 |
+| goal/PROJECT_5DAY_FULL_REVIEW/jcim_submission_candidate/final_blockers.md | 484DB8096260EC08C0D58231F127EA7E4A4CFA2C9B4023803334C0FDD336F862 | 1575 |
+| goal/PROJECT_5DAY_FULL_REVIEW/jcim_submission_candidate/supplement_cross_reference_audit.md | B906591287596C7A77A8A66A9FA93D12907E99AE37104622A57EFBD78A82F215 | 3250 |
+| goal/PROJECT_5DAY_FULL_REVIEW/jcim_submission_candidate/CLAIM_MAP_V5.md | 92E9754ACD757B0E1077A83584F7A6B96DA90E501E26C3489E340FA6867BEDF7 | 2807 |
+| goal/PROJECT_5DAY_FULL_REVIEW/jcim_submission_candidate/V6_SUPPLEMENT_CROSSREF_AUDIT.md | 20890BD407CDC7FB44D513AD641DEDA2DE2604A8271004D6074783CC1BD08C84 | 2516 |
+| goal/PROJECT_5DAY_FULL_REVIEW/jcim_submission_candidate/citation_audit_2025_2026.md | 75A9FCE01012D19F3AAEADCDBC78FB8E21CAE0C835D65D5580CC2A904B6B6432 | 2445 |
+| goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments/pre_registration/Blind2_pre_registration_LOCK_TEMPLATE.md | 29E9208A7D7510ABBD6BE4D7C17AF8BB93316957351C28E2313833A3A02662FD | 2756 |
+| goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments/FINAL_TWELVE_EXPERIMENT_VERDICT.md | 01E594092889D45670F7A7CBBFC8788DC00717683F18D21B67BA4E18860C2409 | 7560 |
+| goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments/runs/E1_blind2_b0_manifest_adapter/Blind2_b0_style_manifest_summary.csv | D37D971ABDAD2690E52A1DA8E2C5EA05A27F3345745E59E3F5B74457AF534CEA | 715 |
+| goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments/runs/E1_blind2_b0_manifest_adapter/Blind2_b0_style_leakage_audit.csv | B79733363C9AF6CBCC55035899689081E3F78CBCDBB58E39FD7DAD8B21C04848 | 168 |
+| goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments/runs/E1_blind2_82_77_candidate_scorer/full_train2_vocab161/E1_blind2_82_77_candidate_scorer_REPORT.md | F8123C470356CFB7EB458B181CF88E43F5527E46AED84D9DEEEDE2980D6F4FD9 | 2878 |
+| goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments/runs/E1_blind2_82_77_candidate_scorer/full_train2_vocab161/blind2_82_77_final_metrics.csv | 6AFEA9FFF9CA17E37ABAE4ED1F8D34DF8986933325353B15CA3A0C14ADC6EF62 | 1436 |
+| goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments/runs/E1_blind2_82_77_candidate_scorer/full_train2_vocab161/blind2_82_77_query_bootstrap.csv | 1F322659F437C49D665DFD358BF6723629C7583A10E2F1F26F497FE7B7F98C6F | 1066 |
+| goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments/runs/E1_blind2_grouped_uncertainty/full_train2_vocab161/E1_blind2_grouped_uncertainty_REPORT.md | 00E2A2E95D443FE69FF0E868E56AA5808987D11C364F6CDAD14464FFD2FD6EA8 | 5702 |
+| goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments/runs/E1_blind2_grouped_uncertainty/full_train2_vocab161/blind2_grouped_uncertainty.csv | DB781BEA15E7AB59F718204FA89D5B328AFF81AB9608696BA035DE8FC1065EC2 | 8540 |
+| goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments/runs/E2_blind2_attachment_compatibility_sensitivity/full_train2_vocab161/E2_blind2_attachment_compatibility_REPORT.md | 6A3A2C21943A1BA24BF1227956A3B0601018BF17B75D667210E40078233418E6 | 8455 |
+| goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments/runs/E2_blind2_attachment_compatibility_sensitivity/full_train2_vocab161/E2_blind2_attachment_compatibility_coverage.csv | C22348C73110B0C535DDDC8FEAC557ED120AE2A32AD152C8A673D95CDD74AC30 | 603 |
+| goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments/runs/E2_blind2_attachment_compatibility_sensitivity/full_train2_vocab161/E2_blind2_attachment_compatibility_metrics.csv | BF78B8F9AA76EDCE01E8AE098BA9DAF5EEB60E6688EB453B9261A2026F900834 | 2250 |
+| goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments/runs/E9_blind2_lambdarank_categorical/full_train2_vocab161/E9_blind2_lambdarank_categorical_REPORT.md | FE78A733738039E5257C17D7B30A43887365C43A7BBDBCCA915625B6EFB343A1 | 2884 |
+| goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments/runs/E9_blind2_lambdarank_categorical/full_train2_vocab161/E9_blind2_lambdarank_categorical_metrics.csv | A7586B3A80B26862F99D8F55EA0AEDE75490D990507D33CAAF03569F1DCC32A8 | 1063 |
+| goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments/runs/E9_blind2_lambdarank_categorical_grouped_uncertainty/full_train2_vocab161/E9_lambdarank_categorical_grouped_uncertainty_REPORT.md | 9CE691E6C127CB0391A0D6498D019695D32F6A38EA8A683C89A40BF785EE2618 | 5251 |
+| goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments/runs/E6_activity_reranking_diagnostic/E6_activity_reranking_diagnostic_REPORT.md | 0B5EFD632DF1927B83C29AFC68FAE4B97FB597F0187A4558B861FB76E754C615 | 4164 |
+| goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments/runs/E6_activity_reranking_diagnostic/E6_activity_reranking_metrics.csv | 0D6B11AEF5E2A52FE0B873A7041CF577A48902A7111D286E82F2912CCCB9B47F | 2623 |
+| goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments/runs/E12_calibration_sanity/E12_calibration_sanity_REPORT.md | FCB38EE792A7DA9B4742487FCF42DC6AAB312FC649C951631DD1216975F4D413 | 2659 |
+| goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments/runs/E12_calibration_sanity/E12_calibration_metrics.csv | 0FA9A894E0296F9A80365506C439833A8F3CC621A2AE1D5AE61EAB7BF4765587 | 815 |
+
+## Evidence Directory Summary
+
+- Directory: `goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments`
+- File count: 328
+- Total size bytes: 4814157785
+
+## Claim Boundary
+
+This lock supports the V6 benchmark-audit manuscript framing: Fresh Blind2 is the primary prospective evaluation; HistGB82 is the primary prospective Top-10 HistGB result; HistGB77 is a no-prior-rank diagnostic comparator; A4C, activity-comparable reranking, calibration, and LambdaRankCat remain supplementary or future-direction diagnostics.

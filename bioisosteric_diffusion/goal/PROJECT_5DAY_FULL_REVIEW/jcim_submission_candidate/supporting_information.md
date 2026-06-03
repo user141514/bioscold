@@ -2,86 +2,137 @@
 
 ## Leakage-Controlled Closed-Vocabulary Fragment Replacement Ranking with Candidate-Level Scoring
 
-This Supporting Information file contains the verified metric, rescue/lost, ablation, and per-fragment tables cited by the main manuscript. It is intended for ACS/JCIM submission as Supporting Information for Publication.
+This Supporting Information file accompanies the V6 manuscript. It preserves the evidence hierarchy used in the main text: Fresh Blind2 is the primary prospective evaluation; original secondary-blind results are diagnostic history; A4C, activity-comparable reranking, calibration, and categorical-schema checks are workflow or boundary diagnostics only.
 
-## Table Directory
+## Directory
 
-- Supplementary Table S2. Secondary blind metrics recomputed in the JCIM evidence patch.
-- Supplementary Table S3. Rescue/lost analysis by query_id merge.
-- Supplementary Table S4. Leave-one-family-out ablation.
-- Supplementary Table S5. Per-fragment Top-10 on the secondary blind set.
+### Supplementary Methods
 
-## Notes on Evidence Boundaries
+- **SM1.** ChEMBL37K curation, MMP extraction, and candidate-vocabulary construction.
+- **SM2.** A4C provenance and alert annotation scope.
+- **SM3.** Activity-comparable reranking diagnostic.
+- **SM4.** Calibration sanity diagnostic.
+- **SM5.** Candidate-matrix sensitivity diagnostic.
+- **SM6.** Frozen categorical schema alignment.
 
-Supplementary Table S4 reports a paired confidence interval only for the main post-audit prior_ranks deletion; the other leave-one-family-out rows are point estimates. Supplementary Table S5 reports per-fragment point estimates and should not be read as a set of per-fragment significance claims.
+### Supplementary Tables
 
----
+- **Supplementary Table S1.** Original secondary-blind 82/77 comparison, retained as diagnostic history.
+- **Supplementary Table S2.** Original secondary-blind Top-10 hierarchy used for diagnostic context.
+- **Supplementary Table S3.** Rescue/lost analysis for the original secondary-blind audit.
+- **Supplementary Table S4.** Original secondary-blind leave-one-family-out ablation.
+- **Supplementary Table S5.** Original secondary-blind per-fragment Top-10 point estimates.
+- **Supplementary Table S6.** Random/permissive split stress test for locked standalone base rankers.
+- **Supplementary Table S7.** Fresh Blind2 grouped uncertainty analysis.
+- **Supplementary Table S8.** Fresh Blind2 candidate-matrix sensitivity.
+- **Supplementary Table S9.** A4C workflow annotation summary.
+- **Supplementary Table S10.** Activity-comparable reranking boundary diagnostic.
+- **Supplementary Table S11.** Calibration sanity boundary diagnostic.
 
-# Supplementary Tables: Verified Evidence Chain
+### Supplementary Figures
 
-All rescue/lost values are computed by query identifier merge rather than positional assignment. The current evidence source for the JCIM-facing revision is `goal/PROJECT_5DAY_FULL_REVIEW/jcim_major_revision/`.
+- **Supplementary Figure S3.** Original secondary-blind fragment-level Top-10 deltas before and after post-audit prior-rank pruning.
+- **Supplementary Figure S4.** Frozen categorical schema alignment audit.
+- **Supplementary Figure S5.** Original secondary-blind prior-ranks mechanism audit.
 
----
-
-## Supplementary Table S2. Secondary Blind Metrics Recomputed in the JCIM Evidence Patch
-
-**Computation:** `scripts/jcim_major_revision_patch.py`; output file `jcim_full_secondary_metrics_with_ci.csv`.
-
-| Method | N queries | Top-10 | 95% CI for Top-10 | MRR | 95% CI for MRR |
-|--------|----------:|-------:|------------------:|----:|---------------:|
-| Attachment-Frequency | 13,347 | 0.6019 | [0.5936, 0.6102] | 0.2858 | [0.2799, 0.2914] |
-| DE | 13,347 | 0.8055 | [0.7986, 0.8122] | 0.4174 | [0.4111, 0.4237] |
-| HGB-refit candidate score | 13,347 | 0.8624 | [0.8564, 0.8681] | 0.4662 | [0.4602, 0.4721] |
-| Borda candidate-matrix score | 13,347 | 0.8456 | [0.8391, 0.8516] | 0.4799 | [0.4737, 0.4862] |
-| Score Blend | 13,347 | 0.8558 | [0.8497, 0.8616] | 0.4842 | [0.4779, 0.4904] |
-| Initial 82-feature scorer | 13,347 | 0.8851 | [0.8796, 0.8903] | 0.4529 | [0.4472, 0.4587] |
-| Post-audit 77-feature scorer | 13,347 | 0.9243 | [0.9199, 0.9287] | 0.4769 | [0.4712, 0.4829] |
-
-The HGB-refit and Borda candidate-matrix rows are computed from candidate-matrix score columns and are used for aligned rescue/lost diagnostics. The main paper retains the historical pre-D4S method hierarchy where Score Blend is the strongest pre-D4S baseline and the 77-feature scorer is a post-audit locked result.
+Figures S3--S5 are retained as diagnostic history. No Supplementary Figure is used to claim that the 77-feature no-prior-rank configuration prospectively improves Top-10 on Fresh Blind2.
 
 ---
 
-## Supplementary Table S3. Rescue/Lost Analysis by query_id Merge
+# Supplementary Methods
 
-**Script:** `scripts/jcim_major_revision_patch.py`; output files `jcim_rescue_lost_bootstrap.csv` and `jcim_query_level_82_77_scoreblend_audit.csv`.
+## SM1. ChEMBL37K Curation, MMP Extraction, and Candidate-Vocabulary Construction
 
-### S3a. Post-audit 77-feature scorer vs Score Blend and the initial 82-feature scorer
+ChEMBL37K is a curated ChEMBL33-derived molecular collection used to construct structure-derived replacement labels. Molecules are standardized before matched molecular pair extraction by salt stripping, stereochemistry normalization, quality filtering, and removal of molecules failing the PAINS/Brenk construction filters used in the benchmark pipeline. Fragment candidates outside the molecular-weight range 15--250 Da are excluded from the replacement vocabulary.
 
-N = 13,347 common secondary blind queries. The post-audit 77-feature scorer has 12,337 Top-10 hits (Top-10 = 0.9243).
+Matched molecular pairs are generated by applying retrosynthetic bond-cleavage rules to acyclic single bonds. Each molecule is decomposed into scaffold--fragment pairs; two molecules sharing the same scaffold context but differing in one substituent fragment define an observed structure-derived replacement. The query-side transform key used for split control is `(old fragment, attachment signature)`, not the full replacement triple `(old fragment, attachment signature, replacement)`.
 
-| Reference | Ref Top-10 | Rescue | Lost | Net | Net per query | 95% CI for net per query | Rescue/Lost ratio | 95% CI for ratio |
-|-----------|-----------:|-------:|-----:|----:|--------------:|-------------------------:|------------------:|-----------------:|
-| Score Blend | 0.8558 | 1,016 | 101 | +915 | +0.0686 | [+0.0638, +0.0733] | 10.06 | [8.25, 12.52] |
-| Initial 82-feature scorer | 0.8851 | 626 | 102 | +524 | +0.0393 | [+0.0354, +0.0432] | 6.14 | [5.03, 7.65] |
+Duplicate replacement observations are collapsed at the query/candidate level before candidate-matrix construction. For the original secondary-blind diagnostic matrix, each query is evaluated against a fixed 150-row closed vocabulary. For Fresh Blind2, each query is evaluated against the full Train2-derived 161-fragment vocabulary. The attachment signature is retained as query context and feature input in the full-vocabulary policy; Train2-observed attachment-subset analyses are reported only as candidate-matrix sensitivity diagnostics.
 
-### S3b. Initial 82-feature scorer vs Score Blend
+The exact preprocessing scripts and feature-schema files are included in the V5/Fresh Blind2 evidence archive. This Supplementary Methods section records the audit fields needed for reviewer interpretation and does not introduce additional performance claims beyond the main manuscript.
 
-This comparison is retained to explain why the 77-feature post-audit model is preferable to the initial 82-feature scorer.
+## SM2. A4C Provenance and Alert Annotation Scope
 
-| Reference | Ref hits | Ref Top-10 | Rescue | Lost | Net | 82-feature hits | 82-feature Top-10 |
-|-----------|---------:|-----------:|-------:|-----:|----:|----------------:|------------------:|
-| Score Blend | 11,422 | 0.8558 | 987 | 596 | +391 | 11,813 | 0.8851 |
+A4C annotations are workflow-level computational triage annotations. They are not used for fitting, feature selection, ranking claims, activity validation, safety scoring, or medicinal-chemistry validation. Construction-time PAINS/Brenk filtering is a benchmark-vocabulary quality-control step; A4C annotations are post-ranking proposal/provenance annotations and should not be interpreted as alert rates for an unfiltered replacement catalogue.
 
-Arithmetic check: 11,422 + 987 - 596 = 11,813, and 11,813/13,347 = 0.8851 after rounding.
+The provenance groups are interpreted as follows:
 
-### S3c. Key reliability shift
+- **G2.** Borda-emergent provenance group requiring downstream review.
+- **G3.** DE-elevated provenance group.
+- **G4.** Shared HGB/Borda provenance group with insufficient A4C coverage for group-level alert estimation.
 
-| Metric | Initial 82-feature scorer | Post-audit 77-feature scorer | Change |
-|--------|--------------------------:|------------------------------:|-------:|
-| Lost queries vs Score Blend | 596 | 101 | 5.9-fold reduction |
-| Net queries vs Score Blend | +391 | +915 | 2.3-fold increase |
-| Blind Top-10 | 0.8851 | 0.9243 | +0.0393 |
+Because G4 has sparse coverage, its covered-subset alert rate is not a group-wide estimate. A4C remains supplementary-only in the V6 manuscript.
 
-The post-audit prior_ranks removal improves aggregate accuracy while substantially reducing regressions against the Score Blend baseline. Because the removal was prompted by blind diagnostics, this is reported as a locked post-selection result rather than a fully prospective feature-selection claim.
+## SM3. Activity-Comparable Reranking Diagnostic
+
+The activity-comparable diagnostic links structure-derived positives to same-assay activity-comparable pairs when their `(old fragment, attachment signature, replacement)` key appears in a current secondary-blind candidate context. It is retrospective and structure-conditioned. It does not define the model target, does not validate activity preservation, and does not support biological or wet-lab claims.
+
+The diagnostic is used only to verify the boundary stated in the main text: activity-comparable positives can be linked and ranked, but degraded activity pairs can also receive high ranks.
+
+## SM4. Calibration Sanity Diagnostic
+
+The calibration audit regenerates fixed 82-feature and 77-feature HistGB outputs under the existing development/calibration-trained protocol and evaluates whether raw classifier outputs can be interpreted as calibrated probabilities. The audit is not a new model and does not change the primary ranking metrics.
+
+The calibration verdict is that raw HistGB outputs should be interpreted as ranking scores, not calibrated probabilities. The V6 manuscript therefore uses "ranking score" language and avoids absolute score-to-outcome claims.
+
+## SM5. Candidate-Matrix Sensitivity Diagnostic
+
+The Fresh Blind2 primary policy uses the full Train2-derived 161-fragment vocabulary. Candidate-matrix sensitivity analyses evaluate Train2-observed attachment subsets and a positive-forced attachment-subset variant. These analyses distinguish ranking quality from candidate-coverage effects. They do not establish robustness to every possible full-compatible, fixed-300, external, or hard-negative candidate universe.
+
+## SM5a. Overlap Count Convention
+
+Overlap counts in main-text Table 3 are unique-key overlaps under the manuscript's current overlap-definition convention. The query-side transform key is `(old fragment, attachment signature)`, and the full old-to-replacement key is the unique triple `(old fragment, attachment signature, replacement)`. These counts are not candidate-row-level overlaps; row-level audit counts from earlier internal artifacts are therefore not interchangeable with the Table 3 values.
+
+## SM6. Frozen Categorical Schema Alignment
+
+Categorical features are encoded with a frozen schema fitted on the development/calibration set. Observed categories and column order are recorded; unseen blind categories are mapped to a reserved OTHER category; and the blind feature matrix is forced to match the development schema before prediction. Shape assertions are used before inference. This is an implementation-alignment safeguard, not a scientific result.
 
 ---
 
-## Supplementary Table S4. Leave-One-Family-Out Ablation
+# Supplementary Tables
 
-**Source:** `goal/A_improve/D4S31_FINAL_LOCK/01_ablation_findings.md`; cross-checked against `scripts/jcim_major_revision_patch.py` for the paired confidence interval of the main deletion.
+## Supplementary Table S1. Original Secondary-Blind 82/77 Comparison Retained as Diagnostic History
 
-| Feature family removed | Features removed | Description | Blind Top-10 | Δ from full 82-feature scorer | 95% CI for Δ |
-|------------------------|-----------------:|-------------|-------------:|------------------------------:|-------------:|
+The original secondary-blind comparison is retained to document the post-audit origin of the no-prior-rank 77-feature configuration. It is not the primary prospective result in the V6 manuscript.
+
+| Quantity | Value | 95% CI | Evidence role |
+|---|---:|---:|---|
+| Initial 82-feature scorer Top-10 | 0.8851 | [0.8796, 0.8903] | prospective result on the original secondary-blind evaluation |
+| Post-audit 77-feature scorer Top-10 | 0.9243 | [0.9199, 0.9287] | post-audit diagnostic history |
+| 77-feature minus 82-feature Top-10 | +0.0393 | [0.0354, 0.0432] | post-selection diagnostic, not Fresh Blind2 replication |
+
+## Supplementary Table S2. Original Secondary-Blind Top-10 Hierarchy Used for Diagnostic Context
+
+These values are retained as original secondary-blind context. They are not the primary V6 performance table.
+
+| Method | Top-10 | 95% CI | Evidence role |
+|---|---:|---:|---|
+| Attachment-Frequency | 0.6019 | [0.5933, 0.6104] | baseline |
+| HGB | 0.7437 | [0.7356, 0.7516] | base ranker |
+| Dual Encoder (DE) | 0.8055 | [0.7986, 0.8122] | base ranker |
+| Borda(DE,HGB) | 0.8384 | [0.8321, 0.8447] | fusion baseline |
+| MLP (rank-only) | 0.8402 | [0.8339, 0.8466] | fusion baseline |
+| Score Blend (MLP + HGB) | 0.8558 | [0.8495, 0.8621] | strongest pre-candidate baseline |
+| Initial 82-feature scorer | 0.8851 | [0.8796, 0.8903] | original prospective candidate-level result |
+| Post-audit 77-feature scorer | 0.9243 | [0.9199, 0.9287] | post-audit diagnostic history |
+
+## Supplementary Table S3. Rescue/Lost Analysis for the Original Secondary-Blind Audit
+
+The rescue/lost audit is retained as diagnostic history explaining why the original no-prior-rank deletion was investigated. It does not override the Fresh Blind2 non-replication result.
+
+| Comparison | Rescue | Lost | Net | Ratio / note |
+|---|---:|---:|---:|---|
+| 77-feature scorer vs Score Blend | 1,016 | 101 | +915 | Rescue/lost ratio 10.06 [8.25, 12.52] |
+| 77-feature scorer vs initial 82-feature scorer | 626 | 102 | +524 | Rescue/lost ratio 6.14 [5.03, 7.65] |
+| Initial 82-feature scorer lost vs Score Blend | -- | 596 | -- | Original secondary-blind diagnostic |
+| 77-feature scorer lost vs Score Blend | -- | 101 | -- | 5.9-fold fewer lost queries than initial 82-feature scorer |
+
+## Supplementary Table S4. Original Secondary-Blind Leave-One-Family-Out Ablation
+
+Positive Delta means that removing the feature family improves Top-10 relative to the full 82-feature scorer on the original secondary-blind audit. Only the prior_ranks deletion has a paired confidence interval in the current lock.
+
+| Feature family removed | Features removed | Description | Blind Top-10 | Delta from full 82-feature scorer | 95% CI for Delta |
+|---|---:|---|---:|---:|---:|
 | None: full 82-feature scorer | 0 | All retained feature families plus prior_ranks | 0.8851 | -- | -- |
 | prior_ranks | 5 | Per-query ranks of sparse prior scores | 0.9243 | +0.0393 | [+0.0354, +0.0432] |
 | prior_positives | 3 | Per-query counts of positive prior observations | 0.9037 | +0.0187 | not reported |
@@ -92,49 +143,138 @@ The post-audit prior_ranks removal improves aggregate accuracy while substantial
 | model_scores | 5 | Base-ranker score outputs | 0.8610 | -0.0241 | not reported |
 | sim_freq | 3 | Similarity and frequency descriptors | 0.8649 | -0.0202 | not reported |
 
-Positive Δ means that removing the family improves blind Top-10 relative to the full 82-feature scorer. Only the prior_ranks deletion has a paired bootstrap confidence interval in the current evidence lock.
+## Supplementary Table S5. Original Secondary-Blind Per-Fragment Top-10 Point Estimates
+
+These are point estimates by old-fragment stratum and should not be read as separate per-fragment significance claims.
+
+| Fragment | n | Score Blend | Initial 82-feature scorer | Post-audit 77-feature scorer | Delta 77 vs Score Blend | Delta 77 vs 82 |
+|---|---:|---:|---:|---:|---:|---:|
+| *CCC | 2,112 | 0.8835 | 0.8987 | 0.8930 | +0.0095 | -0.0057 |
+| *c1ccccc1F | 2,113 | 0.9035 | 0.9612 | 0.9579 | +0.0544 | -0.0033 |
+| *N1CCCCC1 | 1,208 | 1.0000 | 1.0000 | 1.0000 | 0.0000 | 0.0000 |
+| *OC(F)(F)F | 253 | 1.0000 | 1.0000 | 1.0000 | 0.0000 | 0.0000 |
+| *Nc1ccc(C)cc1 | 234 | 1.0000 | 1.0000 | 1.0000 | 0.0000 | 0.0000 |
+| *c1ccccc1C(F)(F)F | 211 | 1.0000 | 1.0000 | 1.0000 | 0.0000 | 0.0000 |
+| *C(=O)NC | 128 | 1.0000 | 1.0000 | 1.0000 | 0.0000 | 0.0000 |
+| *C(=O)c1ccc(OC)cc1 | 120 | 1.0000 | 1.0000 | 1.0000 | 0.0000 | 0.0000 |
+| *C(=O)c1ccco1 | 104 | 0.9327 | 1.0000 | 1.0000 | +0.0673 | 0.0000 |
+| *c1ccc(C(C)C)cc1 | 101 | 1.0000 | 1.0000 | 1.0000 | 0.0000 | 0.0000 |
+| *c1cccc(C)c1 | 1,823 | 0.9013 | 0.9731 | 0.9742 | +0.0730 | +0.0011 |
+| *CCCc1ccccc1 | 216 | 1.0000 | 0.9954 | 1.0000 | 0.0000 | +0.0046 |
+| *C1CCCCC1 | 2,244 | 0.7197 | 0.7518 | 0.7745 | +0.0548 | +0.0227 |
+| *Cc1ccccn1 | 233 | 0.5708 | 0.8841 | 0.9356 | +0.3648 | +0.0515 |
+| *N(C)C | 1,648 | 0.6608 | 0.8083 | 0.9278 | +0.2670 | +0.1195 |
+| *Cc1cccnc1 | 158 | 1.0000 | 0.8734 | 0.9937 | -0.0063 | +0.1203 |
+| *Cc1ccccc1Cl | 215 | 1.0000 | 0.7070 | 1.0000 | 0.0000 | +0.2930 |
+| *Cc1ccccc1OC | 108 | 1.0000 | 0.1944 | 1.0000 | 0.0000 | +0.8056 |
+| *Cc1cccc(OC)c1 | 118 | 1.0000 | 0.0000 | 0.9407 | -0.0593 | +0.9407 |
+
+## Supplementary Table S6. Random/Permissive Split Stress Test for Base Rankers
+
+The random/permissive query split preserved train-blind query non-overlap but allowed train-blind transform-key overlap for 840/840 blind transform identities. This table is a split-protocol diagnostic for locked standalone base rankers only.
+
+| Method | Random/permissive Top-10 | Transform-heldout Top-10 | Delta random minus heldout | 95% CI for Delta | Train-blind transform overlap |
+|---|---:|---:|---:|---:|---:|
+| Attachment-Frequency | 0.5727 | 0.6019 | -0.0292 | [-0.0404, -0.0173] | 840/840 |
+| DE | 0.8784 | 0.8055 | +0.0729 | [0.0643, 0.0814] | 840/840 |
+| HGB | 0.8191 | 0.7437 | +0.0755 | [0.0655, 0.0853] | 840/840 |
+| Borda(DE,HGB) | 0.8699 | 0.8384 | +0.0316 | [0.0230, 0.0398] | 840/840 |
+
+## Supplementary Table S7. Fresh Blind2 Grouped Uncertainty Analysis
+
+Query-level intervals resample queries. Grouped intervals resample query-side transform keys, old fragments, attachment signatures, or old-fragment clusters. These analyses show that query-level gains are stronger than group-level Top-10 robustness.
+
+| Comparison | Metric | Delta | Query CI | Transform-key CI | Old-fragment CI | Attachment-signature CI | Old-fragment-cluster CI |
+|---|---|---:|---:|---:|---:|---:|---:|
+| HistGB82 - Score Blend | Top-10 | +0.0403 | [+0.0355, +0.0446] | [-0.0068, +0.0734] | [-0.0101, +0.0717] | [-0.0395, +0.0824] | [-0.0073, +0.0820] |
+| HistGB82 - Score Blend | MRR | +0.1141 | [+0.1099, +0.1184] | [+0.0852, +0.1505] | [+0.0841, +0.1491] | [+0.0999, +0.1377] | [+0.0823, +0.1601] |
+| HistGB77 - HistGB82 | Top-10 | -0.0070 | [-0.0094, -0.0044] | [-0.0207, +0.0048] | [-0.0216, +0.0050] | [-0.0210, +0.0046] | [-0.0233, +0.0014] |
+| HistGB77 - HistGB82 | MRR | +0.0026 | [+0.0007, +0.0045] | [-0.0086, +0.0203] | [-0.0075, +0.0219] | [-0.0225, +0.0131] | [-0.0075, +0.0115] |
+| HistGB77 - Score Blend | Top-10 | +0.0334 | [+0.0284, +0.0381] | [-0.0119, +0.0649] | [-0.0131, +0.0633] | [-0.0509, +0.0614] | [-0.0108, +0.0719] |
+| HistGB77 - Score Blend | MRR | +0.1167 | [+0.1126, +0.1209] | [+0.0861, +0.1583] | [+0.0851, +0.1585] | [+0.0850, +0.1365] | [+0.0830, +0.1685] |
+
+## Supplementary Table S8. Fresh Blind2 Candidate-Matrix Sensitivity
+
+The full-161 matrix is the primary policy. The Train2-observed attachment subset is a sensitivity analysis and has incomplete positive coverage. The positive-forced variant is diagnostic only.
+
+### S8a. Candidate coverage
+
+| Setting | n queries | Candidate count median | Candidate count mean | Positive rows | Zero in-scope-positive queries | All positives covered | Random expected Top-10 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Full 161 all candidates | 17,058 | 161 | 161.00 | 28,330 | 0 | 17,058 | 0.0987 |
+| Train2-observed attachment subset | 17,058 | 108 | 116.16 | 26,895 | 670 | 15,826 | 0.1303 |
+| Attachment subset, positive-forced | 17,058 | 108 | 116.24 | 28,330 | 0 | 17,058 | 0.1362 |
+
+### S8b. Ranking metrics by candidate policy
+
+| Setting | Method | Top-1 | Top-5 | Top-10 | Top-20 | Top-50 | MRR |
+|---|---|---:|---:|---:|---:|---:|---:|
+| Full 161 all candidates | Score Blend | 0.2467 | 0.6568 | 0.8077 | 0.9191 | 0.9856 | 0.4242 |
+| Full 161 all candidates | Borda(DE,HGB) | 0.2511 | 0.6503 | 0.8176 | 0.9104 | 0.9909 | 0.4284 |
+| Full 161 all candidates | HistGB82 | 0.3758 | 0.7452 | 0.8480 | 0.9425 | 0.9986 | 0.5383 |
+| Full 161 all candidates | HistGB77 | 0.3808 | 0.7503 | 0.8411 | 0.9447 | 0.9987 | 0.5409 |
+| Train2-observed attachment subset | Score Blend | 0.2467 | 0.6561 | 0.8009 | 0.9008 | 0.9569 | 0.4218 |
+| Train2-observed attachment subset | Borda(DE,HGB) | 0.2543 | 0.6437 | 0.7999 | 0.8919 | 0.9549 | 0.4258 |
+| Train2-observed attachment subset | HistGB82 | 0.3751 | 0.7279 | 0.8295 | 0.9272 | 0.9603 | 0.5311 |
+| Train2-observed attachment subset | HistGB77 | 0.3801 | 0.7329 | 0.8225 | 0.9293 | 0.9603 | 0.5336 |
+| Attachment subset, positive-forced | Score Blend | 0.2467 | 0.6568 | 0.8082 | 0.9191 | 0.9941 | 0.4243 |
+| Attachment subset, positive-forced | Borda(DE,HGB) | 0.2550 | 0.6510 | 0.8182 | 0.9104 | 0.9921 | 0.4310 |
+| Attachment subset, positive-forced | HistGB82 | 0.3758 | 0.7465 | 0.8480 | 0.9568 | 0.9996 | 0.5406 |
+| Attachment subset, positive-forced | HistGB77 | 0.3808 | 0.7514 | 0.8411 | 0.9656 | 0.9995 | 0.5434 |
+
+## Supplementary Table S9. A4C Workflow Annotation Summary
+
+A4C annotations are coverage-limited computational workflow diagnostics. They are not safety scoring, activity validation, expert review, or medicinal-chemistry validation.
+
+| Group | Interpretation | A4C coverage | Alert signal |
+|---|---|---:|---|
+| G2 | Borda-emergent provenance group requiring downstream review | 100% | 46.85% computational alert annotation |
+| G3 | DE-elevated provenance group | 100% | 9.67% computational alert annotation |
+| G4 | Shared HGB/Borda provenance group | 5.63% | Insufficient coverage for group-level estimate; 17.60% among covered subset; 94.37% unknown |
+
+## Supplementary Table S10. Activity-Comparable Reranking Boundary Diagnostic
+
+### S10a. Activity-comparable coverage and band counts
+
+| Activity band | n pairs | n current-positive-any |
+|---|---:|---:|
+| Retained, Delta pChEMBL >= -0.5 | 781 | 781 |
+| Improved, Delta pChEMBL >= 0.5 | 142 | 142 |
+| Degraded, Delta pChEMBL <= -1.0 | 47 | 47 |
+| Ambiguous, -1.0 < Delta pChEMBL < -0.5 | 94 | 94 |
+
+### S10b. Activity-comparable reranking metrics
+
+| Band | Method | n pairs | Top-1 | Top-5 | Top-10 | Top-20 | Top-50 | MRR | Median rank |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| All linked pairs | Score Blend | 1,064 | 0.2227 | 0.6100 | 0.7961 | 0.9699 | 0.9991 | 0.3955 | 4 |
+| All linked pairs | HistGB82 | 1,064 | 0.2415 | 0.7265 | 0.8722 | 0.9605 | 0.9962 | 0.4487 | 3 |
+| All linked pairs | HistGB77 | 1,064 | 0.3008 | 0.7491 | 0.8994 | 0.9727 | 0.9962 | 0.4837 | 3 |
+| Degraded pairs | Score Blend | 47 | 0.2553 | 0.6596 | 0.8085 | 0.9574 | 1.0000 | 0.4360 | 3 |
+| Degraded pairs | HistGB82 | 47 | 0.2340 | 0.7021 | 0.8936 | 0.9574 | 1.0000 | 0.4400 | 3 |
+| Degraded pairs | HistGB77 | 47 | 0.2766 | 0.7447 | 0.9149 | 0.9787 | 1.0000 | 0.4633 | 3 |
+
+Degraded activity pairs can also receive high ranks. This table does not support activity-preservation claims.
+
+## Supplementary Table S11. Calibration Sanity Boundary Diagnostic
+
+| Model | n candidate rows | Positive rate | Brier | Constant base-rate Brier | Brier minus constant | ECE 10 equal-width | ECE 20 equal-width |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Initial 82-feature scorer | 2,002,050 | 0.0100 | 0.0339 | 0.0099 | 0.0239 | 0.0410 | 0.0415 |
+| Post-audit 77-feature scorer | 2,002,050 | 0.0100 | 0.0363 | 0.0099 | 0.0264 | 0.0441 | 0.0445 |
+
+The calibration audit fails the pre-specified probability-sanity checks. Raw HistGB outputs should be interpreted as ranking scores, not calibrated probabilities.
 
 ---
 
-## Supplementary Table S5. Per-Fragment Top-10 on the Secondary Blind Set
+# Evidence Provenance
 
-**Source:** `goal/A_improve/D4S31_FINAL_LOCK/04_blind_strata.md` and the fresh 2026-05-30 D4S31 lockdown run.
-
-| Fragment | n | Score Blend | Post-audit 77-feature scorer | Δ |
-|----------|--:|------------:|-----------------------------:|--:|
-| *C(=O)NC | 128 | 1.0000 | 1.0000 | 0.0000 |
-| *C(=O)c1ccc(OC)cc1 | 120 | 1.0000 | 1.0000 | 0.0000 |
-| *C(=O)c1ccco1 | 104 | 0.9327 | 1.0000 | +0.0673 |
-| *C1CCCCC1 | 2,244 | 0.7197 | 0.7527 | +0.0330 |
-| *CCC | 2,112 | 0.8835 | 0.9044 | +0.0208 |
-| *CCCc1ccccc1 | 216 | 1.0000 | 1.0000 | 0.0000 |
-| *Cc1cccc(OC)c1 | 118 | 1.0000 | 1.0000 | 0.0000 |
-| *Cc1ccccc1Cl | 215 | 1.0000 | 1.0000 | 0.0000 |
-| *Cc1ccccc1OC | 108 | 1.0000 | 1.0000 | 0.0000 |
-| *Cc1ccccn1 | 233 | 0.5708 | 0.5708 | 0.0000 |
-| *Cc1cccnc1 | 158 | 1.0000 | 1.0000 | 0.0000 |
-| *N(C)C | 1,648 | 0.6608 | 0.7379 | +0.0771 |
-| *N1CCCCC1 | 1,208 | 1.0000 | 1.0000 | 0.0000 |
-| *Nc1ccc(C)cc1 | 234 | 1.0000 | 1.0000 | 0.0000 |
-| *OC(F)(F)F | 253 | 1.0000 | 1.0000 | 0.0000 |
-| *c1ccc(C(C)C)cc1 | 101 | 1.0000 | 1.0000 | 0.0000 |
-| *c1cccc(C)c1 | 1,823 | 0.9013 | 0.9611 | +0.0598 |
-| *c1ccccc1C(F)(F)F | 211 | 1.0000 | 1.0000 | 0.0000 |
-| *c1ccccc1F | 2,113 | 0.9035 | 0.9304 | +0.0270 |
-
-Summary: all 19 old-fragment strata have non-negative point-estimate Δ relative to Score Blend. These are stratum-level point estimates, not separate per-fragment significance claims.
-
----
-
-## Evidence Provenance
-
-| Item | Script or evidence file | Run date | Status |
-|------|-------------------------|----------|--------|
-| S2 metrics and MRR | `scripts/jcim_major_revision_patch.py` | 2026-05-31 | Verified from `jcim_full_secondary_metrics_with_ci.csv` |
-| S3 rescue/lost | `scripts/jcim_major_revision_patch.py` | 2026-05-31 | Query-id merge; bootstrap by query rows |
-| S4 ablation | `D4S31_FINAL_LOCK/01_ablation_findings.md`; `scripts/jcim_major_revision_patch.py` | 2026-05-31 | Main prior_ranks Δ has paired CI |
-| S5 per-fragment strata | `D4S31_FINAL_LOCK/04_blind_strata.md` | 2026-05-30 | Verified point-estimate table |
-| Main Table 1 | `jcim_full_secondary_metrics_with_ci.csv`; historical baseline lock for selected pre-D4S rows | 2026-05-31 | Values cross-checked in final audit |
-| Main Table 2 | `jcim_paired_bootstrap_key_deltas.csv`; `D4S31_FINAL_LOCK/01_ablation_findings.md` | 2026-05-31 | Main deletion CI verified |
-| Main Table 3 | `jcim_rescue_lost_bootstrap.csv` | 2026-05-31 | Arithmetic verified |
-| Main Table 4 | `d4s30_audit.py` evidence lock | 2026-05-31 | Coverage caveat retained |
+| Item | Evidence source | Status |
+|---|---|---|
+| S1--S5 original secondary-blind diagnostics | Original secondary-blind prior-rank mechanism audit files and query-merge rescue/lost audits | Diagnostic history only |
+| S6 random/permissive stress test | `goal/PAPER_CLAIM_EVIDENCE_LOCK/random_transform_overlap_split_inflation_20260602/` | Base-ranker split-protocol diagnostic |
+| S7 grouped uncertainty | `goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments/runs/E1_blind2_grouped_uncertainty/full_train2_vocab161/` | Fresh Blind2 uncertainty audit |
+| S8 candidate-matrix sensitivity | `goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments/runs/E2_blind2_attachment_compatibility_sensitivity/full_train2_vocab161/` | Fresh Blind2 candidate-policy diagnostic |
+| S9 A4C annotations | `goal/PROJECT_5DAY_FULL_REVIEW/modules/D4A2_A4C_summary.md` and V4 A4C scope audits | Supplementary workflow diagnostic |
+| S10 activity-comparable diagnostic | `goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments/runs/E6_activity_reranking_diagnostic/` | Boundary diagnostic |
+| S11 calibration sanity | `goal/PAPER_CLAIM_EVIDENCE_LOCK/evidence_locks_v5_experiments/runs/E12_calibration_sanity/` | Boundary diagnostic |

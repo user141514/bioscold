@@ -1,0 +1,14 @@
+# Claim Map V5
+
+| Claim | Evidence | Allowed wording | Forbidden wording |
+|---|---|---|---|
+| Fresh Blind2 supports candidate-level scoring over Score Blend | Fresh Blind2 full-161: Score Blend Top-10 = 0.8077; HistGB82 Top-10 = 0.8480; 82 - Score Blend = +0.0403, CI [0.0355, 0.0446] | HistGB82 improves structure-derived Top-10 recovery over Score Blend at query level on Fresh Blind2 | 77-feature is the prospective main method; 0.9243 is the headline result |
+| Fresh Blind2 supports candidate-level scoring over Borda | Fresh Blind2 full-161: Borda Top-10 = 0.8176; HistGB82 Top-10 = 0.8480 | HistGB82 improves over Borda at query level on Fresh Blind2 | Borda is a ceiling or deployable oracle |
+| HistGB82 is stronger than HistGB77 for prospective Top-10 among the original HistGB configurations | Fresh Blind2: HistGB82 Top-10 = 0.8480; HistGB77 Top-10 = 0.8411; 77 - 82 = -0.0070, CI [-0.0094, -0.0044] | HistGB82 is the stronger prospective Top-10 HistGB configuration | HistGB77 prospectively improves Top-10 over HistGB82 |
+| HistGB77 remains useful as a no-prior-rank diagnostic | Fresh Blind2: HistGB77 Top-10 = 0.8411; above Score Blend 0.8077; MRR slightly higher than HistGB82 | HistGB77 remains baseline-beating and offers a small MRR tradeoff | HistGB77 is the final or main model |
+| Old secondary-blind 77-feature result is post-audit only | Old secondary blind: 82 = 0.8851; post-audit 77 = 0.9243; deletion selected after blind diagnostics | The old 77-feature result is a post-audit diagnostic | 0.9243 is the primary prospective result |
+| prior_ranks effect is unstable across partitions | Old blind deletion appeared beneficial; Fresh Blind2 77 - 82 Top-10 = -0.0070 | prior_ranks are an unstable query-relative feature family | removing prior_ranks improves transfer |
+| Group-level uncertainty is wider than query bootstrap | Fresh Blind2 grouped bootstrap: Top-10 CIs can cross zero; MRR sensitivity more stable | query-level gains are positive, with wider group-level uncertainty | query bootstrap alone proves broad chemical generalization |
+| Categorical-aware LambdaRank is a follow-up direction | LambdaRankCat beats Score Blend under grouped uncertainty; vs HistGB group CIs cross zero | categorical-aware LambdaRank is a promising diagnostic/future architecture | LambdaRank is the main method or uniformly superior to HistGB |
+| Activity-comparable analysis is not validation | Degraded activity pairs are also highly ranked; no activity labels used for training/selection | structure-derived positives can be retrospectively linked to activity-comparable pairs | activity-preserving, biological validation, wet-lab validation |
+| HistGB outputs are ranking scores | Calibration audit: weak ECE/Brier behavior | model output / ranking score | calibrated probability |
