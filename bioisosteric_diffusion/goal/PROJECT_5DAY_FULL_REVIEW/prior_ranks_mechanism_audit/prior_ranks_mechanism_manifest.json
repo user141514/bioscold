@@ -1,0 +1,25 @@
+{
+  "outputs": {
+    "targeted_ablation": "E:\\zuhui\\bioisosteric_diffusion\\goal\\PROJECT_5DAY_FULL_REVIEW\\prior_ranks_mechanism_audit\\prior_ranks_targeted_ablation.csv",
+    "support_bin_audit": "E:\\zuhui\\bioisosteric_diffusion\\goal\\PROJECT_5DAY_FULL_REVIEW\\prior_ranks_mechanism_audit\\prior_ranks_support_bin_audit.csv",
+    "old_fragment_delta": "E:\\zuhui\\bioisosteric_diffusion\\goal\\PROJECT_5DAY_FULL_REVIEW\\prior_ranks_mechanism_audit\\prior_ranks_old_fragment_delta.csv",
+    "mechanism_figure_svg": "E:\\zuhui\\bioisosteric_diffusion\\goal\\PROJECT_5DAY_FULL_REVIEW\\prior_ranks_mechanism_audit\\figure_s_prior_ranks_mechanism.svg",
+    "mechanism_figure_pdf": "E:\\zuhui\\bioisosteric_diffusion\\goal\\PROJECT_5DAY_FULL_REVIEW\\prior_ranks_mechanism_audit\\figure_s_prior_ranks_mechanism.pdf",
+    "mechanism_figure_png": "E:\\zuhui\\bioisosteric_diffusion\\goal\\PROJECT_5DAY_FULL_REVIEW\\prior_ranks_mechanism_audit\\figure_s_prior_ranks_mechanism.png"
+  },
+  "protocol": [
+    "Fixed HistGB protocol copied from jcim_major_revision_patch.py.",
+    "Training uses the development/calibration matrix only.",
+    "No hyperparameter search or model selection is performed on secondary blind labels.",
+    "All bootstraps resample query-level rows.",
+    "This is a post-audit mechanism diagnostic, not a new main scorer."
+  ],
+  "score_columns": {
+    "full_82_feature_scorer": "score_full_82_feature_scorer",
+    "drop_prior_ranks_77_feature_scorer": "score_drop_prior_ranks_77_feature_scorer",
+    "drop_F5_prior_scores": "score_drop_F5_prior_scores",
+    "drop_F6_prior_statistics": "score_drop_F6_prior_statistics",
+    "drop_F7_pmi_conditional_prior_contrast": "score_drop_F7_pmi_conditional_prior_contrast",
+    "drop_all_non_rank_prior_families": "score_drop_all_non_rank_prior_families"
+  }
+}

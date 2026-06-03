@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Created with matplotlib (http://matplotlib.org/) -->
+<svg height="522pt" version="1.1" viewBox="0 0 763.2 522" width="763.2pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+*{stroke-linecap:butt;stroke-linejoin:round;}
+  </style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 522 
+L 763.2 522 
+L 763.2 0 
+L 0 0 
+z
+" style="fill:#FFFFFF;"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path clip-path="url(#pcd341ca41e)" d="M 12.320717 478.177778 
+L 266.948879 478.177778 
+L 266.948879 62.511111 
+L 12.320717 62.511111 
+z
+" style="fill:#FFFFFF;stroke:#D9D9D9;stroke-width:0.5;"/>
+   </g>
+   <g id="patch_3">
+    <path clip-path="url(#pcd341ca41e)" d="M 34.9087 262.288889 
+L 134.158924 262.288889 
+L 134.158924 203 
+L 34.9087 203 
+z
+" style="fill:#F4F8FF;stroke:#0B3F99;"/>
+   </g>
+   <g id="patch_4">
+    <path clip-path="url(#pcd341ca41e)" d="M 34.9087 375.066667 
+L 134.158924 375.066667 
+L 134.158924 296.444444 
+L 34.9087 296.444444 
+z
+" style="fill:#F4F8FF;stroke:#0B3F99;"/>
+   </g>
+   <g id="patch_5">
+    <path clip-path="url(#pcd341ca41e)" d="M 84.533812 262.288889 
+Q 84.533812 279.366667 84.533812 295.270509 
+" style="fill:none;stroke:#0B3F99;stroke-linecap:round;stroke-width:1.1;"/>
+    <path clip-path="url(#pcd341ca41e)" d="M 87.133812 290.070509 
+L 84.533812 295.270509 
+L 81.933812 290.070509 
+L 87.133812 290.070509 
+z
+" style="fill:#0B3F99;stroke:#0B3F99;stroke-linecap:round;stroke-width:1.1;"/>
+   </g>
+   <g id="patch_6">
+    <path clip-path="url(#pcd341ca41e)" d="M 161.538296 259.711111 
+L 264.210942 259.711111 
+L 264.210942 206.866667 
+L 161.538296 206.866667 
+z
+" style="fill:#F2FBFA;stroke:#087A74;"/>
+   </g>
+   <g id="patch_7">
+    <path clip-path="url(#pcd341ca41e)" d="M 161.538296 343.488889 
+L 264.210942 343.488889 
+L 264.210942 281.622222 
+L 161.538296 281.622222 
+z
+" style="fill:#F2FBFA;stroke:#087A74;"/>
+   </g>
+   <g id="patch_8">
+    <path clip-path="url(#pcd341ca41e)" d="M 161.538296 435 
+L 264.210942 435 
+L 264.210942 373.133333 
+L 161.538296 373.133333 
+z
+" style="fill:#F2FBFA;stroke:#087A74;"/>
+   </g>
+   <g id="patch_9">
+    <path clip-path="url(#pcd341ca41e)" d="M 212.874619 259.711111 
+Q 212.874619 270.666667 212.874619 280.448287 
+" style="fill:none;stroke:#087A74;stroke-linecap:round;stroke-width:1.1;"/>
+    <path clip-path="url(#pcd341ca41e)" d="M 215.474619 275.248287 
+L 212.874619 280.448287 
+L 210.274619 275.248287 
+L 215.474619 275.248287 
+z
+" style="fill:#087A74;stroke:#087A74;stroke-linecap:round;stroke-width:1.1;"/>
+   </g>
+   <g id="patch_10">
+    <path clip-path="url(#pcd341ca41e)" d="M 212.874619 343.488889 
+Q 212.874619 358.311111 212.874619 371.959398 
+" style="fill:none;stroke:#087A74;stroke-linecap:round;stroke-width:1.1;"/>
+    <path clip-path="url(#pcd341ca41e)" d="M 215.474619 366.759398 
+L 212.874619 371.959398 
+L 210.274619 366.759398 
+L 215.474619 366.759398 
+z
+" style="fill:#087A74;stroke:#087A74;stroke-linecap:round;stroke-width:1.1;"/>
+   </g>
+   <g id="patch_11">
+    <path clip-path="url(#pcd341ca41e)" d="M 275.162691 478.177778 
+L 470.240717 478.177778 
+L 470.240717 62.511111 
+L 275.162691 62.511111 
+z
+" style="fill:#FFFFFF;stroke:#D9D9D9;stroke-width:0.5;"/>
+   </g>
+   <g id="patch_12">
+    <path clip-path="url(#pcd341ca41e)" d="M 301.173094 222.333333 
+L 462.026906 222.333333 
+L 462.026906 124.377778 
+L 301.173094 124.377778 
+z
+" style="fill:#F2FBFA;stroke:#087A74;stroke-width:0.9;"/>
+   </g>
+   <g id="patch_13">
+    <path clip-path="url(#pcd341ca41e)" d="M 301.173094 347.355556 
+L 462.026906 347.355556 
+L 462.026906 240.377778 
+L 301.173094 240.377778 
+z
+" style="fill:#F2FBFA;stroke:#087A74;stroke-width:0.9;"/>
+   </g>
+   <g id="patch_14">
+    <path clip-path="url(#pcd341ca41e)" d="M 301.173094 472.377778 
+L 462.026906 472.377778 
+L 462.026906 375.711111 
+L 301.173094 375.711111 
+z
+" style="fill:#FFF6F4;stroke:#A43A3A;stroke-width:0.9;"/>
+   </g>
+   <g id="patch_15">
+    <path clip-path="url(#pcd341ca41e)" d="M 479.139013 478.177778 
+L 746.087892 478.177778 
+L 746.087892 62.511111 
+L 479.139013 62.511111 
+z
+" style="fill:#FFFFFF;stroke:#D9D9D9;stroke-width:0.5;"/>
+   </g>
+   <g id="patch_16">
+    <path clip-path="url(#pcd341ca41e)" d="M 492.8287 400.844444 
+L 746.087892 400.844444 
+L 746.087892 101.177778 
+L 492.8287 101.177778 
+z
+" style="fill:#FFFFFF;stroke:#D9D9D9;stroke-width:0.5;"/>
+   </g>
+   <g id="patch_17">
+    <path clip-path="url(#pcd341ca41e)" d="M 548.956413 192.796296 
+L 631.094529 192.796296 
+L 631.094529 177.974074 
+L 548.956413 177.974074 
+z
+" style="fill:#FFFFFF;stroke:#D9D9D9;stroke-width:0.5;"/>
+   </g>
+   <g id="patch_18">
+    <path clip-path="url(#pcd341ca41e)" d="M 548.956413 192.796296 
+L 631.094529 192.796296 
+L 631.094529 177.974074 
+L 548.956413 177.974074 
+z
+" style="fill:#087A74;"/>
+   </g>
+   <g id="patch_19">
+    <path clip-path="url(#pcd341ca41e)" d="M 548.956413 280.655556 
+L 631.094529 280.655556 
+L 631.094529 265.833333 
+L 548.956413 265.833333 
+z
+" style="fill:#FFFFFF;stroke:#D9D9D9;stroke-width:0.5;"/>
+   </g>
+   <g id="patch_20">
+    <path clip-path="url(#pcd341ca41e)" d="M 548.956413 280.655556 
+L 631.094529 280.655556 
+L 631.094529 265.833333 
+L 548.956413 265.833333 
+z
+" style="fill:#087A74;"/>
+   </g>
+   <g id="patch_21">
+    <path clip-path="url(#pcd341ca41e)" d="M 548.956413 366.581481 
+L 631.094529 366.581481 
+L 631.094529 351.759259 
+L 548.956413 351.759259 
+z
+" style="fill:#FFFFFF;stroke:#D9D9D9;stroke-width:0.5;"/>
+   </g>
+   <g id="patch_22">
+    <path clip-path="url(#pcd341ca41e)" d="M 548.956413 366.581481 
+L 553.580789 366.581481 
+L 553.580789 351.759259 
+L 548.956413 351.759259 
+z
+" style="fill:#087A74;"/>
+   </g>
+   <g id="patch_23">
+    <path clip-path="url(#pcd341ca41e)" d="M 553.580789 366.581481 
+L 631.094529 366.581481 
+L 631.094529 351.759259 
+L 553.580789 351.759259 
+z
+" style="fill:url(#h580c3aba75);"/>
+   </g>
+   <g id="line2d_1">
+    <path clip-path="url(#pcd341ca41e)" d="M 139.634798 456.266667 
+L 139.634798 128.244444 
+" style="fill:none;stroke:#D9D9D9;stroke-dasharray:3.2,3.2;stroke-dashoffset:0;stroke-width:0.65;"/>
+   </g>
+   <g id="line2d_2">
+    <path clip-path="url(#pcd341ca41e)" d="M 543.480538 400.844444 
+L 543.480538 101.177778 
+" style="fill:none;stroke:#D9D9D9;stroke-linecap:square;stroke-width:0.5;"/>
+   </g>
+   <g id="line2d_3">
+    <path clip-path="url(#pcd341ca41e)" d="M 639.992825 400.844444 
+L 639.992825 101.177778 
+" style="fill:none;stroke:#D9D9D9;stroke-linecap:square;stroke-width:0.5;"/>
+   </g>
+   <g id="line2d_4">
+    <path clip-path="url(#pcd341ca41e)" d="M 492.8287 137.266667 
+L 746.087892 137.266667 
+" style="fill:none;stroke:#D9D9D9;stroke-linecap:square;stroke-width:0.5;"/>
+   </g>
+   <g id="line2d_5">
+    <path clip-path="url(#pcd341ca41e)" d="M 492.8287 225.125926 
+L 746.087892 225.125926 
+" style="fill:none;stroke:#D9D9D9;stroke-linecap:square;stroke-width:0.5;"/>
+   </g>
+   <g id="line2d_6">
+    <path clip-path="url(#pcd341ca41e)" d="M 492.8287 312.985185 
+L 746.087892 312.985185 
+" style="fill:none;stroke:#D9D9D9;stroke-linecap:square;stroke-width:0.5;"/>
+   </g>
+   <g id="text_1">
+    <text style="fill:#222222;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:16px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 381.942242, 24.929566)" x="381.942242" y="24.929566">Dual-mode provenance triage for exploratory replacement proposals</text>
+   </g>
+   <g id="text_2">
+    <text style="fill:#222222;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:15px;font-style:normal;font-weight:bold;text-anchor:start;" transform="rotate(-0, 23.272466, 94.470182)" x="23.272466" y="94.470182">A. Dual-mode proposal routes</text>
+   </g>
+   <g id="text_3">
+    <text style="fill:#0B3F99;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:11px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 68.44843, 142.487023)" x="68.44843" y="142.487023">Conservative Mode</text>
+   </g>
+   <g id="text_4">
+    <text style="fill:#0B3F99;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:11px;font-style:italic;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 68.44843, 164.948047)" x="68.44843" y="164.948047">HGB route</text>
+   </g>
+   <g id="text_5">
+    <text style="fill:#087A74;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:11px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 200.553901, 142.487023)" x="200.553901" y="142.487023">Exploration Mode</text>
+   </g>
+   <g id="text_6">
+    <text style="fill:#087A74;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:10.2px;font-style:italic;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 200.553901, 164.762734)" x="200.553901" y="164.762734">Borda(DE,HGB) route</text>
+   </g>
+   <g id="text_7">
+    <text style="fill:#0B3F99;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:13px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 84.533812, 235.767491)" x="84.533812" y="235.767491">HGB</text>
+   </g>
+   <g id="text_8">
+    <text style="fill:#0B3F99;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:10.8px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 84.533812, 333.0)" x="84.533812" y="333.0">frequency-aligned</text>
+    <text style="fill:#0B3F99;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:10.8px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 84.533812, 347.0)" x="84.533812" y="347.0">proposals</text>
+   </g>
+   <g id="text_9">
+    <text style="fill:#087A74;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:10.8px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 212.874619, 235.88342)" x="212.874619" y="235.88342">Borda(DE,HGB)</text>
+   </g>
+   <g id="text_10">
+    <text style="fill:#087A74;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:10.9px;font-style:normal;font-weight:normal;" transform="translate(187.753525 310.03476)">exploratory</text>
+    <text style="fill:#087A74;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:10.9px;font-style:normal;font-weight:normal;" transform="translate(191.984088 320.333898)">proposals</text>
+   </g>
+   <g id="text_11">
+    <text style="fill:#087A74;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:10.9px;font-style:normal;font-weight:normal;" transform="translate(187.757783 401.545871)">provenance</text>
+    <text style="fill:#087A74;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:10.9px;font-style:normal;font-weight:normal;" transform="translate(201.071963 411.824571)">strata</text>
+   </g>
+   <g id="text_12">
+    <text style="fill:#0B3F99;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:9.2px;font-style:italic;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 69.817399, 457.744691)" x="69.817399" y="457.744691">Driven by HGB</text>
+   </g>
+   <g id="text_13">
+    <text style="fill:#087A74;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:8.5px;font-style:italic;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 200.553901, 457.583199)" x="200.553901" y="457.583199">Driven by Borda(DE,HGB)</text>
+   </g>
+   <g id="text_14">
+    <text style="fill:#222222;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:15px;font-style:normal;font-weight:bold;text-anchor:start;" transform="rotate(-0, 286.114439, 94.470182)" x="286.114439" y="94.470182">B. Provenance strata</text>
+   </g>
+   <g id="text_15">
+    <text style="fill:#087A74;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:15px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 381.6, 151.181293)" x="381.6" y="151.181293">G4 shared</text>
+   </g>
+   <g id="text_16">
+    <text style="fill:#222222;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:11.2px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 381.6, 180.15)" x="381.6" y="180.15"><tspan style="font-style:italic;">K</tspan><tspan style="font-size:7.5px;baseline-shift:sub;">HGB</tspan><tspan style="font-style:normal;"> ∩ </tspan><tspan style="font-style:italic;">K</tspan><tspan style="font-size:7.5px;baseline-shift:sub;">Borda</tspan></text>
+   </g>
+
+   <g id="text_17">
+    <text style="fill:#222222;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:10.8px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 381.6, 203.661198)" x="381.6" y="203.661198">consensus</text>
+   </g>
+   <g id="text_18">
+    <text style="fill:#087A74;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:15px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 381.6, 267.181293)" x="381.6" y="267.181293">G3 DE-elevated</text>
+   </g>
+   <g id="text_19">
+    <text style="fill:#222222;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:11.2px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 381.6, 296.15)" x="381.6" y="296.15"><tspan style="font-style:italic;">K</tspan><tspan style="font-size:7.5px;baseline-shift:sub;">Borda</tspan><tspan style="font-style:normal;"> \ </tspan><tspan style="font-style:italic;">K</tspan><tspan style="font-size:7.5px;baseline-shift:sub;">HGB</tspan></text>
+   </g>
+
+   <g id="text_20">
+    <text style="fill:#222222;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:10.8px;font-style:normal;font-weight:normal;" transform="translate(337.806844 323.403739)">similarity-supported</text>
+    <text style="fill:#222222;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:10.8px;font-style:normal;font-weight:normal;" transform="translate(359.703844 333.983351)">expansion</text>
+   </g>
+   <g id="text_21">
+    <text style="fill:#A43A3A;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:15px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 381.6, 402.500564)" x="381.6" y="402.500564">G2 Borda-emergent</text>
+   </g>
+   <g id="text_22">
+    <text style="fill:#222222;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:11.2px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 381.6, 431.49)" x="381.6" y="431.49"><tspan style="font-style:italic;">K</tspan><tspan style="font-size:7.5px;baseline-shift:sub;">Borda</tspan><tspan style="font-style:normal;"> \ (</tspan><tspan style="font-style:italic;">K</tspan><tspan style="font-size:7.5px;baseline-shift:sub;">HGB</tspan><tspan style="font-style:normal;"> ∪ </tspan><tspan style="font-style:italic;">K</tspan><tspan style="font-size:7.5px;baseline-shift:sub;">DE</tspan><tspan style="font-style:normal;">)</tspan></text>
+   </g>
+
+   <g id="text_23">
+    <text style="fill:#222222;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:10.8px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 381.6, 453.695517)" x="381.6" y="453.695517">highest novelty</text>
+   </g>
+   <g id="text_24">
+    <text style="fill:#222222;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:15px;font-style:normal;font-weight:bold;text-anchor:start;" transform="rotate(-0, 490.090762, 94.45612)" x="490.090762" y="94.45612">C. Coverage-limited A4C triage</text>
+   </g>
+   <g id="text_25">
+    <text style="fill:#222222;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:11.2px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 518.154619, 121.912847)" x="518.154619" y="121.912847">Group</text>
+   </g>
+   <g id="text_26">
+    <text style="fill:#222222;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:11.2px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 591.736682, 121.891847)" x="591.736682" y="121.891847">Coverage</text>
+   </g>
+   <g id="text_27">
+    <text style="fill:#222222;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:11.2px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 693.040359, 121.902347)" x="693.040359" y="121.902347">Alert signal</text>
+   </g>
+   <g id="text_28">
+    <text style="fill:#A43A3A;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:15px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 518.154619, 184.799812)" x="518.154619" y="184.799812">G2</text>
+   </g>
+   <g id="text_29">
+    <text style="fill:#087A74;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:15px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 518.154619, 272.659071)" x="518.154619" y="272.659071">G3</text>
+   </g>
+   <g id="text_30">
+    <text style="fill:#087A74;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:15px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 518.154619, 360.51833)" x="518.154619" y="360.51833">G4</text>
+   </g>
+   <g id="text_31">
+    <text style="fill:#222222;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:10.8px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 591.736682, 168.324161)" x="591.736682" y="168.324161">100%</text>
+   </g>
+   <g id="text_32">
+    <text style="fill:#A43A3A;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:12.6px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 693.040359, 184.223249)" x="693.040359" y="184.223249">46.85%</text>
+   </g>
+   <g id="text_33">
+    <text style="fill:#222222;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:10.8px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 591.736682, 256.18342)" x="591.736682" y="256.18342">100%</text>
+   </g>
+   <g id="text_34">
+    <text style="fill:#087A74;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:12.6px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 693.040359, 272.082509)" x="693.040359" y="272.082509">9.67%</text>
+   </g>
+   <g id="text_35">
+    <text style="fill:#222222;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:9.9px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 571.202152, 341.248691)" x="571.202152" y="341.248691">5.63%</text>
+   </g>
+   <g id="text_36">
+    <text style="fill:#222222;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:7.2px;font-style:normal;font-weight:normal;text-anchor:start;" transform="rotate(-0, 548.956413, 385.711169)" x="548.956413" y="385.711169">covered</text>
+   </g>
+   <g id="text_37">
+    <text style="fill:#222222;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:7.2px;font-style:normal;font-weight:normal;text-anchor:start;" transform="rotate(-0, 613.297937, 385.711169)" x="613.297937" y="385.711169">unknown</text>
+   </g>
+   <g id="text_38">
+    <text style="fill:#0B3F99;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:11px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 693.040359, 343.446282)" x="693.040359" y="343.446282">17.60%</text>
+   </g>
+   <g id="text_39">
+    <text style="fill:#222222;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:7.4px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 693.040359, 359.974501)" x="693.040359" y="359.974501">among covered;</text>
+   </g>
+   <g id="text_40">
+    <text style="fill:#666666;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:9px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 693.040359, 378.410258)" x="693.040359" y="378.410258">94.37%</text>
+   </g>
+   <g id="text_41">
+    <text style="fill:#222222;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:7.4px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 693.040359, 392.20366)" x="693.040359" y="392.20366">unknown</text>
+   </g>
+   <g id="text_42">
+    <text style="fill:#666666;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:8.4px;font-style:normal;font-weight:normal;" transform="translate(545.083765 443.122118)">A4C = computational triage only;</text>
+    <text style="fill:#666666;font-family:Arial, Helvetica, DejaVu Sans, sans-serif;font-size:8.4px;font-style:normal;font-weight:normal;" transform="translate(556.379859 453.612431)">not experimental validation.</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pcd341ca41e">
+   <rect height="522" width="763.2" x="0" y="0"/>
+  </clipPath>
+ </defs>
+ <defs>
+  <pattern height="72" id="h580c3aba75" patternUnits="userSpaceOnUse" width="72" x="0" y="0">
+   <rect fill="#ffffff" height="73" width="73" x="0" y="0"/>
+   <path d="M -36 36 
+L 36 -36 
+M -33 39 
+L 39 -33 
+M -30 42 
+L 42 -30 
+M -27 45 
+L 45 -27 
+M -24 48 
+L 48 -24 
+M -21 51 
+L 51 -21 
+M -18 54 
+L 54 -18 
+M -15 57 
+L 57 -15 
+M -12 60 
+L 60 -12 
+M -9 63 
+L 63 -9 
+M -6 66 
+L 66 -6 
+M -3 69 
+L 69 -3 
+M 0 72 
+L 72 0 
+M 3 75 
+L 75 3 
+M 6 78 
+L 78 6 
+M 9 81 
+L 81 9 
+M 12 84 
+L 84 12 
+M 15 87 
+L 87 15 
+M 18 90 
+L 90 18 
+M 21 93 
+L 93 21 
+M 24 96 
+L 96 24 
+M 27 99 
+L 99 27 
+M 30 102 
+L 102 30 
+M 33 105 
+L 105 33 
+M 36 108 
+L 108 36 
+" style="fill:#D9D9D9;stroke:#D9D9D9;stroke-linecap:butt;stroke-linejoin:miter;stroke-width:1.1;"/>
+  </pattern>
+ </defs>
+</svg>

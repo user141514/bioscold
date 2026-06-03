@@ -1,0 +1,22 @@
+{
+  "workflow": "rewrite_existing",
+  "scene": "journal",
+  "tier": "flash",
+  "output_language": "en",
+  "target_name": "JCIM (Journal of Chemical Information and Modeling)",
+  "materials_dir": "",
+  "draft_path": "jcim_submission_candidate/main_manuscript.md",
+  "user_motivation": "",
+  "official_urls": ["https://pubs.acs.org/journal/jcisd8"],
+  "special_requirements": [
+    "Preserve all quantitative results and CIs as locked numbers",
+    "Post-audit 77-feature scorer is post-selection finding, not prospective",
+    "A4C proxy is computational triage only, not activity validation",
+    "Maintain transform-heldout benchmark framing and protocol separation"
+  ],
+  "word_output": "none",
+  "translation_package": "none",
+  "reference_mode": "local_first",
+  "reference_paths": ["."],
+  "citation_target_count": 20
+}

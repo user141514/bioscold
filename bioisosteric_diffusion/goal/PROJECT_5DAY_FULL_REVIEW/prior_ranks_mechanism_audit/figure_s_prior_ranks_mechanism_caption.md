@@ -1,0 +1,3 @@
+# Supplementary Figure Sx Caption
+
+**Supplementary Figure Sx. Prior-ranks mechanism audit.** Panel A shows targeted prior-family ablations relative to the initial 82-feature scorer under the fixed HistGB protocol. Removing prior ranks gives the largest Top-10 increase, whereas dropping PMI/conditional-prior contrast reduces performance. Panel B stratifies queries by train-derived prior support and shows that the 77-feature minus 82-feature gain is largest in the low-support bin. This is a post-audit targeted mechanism diagnostic, not prospective feature selection. These diagnostics support a bounded interpretation of prior_ranks as non-transferable shortcuts; they do not establish a universal claim about rank features.

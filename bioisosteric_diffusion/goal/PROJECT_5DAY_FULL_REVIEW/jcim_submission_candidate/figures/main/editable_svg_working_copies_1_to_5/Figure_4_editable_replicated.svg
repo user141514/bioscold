@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Created with matplotlib (http://matplotlib.org/) -->
+<svg height="302.772234pt" version="1.1" viewBox="0 0 644.270375 302.772234" width="644.270375pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+*{stroke-linecap:butt;stroke-linejoin:round;}
+  </style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 302.772234 
+L 644.270375 302.772234 
+L 644.270375 0 
+L 0 0 
+z
+" style="fill:#ffffff;"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 90.402375 265.59 
+L 289.122375 265.59 
+L 289.122375 52.614 
+L 90.402375 52.614 
+z
+" style="fill:#ffffff;"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <path clip-path="url(#p591193d245)" d="M 116.898375 265.59 
+L 116.898375 52.614 
+" style="fill:none;stroke:#e2e2e2;stroke-linecap:square;stroke-width:0.55;"/>
+     </g>
+     <g id="line2d_2">
+      <defs>
+       <path d="M 0 0 
+L 0 4 
+" id="mfa41305dd5" style="stroke:#4d4d4d;stroke-width:0.8;"/>
+      </defs>
+      <g>
+       <use style="fill:#4d4d4d;stroke:#4d4d4d;stroke-width:0.8;" x="116.898375" xlink:href="#mfa41305dd5" y="265.59"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-family:Arial;font-size:8.7px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 116.898375, 279.317297)" x="116.898375" y="279.317297">-0.02</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_3">
+      <path clip-path="url(#p591193d245)" d="M 169.890375 265.59 
+L 169.890375 52.614 
+" style="fill:none;stroke:#e2e2e2;stroke-linecap:square;stroke-width:0.55;"/>
+     </g>
+     <g id="line2d_4">
+      <g>
+       <use style="fill:#4d4d4d;stroke:#4d4d4d;stroke-width:0.8;" x="169.890375" xlink:href="#mfa41305dd5" y="265.59"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-family:Arial;font-size:8.7px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 169.890375, 279.317297)" x="169.890375" y="279.317297">0.00</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_5">
+      <path clip-path="url(#p591193d245)" d="M 222.882375 265.59 
+L 222.882375 52.614 
+" style="fill:none;stroke:#e2e2e2;stroke-linecap:square;stroke-width:0.55;"/>
+     </g>
+     <g id="line2d_6">
+      <g>
+       <use style="fill:#4d4d4d;stroke:#4d4d4d;stroke-width:0.8;" x="222.882375" xlink:href="#mfa41305dd5" y="265.59"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-family:Arial;font-size:8.7px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 222.882375, 279.317297)" x="222.882375" y="279.317297">0.02</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_7">
+      <path clip-path="url(#p591193d245)" d="M 275.874375 265.59 
+L 275.874375 52.614 
+" style="fill:none;stroke:#e2e2e2;stroke-linecap:square;stroke-width:0.55;"/>
+     </g>
+     <g id="line2d_8">
+      <g>
+       <use style="fill:#4d4d4d;stroke:#4d4d4d;stroke-width:0.8;" x="275.874375" xlink:href="#mfa41305dd5" y="265.59"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-family:Arial;font-size:8.7px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 275.874375, 279.317297)" x="275.874375" y="279.317297">0.04</text>
+     </g>
+    </g>
+    <g id="text_5">
+     <text style="font-family:Arial;font-size:9.2px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 189.762375, 293.743734)" x="189.762375" y="293.743734">ΔTop-10 vs initial 82-feature scorer</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_9"/>
+     <g id="text_6">
+      <text style="font-family:Arial;font-size:9.2px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 84.402375, 65.587321)" x="84.402375" y="65.587321">Drop prior ranks</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_10"/>
+     <g id="text_7">
+      <text style="font-family:Arial;font-size:9.2px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 84.402375, 162.394594)" x="84.402375" y="162.394594">Drop model ranks</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_11"/>
+     <g id="text_8">
+      <text style="font-family:Arial;font-size:9.2px;font-style:normal;font-weight:normal;text-anchor:end;" transform="rotate(-0, 84.402375, 259.201866)" x="84.402375" y="259.201866">Drop model scores</text>
+     </g>
+    </g>
+   </g>
+   <g id="line2d_12">
+    <path clip-path="url(#p591193d245)" d="M 169.890375 265.59 
+L 169.890375 52.614 
+" style="fill:none;stroke:#4d4d4d;stroke-linecap:square;stroke-width:0.8;"/>
+   </g>
+   <g id="LineCollection_1">
+    <path clip-path="url(#p591193d245)" d="M 169.890375 62.294727 
+L 274.019655 62.294727 
+" style="fill:none;stroke:#2c7774;stroke-width:1.25;"/>
+   </g>
+   <g id="LineCollection_2">
+    <path clip-path="url(#p591193d245)" d="M 169.890375 159.102 
+L 129.086535 159.102 
+" style="fill:none;stroke:#8d8d8d;stroke-width:1.25;"/>
+   </g>
+   <g id="LineCollection_3">
+    <path clip-path="url(#p591193d245)" d="M 169.890375 255.909273 
+L 106.035015 255.909273 
+" style="fill:none;stroke:#8d8d8d;stroke-width:1.25;"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 90.402375 265.59 
+L 289.122375 265.59 
+" style="fill:none;stroke:#4d4d4d;stroke-linecap:square;stroke-linejoin:miter;stroke-width:0.8;"/>
+   </g>
+   <g id="LineCollection_4">
+    <path clip-path="url(#p591193d245)" d="M 263.686215 62.294727 
+L 284.353095 62.294727 
+" style="fill:none;stroke:#2c7774;stroke-width:0.95;"/>
+   </g>
+   <g id="line2d_13">
+    <defs>
+     <path d="M 0 2.5 
+C 0.663008 2.5 1.29895 2.236584 1.767767 1.767767 
+C 2.236584 1.29895 2.5 0.663008 2.5 0 
+C 2.5 -0.663008 2.236584 -1.29895 1.767767 -1.767767 
+C 1.29895 -2.236584 0.663008 -2.5 0 -2.5 
+C -0.663008 -2.5 -1.29895 -2.236584 -1.767767 -1.767767 
+C -2.236584 -1.29895 -2.5 -0.663008 -2.5 0 
+C -2.5 0.663008 -2.236584 1.29895 -1.767767 1.767767 
+C -1.29895 2.236584 -0.663008 2.5 0 2.5 
+z
+" id="mc87f9e574f" style="stroke:#ffffff;stroke-width:0.7;"/>
+    </defs>
+    <g clip-path="url(#p591193d245)">
+     <use style="fill:#2c7774;stroke:#ffffff;stroke-width:0.7;" x="274.019655" xlink:href="#mc87f9e574f" y="62.294727"/>
+    </g>
+   </g>
+   <g id="line2d_14">
+    <defs>
+     <path d="M 0 3 
+L 0 -3 
+" id="ma076dcbb82" style="stroke:#2c7774;stroke-width:0.85;"/>
+    </defs>
+    <g clip-path="url(#p591193d245)">
+     <use style="fill:#2c7774;stroke:#2c7774;stroke-width:0.85;" x="263.686215" xlink:href="#ma076dcbb82" y="62.294727"/>
+    </g>
+   </g>
+   <g id="line2d_15">
+    <g clip-path="url(#p591193d245)">
+     <use style="fill:#2c7774;stroke:#2c7774;stroke-width:0.85;" x="284.353095" xlink:href="#ma076dcbb82" y="62.294727"/>
+    </g>
+   </g>
+   <g id="line2d_16">
+    <defs>
+     <path d="M 0 2.5 
+C 0.663008 2.5 1.29895 2.236584 1.767767 1.767767 
+C 2.236584 1.29895 2.5 0.663008 2.5 0 
+C 2.5 -0.663008 2.236584 -1.29895 1.767767 -1.767767 
+C 1.29895 -2.236584 0.663008 -2.5 0 -2.5 
+C -0.663008 -2.5 -1.29895 -2.236584 -1.767767 -1.767767 
+C -2.236584 -1.29895 -2.5 -0.663008 -2.5 0 
+C -2.5 0.663008 -2.236584 1.29895 -1.767767 1.767767 
+C -1.29895 2.236584 -0.663008 2.5 0 2.5 
+z
+" id="mea5b5519f3" style="stroke:#ffffff;stroke-width:0.7;"/>
+    </defs>
+    <g clip-path="url(#p591193d245)">
+     <use style="fill:#8d8d8d;stroke:#ffffff;stroke-width:0.7;" x="129.086535" xlink:href="#mea5b5519f3" y="159.102"/>
+    </g>
+   </g>
+   <g id="line2d_17">
+    <g clip-path="url(#p591193d245)">
+     <use style="fill:#8d8d8d;stroke:#ffffff;stroke-width:0.7;" x="106.035015" xlink:href="#mea5b5519f3" y="255.909273"/>
+    </g>
+   </g>
+   <g id="text_9">
+    <text style="fill:#555555;font-family:Arial;font-size:7.4px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 146.224148, 153.75447)" x="146.224148" y="153.75447">-0.0154</text>
+   </g>
+   <g id="text_10">
+    <text style="fill:#555555;font-family:Arial;font-size:7.4px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 132.854266, 250.561743)" x="132.854266" y="250.561743">-0.0241</text>
+   </g>
+   <g id="text_11">
+    <text style="font-family:Arial;font-size:9.5px;font-style:normal;font-weight:bold;text-anchor:start;" transform="rotate(-0, 90.402375, 42.614)" x="90.402375" y="42.614">A. Ablation of feature families</text>
+   </g>
+   <g id="text_12">
+    <text style="fill:#2c7774;font-family:Arial;font-size:8.2px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 256.474655, 56.561555)" x="256.474655" y="56.561555">+0.0393</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_4">
+    <path clip-path="url(#pa24e3d0d96)" d="M 477.987267 109.967184 
+Q 491.486493 109.967184 504.091291 109.967184 
+" style="fill:none;stroke:#595959;stroke-linecap:round;stroke-width:0.8;"/>
+    <path clip-path="url(#pa24e3d0d96)" d="M 499.691291 107.767184 
+L 504.091291 109.967184 
+L 499.691291 112.167184 
+L 499.691291 107.767184 
+z
+" style="fill:#595959;stroke:#595959;stroke-linecap:round;stroke-width:0.8;"/>
+   </g>
+   <g id="line2d_18">
+    <path clip-path="url(#pa24e3d0d96)" d="M 375.234375 193.2408 
+L 623.236935 193.2408 
+" style="fill:none;stroke:#777777;stroke-linecap:square;stroke-width:0.55;"/>
+   </g>
+   <g id="line2d_19">
+    <path clip-path="url(#pa24e3d0d96)" d="M 375.234375 223.05744 
+L 623.236935 223.05744 
+" style="fill:none;stroke:#9a9a9a;stroke-linecap:square;stroke-width:0.55;"/>
+   </g>
+   <g id="line2d_20">
+    <path clip-path="url(#pa24e3d0d96)" d="M 375.234375 250.74432 
+L 623.236935 250.74432 
+" style="fill:none;stroke:#777777;stroke-linecap:square;stroke-width:0.55;"/>
+   </g>
+   <g id="text_13">
+    <text style="fill:#111111;font-family:Arial;font-size:9.5px;font-style:normal;font-weight:bold;text-anchor:start;" transform="rotate(-0, 375.234375, 57.346802)" x="375.234375" y="57.346802">B. Reliability audit</text>
+   </g>
+   <g id="text_14">
+    <text style="fill:#111111;font-family:Arial;font-size:8.6px;font-style:normal;font-weight:bold;text-anchor:start;" transform="rotate(-0, 375.234375, 81.527921)" x="375.234375" y="81.527921">Lost cases</text>
+   </g>
+   <g id="text_15">
+    <text style="fill:#111111;font-family:Arial;font-size:7.7px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 434.651655, 103.65169)" x="434.651655" y="103.65169">82-feature</text>
+   </g>
+   <g id="text_16">
+    <text style="fill:#111111;font-family:Arial;font-size:10.2px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 434.651655, 118.148591)" x="434.651655" y="118.148591">596</text>
+   </g>
+   <g id="text_17">
+    <text style="fill:#9a4742;font-family:Arial;font-size:10.2px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 530.235975, 112.611215)" x="530.235975" y="112.611215">101</text>
+   </g>
+   <g id="text_18">
+    <text style="fill:#111111;font-family:Arial;font-size:7.7px;font-style:normal;font-weight:normal;text-anchor:start;" transform="rotate(-0, 561.236295, 111.957754)" x="561.236295" y="111.957754">77-feature</text>
+   </g>
+   <g id="text_19">
+    <text style="fill:#7a7a7a;font-family:Arial;font-size:8.2px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 491.485575, 137.857108)" x="491.485575" y="137.857108">5.9× fewer</text>
+   </g>
+   <g id="text_20">
+    <text style="fill:#111111;font-family:Arial;font-size:8.6px;font-style:normal;font-weight:bold;text-anchor:start;" transform="rotate(-0, 375.234375, 160.329041)" x="375.234375" y="160.329041">Rescue/lost audit</text>
+   </g>
+   <g id="text_21">
+    <text style="fill:#111111;font-family:Arial;font-size:8.2px;font-style:normal;font-weight:normal;text-anchor:start;" transform="rotate(-0, 375.234375, 183.646948)" x="375.234375" y="183.646948">Reference</text>
+   </g>
+   <g id="text_22">
+    <text style="fill:#2c7774;font-family:Arial;font-size:8.2px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 483.735495, 183.646948)" x="483.735495" y="183.646948">Rescue</text>
+   </g>
+   <g id="text_23">
+    <text style="fill:#9a4742;font-family:Arial;font-size:8.2px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 540.569415, 183.646948)" x="540.569415" y="183.646948">Lost</text>
+   </g>
+   <g id="text_24">
+    <text style="fill:#7a7a7a;font-family:Arial;font-size:8.2px;font-style:normal;font-weight:normal;text-anchor:middle;" transform="rotate(-0, 599.986695, 183.646948)" x="599.986695" y="183.646948">Net</text>
+   </g>
+   <g id="text_25">
+    <text style="fill:#111111;font-family:Arial;font-size:8.2px;font-style:normal;font-weight:normal;text-anchor:start;" transform="rotate(-0, 375.234375, 211.333828)" x="375.234375" y="211.333828">Score Blend</text>
+   </g>
+   <g id="text_26">
+    <text style="fill:#2c7774;font-family:Arial;font-size:8.2px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 483.735495, 211.339594)" x="483.735495" y="211.339594">1016</text>
+   </g>
+   <g id="text_27">
+    <text style="fill:#9a4742;font-family:Arial;font-size:8.2px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 540.569415, 211.339594)" x="540.569415" y="211.339594">101</text>
+   </g>
+   <g id="text_28">
+    <text style="fill:#7a7a7a;font-family:Arial;font-size:8.2px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 599.986695, 211.339594)" x="599.986695" y="211.339594">+915</text>
+   </g>
+   <g id="text_29">
+    <text style="fill:#111111;font-family:Arial;font-size:8.2px;font-style:normal;font-weight:normal;text-anchor:start;" transform="rotate(-0, 375.234375, 239.020708)" x="375.234375" y="239.020708">82-feature scorer</text>
+   </g>
+   <g id="text_30">
+    <text style="fill:#2c7774;font-family:Arial;font-size:8.2px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 483.735495, 239.026474)" x="483.735495" y="239.026474">626</text>
+   </g>
+   <g id="text_31">
+    <text style="fill:#9a4742;font-family:Arial;font-size:8.2px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 540.569415, 239.026474)" x="540.569415" y="239.026474">102</text>
+   </g>
+   <g id="text_32">
+    <text style="fill:#7a7a7a;font-family:Arial;font-size:8.2px;font-style:normal;font-weight:bold;text-anchor:middle;" transform="rotate(-0, 599.986695, 239.026474)" x="599.986695" y="239.026474">+524</text>
+   </g>
+  </g>
+  <g id="text_33">
+   <text style="font-family:Arial;font-size:9.2px;font-style:normal;font-weight:bold;text-anchor:start;" transform="rotate(-0, 34.098375, 13.897312)" x="34.098375" y="13.897312">Post-audit prior-rank pruning improves transfer</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p591193d245">
+   <rect height="212.976" width="198.72" x="90.402375" y="52.614"/>
+  </clipPath>
+  <clipPath id="pa24e3d0d96">
+   <rect height="212.976" width="258.336" x="375.234375" y="49.482"/>
+  </clipPath>
+ </defs>
+</svg>
