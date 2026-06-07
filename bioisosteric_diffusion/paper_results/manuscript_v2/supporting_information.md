@@ -219,7 +219,36 @@ Source: `paper_results/v2_full_data/e1_main_10seed_summary.csv` (query-weighted 
 
 ---
 
-## S11. Data Availability
+## S11. Zero-Positive OF Predictions
+
+Fourteen OFs in the manifest have zero labeled positive replacements in the current archive. We apply LBC-Ranker (trained on all 123 labeled OFs) to predict top-ranked candidates for these OFs as a qualitative check of model behavior in the absence of training labels for the query OF.
+
+**Table S11: Top-3 predicted candidates for zero-positive OFs.**
+
+| OF | Top-1 | Score | Top-2 | Score | Top-3 | Score |
+|-----|-------|-------|-------|-------|-------|-------|
+| *C(=O)O | *c1ccccc1 | 0.067 | *C(C)=O | 0.061 | *C(=O)OC | 0.054 |
+| *C(=O)c1ccc(OC)cc1 | *c1ccc(OC)cc1 | 0.142 | *c1ccccc1 | 0.077 | *C(=O)c1ccccc1 | 0.045 |
+| *C(=O)c1cccs1 | *c1ccccc1 | 0.205 | *c1ccc(Cl)cc1 | 0.047 | *C(=O)c1ccccc1 | 0.045 |
+| *CC(C)C | *C(C)C | 0.068 | *CC | 0.063 | *C(C)CC | 0.046 |
+| *CCCCCC | *CC | 0.056 | *CCC | 0.047 | *c1ccccc1 | 0.038 |
+| *Cc1cccnc1 | *c1ccccc1 | 0.225 | *Cc1ccccc1 | 0.113 | *Cc1ccncc1 | 0.062 |
+| *NCCc1ccccc1 | *c1ccccc1 | 0.302 | *Cc1ccccc1 | 0.079 | *NCc1ccccc1 | 0.048 |
+| *c1ccc(-c2ccccc2)cc1 | *c1ccccc1 | 0.220 | *c1ccc(Cl)cc1 | 0.093 | *c1ccc(F)cc1 | 0.066 |
+| *c1ccc(C(=O)O)cc1 | *c1ccccc1 | 0.361 | *c1ccc(OC)cc1 | 0.112 | *c1ccc(F)cc1 | 0.094 |
+| *c1ccc(Cl)cc1 | *c1ccccc1 | 0.406 | *c1ccc(F)cc1 | 0.162 | *c1ccc(C)cc1 | 0.138 |
+| *c1ccc2ccccc2c1 | *c1ccccc1 | 0.346 | *c1ccc(Cl)cc1 | 0.113 | *c1ccc(F)cc1 | 0.079 |
+| *c1cccc(C#N)c1 | *c1ccccc1 | 0.443 | *c1cccc(OC)c1 | 0.087 | *c1ccc(OC)cc1 | 0.075 |
+| *c1cccc(OC)c1 | *c1ccccc1 | 0.462 | *c1ccc(OC)cc1 | 0.237 | *c1ccccc1OC | 0.079 |
+| *c1ccccc1OC | *c1ccccc1 | 0.394 | *c1ccc(OC)cc1 | 0.189 | *c1ccc(F)cc1 | 0.106 |
+
+The top-ranked candidate for all 14 zero-positive OFs is *c1ccccc1 (phenyl), the most frequent positive-label candidate in the training set (27,448 positive pairs). This reflects the dominant role of the frequency feature when no OF-specific training signal is available. Top-1 scores range from 0.067 (*C(=O)O, very low confidence) to 0.462 (*c1cccc(OC)c1, moderate confidence). For OFs with clear structural analogs among labeled OFs (e.g., *c1ccc(Cl)cc1, *c1cccc(OC)c1), the top-2 and top-3 predictions include structurally plausible replacements beyond the frequency prior.
+
+Source: `paper_results/v2_full_data/e8_zero_of_predictions.csv`
+
+---
+
+## S12. Data Availability
 
 - **Experiment protocol**: `paper_results/v2_full_data/protocol.md`
 - **Per-seed summary**: `paper_results/v2_full_data/e1_main_10seed_summary.csv`

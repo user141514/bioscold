@@ -1,0 +1,15 @@
+of,n_candidates_scored,top1,top1_score,top2,top2_score,top3,top3_score
+*C(=O)O,152,*c1ccccc1,0.067,*C(C)=O,0.0612,*C(=O)OC,0.0535
+*C(=O)c1ccc(OC)cc1,152,*c1ccc(OC)cc1,0.1419,*c1ccccc1,0.0774,*C(=O)c1ccccc1,0.0454
+*C(=O)c1cccs1,137,*c1ccccc1,0.2051,*c1ccc(Cl)cc1,0.0472,*C(=O)c1ccccc1,0.0453
+*CC(C)C,152,*C(C)C,0.0676,*CC,0.0625,*C(C)CC,0.0455
+*CCCCCC,152,*CC,0.0561,*CCC,0.047,*c1ccccc1,0.0375
+*Cc1cccnc1,152,*c1ccccc1,0.2251,*Cc1ccccc1,0.1133,*Cc1ccncc1,0.0617
+*NCCc1ccccc1,152,*c1ccccc1,0.3016,*Cc1ccccc1,0.0785,*NCc1ccccc1,0.0481
+*c1ccc(-c2ccccc2)cc1,152,*c1ccccc1,0.2198,*c1ccc(Cl)cc1,0.0925,*c1ccc(F)cc1,0.0662
+*c1ccc(C(=O)O)cc1,152,*c1ccccc1,0.3614,*c1ccc(OC)cc1,0.112,*c1ccc(F)cc1,0.0941
+*c1ccc(Cl)cc1,152,*c1ccccc1,0.4064,*c1ccc(F)cc1,0.1623,*c1ccc(C)cc1,0.1383
+*c1ccc2ccccc2c1,152,*c1ccccc1,0.3455,*c1ccc(Cl)cc1,0.113,*c1ccc(F)cc1,0.0794
+*c1cccc(C#N)c1,152,*c1ccccc1,0.4433,*c1cccc(OC)c1,0.0872,*c1ccc(OC)cc1,0.0745
+*c1cccc(OC)c1,152,*c1ccccc1,0.4623,*c1ccc(OC)cc1,0.2365,*c1ccccc1OC,0.079
+*c1ccccc1OC,152,*c1ccccc1,0.3944,*c1ccc(OC)cc1,0.1893,*c1ccc(F)cc1,0.106
