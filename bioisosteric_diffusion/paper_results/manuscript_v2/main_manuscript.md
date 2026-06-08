@@ -73,13 +73,15 @@ For capacity comparison, we also train a HistGradientBoostingClassifier (HGB) on
 
 **Content-Aware (CA)**: Hand-crafted linear combination s_CA(c | f) = λ × Morgan(c, f) + (1 − λ) × PhysChem. The PhysChem term is 1/(1 + ΣΔphyschem). The weight λ is tuned via inner cross-validation from {0, 0.25, 0.5, 0.75, 1.0}.
 
+**Frequency–Content Blend (diagnostic)**: To test whether the two main signal families can be combined by a global scalar weight, we define s_blend(c | f) = α · z(freq(c)) + (1 − α) · z(s_CA(c | f)), where z denotes fold-local standardization (zero mean, unit variance). The blend weight α is selected via inner cross-validation from {0, 0.25, 0.5, 0.75, 1.0}, and CA uses its independently tuned λ = 0.75. This baseline is diagnostic: it uses the same information (candidate frequency and content similarity) as CA plus a frequency prior, but compresses all structural dimensions into a single CA scalar before blending, unlike LBC-Ranker which retains individual structural features.
+
 **C3F-style retrieval baseline**: K-nearest-OF collaborative retrieval with weighted candidate success aggregation and a content-aware fallback for OFs with weak collaborative signal. For each test OF, we find the K most Morgan-similar training OFs, aggregate their per-OF normalized candidate success distributions (each computed strictly from training labels) with similarity-based weighting, and blend with content similarity via a tunable α parameter. K ∈ {3, 5, 7, 10} and α ∈ {0.1, 0.2, 0.3, 0.5, 0.7} are selected via inner cross-validation. This baseline represents the retrieval-based strategy of using cross-OF replacement patterns without learning direct candidate–OF compatibility features.
 
 ### 2.6 Evaluation Protocol
 
 **Outer split**: Ten independent random 70/30 splits of the 123 labeled OFs into training and test sets (seed ∈ {0, ..., 9}). OFs are split without stratification; per-split imbalance diagnostics (positive-pair count distribution in train vs test) are provided in the Supporting Information.
 
-**Inner tuning**: For each outer split, hyperparameters for CA, the retrieval baseline, and HGB are selected via 3-fold GroupKFold cross-validation over the training OFs. Configurations are ranked by mean inner OF-macro Hit@10; ties within 0.005 are broken by model complexity (lower K, lower α, lower depth preferred).
+**Inner tuning**: For each outer split, hyperparameters for CA, the Freq+CA blend, the retrieval baseline, and HGB are selected via 3-fold GroupKFold cross-validation over the training OFs. Configurations are ranked by mean inner OF-macro Hit@10; ties within 0.005 are broken by model complexity (lower K, lower α, lower depth preferred).
 
 **Primary metric**: OF-macro Hit@10, computed as the mean of per-OF Hit@10 values over test OFs. Query-weighted Hit@10 is reported as a secondary metric.
 
@@ -91,20 +93,7 @@ For capacity comparison, we also train a HistGradientBoostingClassifier (HGB) on
 
 ## 3. Results
 
-### 3.1 Component Ladder: Feature Resolution Beyond Blending
-
-To isolate LBC-Ranker's advantage beyond simple feature blending, we construct a component ladder under the same 10-seed protocol with inner 3-fold CV tuning for both CA (λ) and the Freq+CA blend weight (α) (Table 2). Under OF-macro Hit@10, frequency alone achieves 0.462. Tuned content similarity (CA, λ = 0.75) reaches 0.661. A tuned linear blend of frequency and CA (α = 0.25 in all seeds) substantially improves over CA, reaching 0.797 (+0.136). This demonstrates that combining track record and content similarity is already a strong baseline. LBC-Ranker achieves 0.852, further improving over the blend by +0.055, and outperforms it in all 10 seeds. Under query-weighted Hit@10, the same pattern holds: Blend improves over CA by +0.118, and LBC-Ranker improves over Blend by +0.050. The consistent LBC–Blend gap across both metrics indicates that LBC-Ranker's feature-resolved compatibility — retaining individual structural dimensions (bit_corr, five physicochemical deltas) rather than compressing them into a single CA scalar — captures information that coarse blending discards.
-
-**Table 2: Component ladder (10-seed mean Hit@10, inner 3-fold CV tuned).**
-
-| Method | OF-macro | Query-weighted |
-|--------|---------|---------------|
-| Frequency | 0.462 | 0.477 |
-| CA (tuned, λ = 0.75) | 0.661 | 0.608 |
-| Freq+CA blend (tuned, α = 0.25) | 0.797 | 0.727 |
-| **LBC-Ranker** | **0.852** | **0.777** |
-
-### 3.2 Primary Ranking Performance
+### 3.1 Primary Ranking Performance
 
 Table 2 and Figure 2 report the 10-seed ranking performance. LBC-Ranker achieves an OF-macro Hit@10 of 0.852 ± 0.032. The strongest tuned non-LBC baseline is C3F-style retrieval in 7 of 10 seeds and CA in 3 of 10 seeds. The per-seed best non-LBC baseline achieves a mean Hit@10 of 0.723, and the paired mean difference between LBC-Ranker and this per-seed best is +0.130 ± 0.044 (two-sided p = 0.00195, exact sign-flip test). LBC-Ranker outperforms the best non-LBC baseline in all 10 seeds.
 
@@ -121,15 +110,28 @@ Table 2 and Figure 2 report the 10-seed ranking performance. LBC-Ranker achieves
 
 ^a^ Mean across seeds of the per-seed best non-LBC baseline Hit@10. The best baseline is C3F-style retrieval in 7 of 10 seeds and CA in 3 of 10 seeds. The paired Δ is LBC minus the per-seed best baseline. HGB achieves Hit@10 within 0.002 of LBC-Ranker; the difference is not statistically distinguishable under the current HGB hyperparameter grid.
 
-### 3.2 Model Capacity: LR vs HGB
+### 3.2 Component Ladder: Feature Resolution Beyond Blending
+
+To isolate LBC-Ranker's advantage beyond simple feature blending, we construct a component ladder under the same 10-seed protocol with inner 3-fold CV tuning for both CA (λ) and the Freq+CA blend weight (α) (Table 3). Under OF-macro Hit@10, frequency alone achieves 0.462. Tuned content similarity (CA, λ = 0.75) reaches 0.661. A tuned linear blend of frequency and CA (α = 0.25 in all seeds) substantially improves over CA, reaching 0.797 (+0.136). This demonstrates that combining track record and content similarity is already a strong baseline. LBC-Ranker achieves 0.852, further improving over the blend by +0.055, and outperforms it in all 10 seeds. Under query-weighted Hit@10, the same pattern holds: Blend improves over CA by +0.118, and LBC-Ranker improves over Blend by +0.050. The consistent LBC–Blend gap across both metrics indicates that LBC-Ranker's feature-resolved compatibility — retaining individual structural dimensions (bit_corr, five physicochemical deltas) rather than compressing them into a single CA scalar — captures information that coarse blending discards.
+
+**Table 3: Component ladder (10-seed mean Hit@10, inner 3-fold CV tuned).**
+
+| Method | OF-macro | Query-weighted |
+|--------|---------|---------------|
+| Frequency | 0.462 | 0.477 |
+| CA (tuned, λ = 0.75) | 0.661 | 0.608 |
+| Freq+CA blend (tuned, α = 0.25) | 0.797 | 0.727 |
+| **LBC-Ranker** | **0.852** | **0.777** |
+
+### 3.3 Model Capacity: LR vs HGB
 
 LBC-Ranker (LR, 0.852) and HGB (0.851) achieve essentially identical macro Hit@10 (mean paired difference −0.002). HGB achieves a higher macro Hit@10 in 6 seeds and LR in 4 seeds. We retain LR as the primary implementation because it is compact (9 parameters), deterministic, and directly interpretable through feature weights.
 
-### 3.3 Feature Ablation
+### 3.4 Feature Ablation
 
-Table 3 and Figure 1 report the one-drop ablation across 10 seeds. Dropping candidate frequency causes the largest macro Hit@10 degradation (−0.193 ± 0.044), followed by bit_corr (−0.155 ± 0.059) and Morgan Tanimoto similarity (−0.109 ± 0.055). The five physicochemical delta features each contribute modestly (Δ ranging from −0.070 to −0.091).
+Table 4 and Figure 1 report the one-drop ablation across 10 seeds. Dropping candidate frequency causes the largest macro Hit@10 degradation (−0.193 ± 0.044), followed by bit_corr (−0.155 ± 0.059) and Morgan Tanimoto similarity (−0.109 ± 0.055). The five physicochemical delta features each provide secondary but consistent signal (Δ ranging from −0.070 to −0.091).
 
-**Table 3: Feature ablation (10-seed mean OF-macro Hit@10 degradation).**
+**Table 4: Feature ablation (10-seed mean OF-macro Hit@10 degradation).**
 
 | Feature Dropped | Δ Hit@10 | Std |
 |----------------|---------|------|
@@ -142,11 +144,11 @@ Table 3 and Figure 1 report the one-drop ablation across 10 seeds. Dropping cand
 | dMW | −0.077 | 0.045 |
 | dHeavy | −0.070 | 0.045 |
 
-### 3.4 Baseline Tuning Behavior
+### 3.5 Baseline Tuning Behavior
 
-CA tuning consistently selects λ = 0.75 across all seeds (3:1 Morgan-to-physchem weighting). C3F-style retrieval tuning selects K ∈ {3, 5, 7, 10} with α = 0.1 in all 10 seeds. HGB tuning selects depth = 5 in 8 of 10 seeds and depth = 3 in 2 of 10 seeds. Full tuning results are provided in the Supporting Information (tuning ledger).
+CA tuning consistently selects λ = 0.75 across all seeds (3:1 Morgan-to-physchem weighting). The Freq+CA blend tuning consistently selects α = 0.25. C3F-style retrieval tuning selects K ∈ {3, 5, 7, 10} with α = 0.1 in all 10 seeds. HGB tuning selects depth = 5 in 8 of 10 seeds and depth = 3 in 2 of 10 seeds. Full tuning results are provided in the Supporting Information (tuning ledger).
 
-### 3.5 Query-Weighted and Per-OF Analysis
+### 3.6 Query-Weighted and Per-OF Analysis
 
 Under query-weighted Hit@10, LBC-Ranker achieves a paired improvement of +0.093 over the best tuned non-LBC baseline. The full per-OF Hit@10 distribution across all seeds is provided in the Supporting Information (Table S3).
 
