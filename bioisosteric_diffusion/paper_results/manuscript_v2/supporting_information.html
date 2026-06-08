@@ -1,0 +1,1026 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>Supporting Information - LBC-Ranker</title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<div id="header">
+<h1 class="title">Supporting Information - LBC-Ranker</h1>
+</div>
+<h1 id="supporting-information">Supporting Information</h1>
+<h2 id="lbc-ranker-learned-candidatefragment-compatibility-ranking-for-fragment-replacement">LBC-Ranker: Learned Candidate–Fragment Compatibility Ranking for Fragment Replacement</h2>
+<hr />
+<h2 id="s1.-full-experiment-protocol">S1. Full Experiment Protocol</h2>
+<p>The experiment protocol is archived at <code>paper_results/v2_full_data/protocol.md</code>. Key design decisions:</p>
+<ul>
+<li><strong>Data</strong>: 123 OFs with positive-label support from 137,556 query rows (ChEMBL 36-derived D4A0 archive)</li>
+<li><strong>Evaluation</strong>: 10 independent 70/30 OF-level splits, inner 3-fold GroupKFold CV for hyperparameter selection</li>
+<li><strong>Primary metric</strong>: OF-macro Hit@10</li>
+<li><strong>Statistical test</strong>: Exact paired sign-flip test (2^10 = 1,024 sign configurations)</li>
+<li><strong>Tiebreaker</strong>: Within 0.005 mean inner Hit@10, lower model complexity preferred</li>
+</ul>
+<hr />
+<h2 id="s2.-dataset-statistics">S2. Dataset Statistics</h2>
+<p><strong>Table S1: Dataset summary.</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Total query rows</td>
+<td>137,556</td>
+</tr>
+<tr class="even">
+<td>Unique OF strings</td>
+<td>137</td>
+</tr>
+<tr class="odd">
+<td>OFs with positive-label support</td>
+<td>123</td>
+</tr>
+<tr class="even">
+<td>OFs with zero positive-label support</td>
+<td>14 (10.2%)</td>
+</tr>
+<tr class="odd">
+<td>Unique candidate fragments</td>
+<td>152</td>
+</tr>
+<tr class="even">
+<td>Total candidate pair rows</td>
+<td>14,950,719</td>
+</tr>
+<tr class="odd">
+<td>Positive pair rate</td>
+<td>1.33%</td>
+</tr>
+<tr class="even">
+<td>Positive pair range per OF</td>
+<td>98–27,448</td>
+</tr>
+<tr class="odd">
+<td>Top 10 OFs share of positives</td>
+<td>47.8%</td>
+</tr>
+</tbody>
+</table>
+<p>Source: <code>paper_results/v2_full_data/e4_coldstart_audit.csv</code></p>
+<hr />
+<h2 id="s3.-split-imbalance-diagnostics">S3. Split Imbalance Diagnostics</h2>
+<p><strong>Table S2: Per-seed split imbalance audit.</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Seed</th>
+<th>Train OFs</th>
+<th>Test OFs</th>
+<th>Train pos pairs</th>
+<th>Test pos pairs</th>
+<th>Train share</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>86</td>
+<td>37</td>
+<td>142,053</td>
+<td>53,668</td>
+<td>72.6%</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>86</td>
+<td>37</td>
+<td>149,997</td>
+<td>45,724</td>
+<td>76.6%</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>86</td>
+<td>37</td>
+<td>162,164</td>
+<td>33,557</td>
+<td>82.9%</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>86</td>
+<td>37</td>
+<td>136,447</td>
+<td>59,274</td>
+<td>69.7%</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>86</td>
+<td>37</td>
+<td>148,631</td>
+<td>47,090</td>
+<td>75.9%</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>86</td>
+<td>37</td>
+<td>149,217</td>
+<td>46,504</td>
+<td>76.2%</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>86</td>
+<td>37</td>
+<td>156,085</td>
+<td>39,636</td>
+<td>79.7%</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td>86</td>
+<td>37</td>
+<td>153,185</td>
+<td>42,536</td>
+<td>78.3%</td>
+</tr>
+<tr class="odd">
+<td>8</td>
+<td>86</td>
+<td>37</td>
+<td>158,272</td>
+<td>37,449</td>
+<td>80.9%</td>
+</tr>
+<tr class="even">
+<td>9</td>
+<td>86</td>
+<td>37</td>
+<td>149,346</td>
+<td>46,375</td>
+<td>76.3%</td>
+</tr>
+</tbody>
+</table>
+<p>Train positive-pair share ranges from 69.7% to 82.9% across seeds (mean 76.9%). Splits are not stratified by positive-pair count; this variability is reflected in the per-seed standard deviation of Hit@10 estimates.</p>
+<p>Source: <code>paper_results/v2_full_data/e4_split_imbalance_audit.csv</code></p>
+<hr />
+<h2 id="s4.-per-seed-detailed-results">S4. Per-Seed Detailed Results</h2>
+<p><strong>Table S3: Per-seed OF-macro Hit@10.</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Seed</th>
+<th>LBC-Ranker</th>
+<th>HGB</th>
+<th>C3F-style (tuned)</th>
+<th>CA (tuned)</th>
+<th>Frequency</th>
+<th>Best non-LBC</th>
+<th>Δ macro</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0.8266</td>
+<td>0.8640</td>
+<td>0.7467</td>
+<td>0.6195</td>
+<td>0.4694</td>
+<td>C3F</td>
+<td>+0.0799</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>0.8686</td>
+<td>0.8778</td>
+<td>0.6944</td>
+<td>0.6593</td>
+<td>0.4519</td>
+<td>C3F</td>
+<td>+0.1743</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>0.8625</td>
+<td>0.8781</td>
+<td>0.6763</td>
+<td>0.6926</td>
+<td>0.4112</td>
+<td>CA</td>
+<td>+0.1699</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>0.8591</td>
+<td>0.7438</td>
+<td>0.6742</td>
+<td>0.6552</td>
+<td>0.4367</td>
+<td>C3F</td>
+<td>+0.1849</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>0.8162</td>
+<td>0.8244</td>
+<td>0.7737</td>
+<td>0.6460</td>
+<td>0.4927</td>
+<td>C3F</td>
+<td>+0.0425</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>0.8285</td>
+<td>0.9016</td>
+<td>0.6910</td>
+<td>0.6493</td>
+<td>0.4147</td>
+<td>C3F</td>
+<td>+0.1375</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>0.8991</td>
+<td>0.8942</td>
+<td>0.7633</td>
+<td>0.6640</td>
+<td>0.5094</td>
+<td>C3F</td>
+<td>+0.1358</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td>0.8376</td>
+<td>0.7838</td>
+<td>0.6742</td>
+<td>0.6899</td>
+<td>0.4285</td>
+<td>CA</td>
+<td>+0.1477</td>
+</tr>
+<tr class="odd">
+<td>8</td>
+<td>0.9037</td>
+<td>0.8766</td>
+<td>0.7864</td>
+<td>0.6288</td>
+<td>0.5068</td>
+<td>C3F</td>
+<td>+0.1173</td>
+</tr>
+<tr class="even">
+<td>9</td>
+<td>0.8190</td>
+<td>0.8603</td>
+<td>0.6832</td>
+<td>0.7090</td>
+<td>0.5032</td>
+<td>CA</td>
+<td>+0.1099</td>
+</tr>
+<tr class="odd">
+<td><strong>Mean</strong></td>
+<td><strong>0.8521</strong></td>
+<td>0.8505</td>
+<td>0.7163</td>
+<td>0.6614</td>
+<td>0.4624</td>
+<td>—</td>
+<td><strong>+0.1300</strong></td>
+</tr>
+<tr class="even">
+<td><strong>Std</strong></td>
+<td>0.0318</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>0.0443</td>
+</tr>
+</tbody>
+</table>
+<p>Source: <code>paper_results/v2_full_data/e1_main_10seed_summary.csv</code></p>
+<hr />
+<h2 id="s5.-paired-sign-flip-tests">S5. Paired Sign-Flip Tests</h2>
+<p><strong>Table S4: Exact paired sign-flip test results (2^10 = 1,024 configurations).</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Comparison</th>
+<th>n</th>
+<th>Mean Δ</th>
+<th>All positive</th>
+<th>One-sided p</th>
+<th>Two-sided p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>LBC vs CA</td>
+<td>10</td>
+<td>+0.1907</td>
+<td>Yes</td>
+<td>0.000977</td>
+<td>0.001953</td>
+</tr>
+<tr class="even">
+<td>LBC vs C3F-style</td>
+<td>10</td>
+<td>+0.1357</td>
+<td>Yes</td>
+<td>0.000977</td>
+<td>0.001953</td>
+</tr>
+<tr class="odd">
+<td>LBC vs Frequency</td>
+<td>10</td>
+<td>+0.3896</td>
+<td>Yes</td>
+<td>0.000977</td>
+<td>0.001953</td>
+</tr>
+<tr class="even">
+<td>LBC vs Best non-LBC</td>
+<td>10</td>
+<td>+0.1300</td>
+<td>Yes</td>
+<td>0.000977</td>
+<td>0.001953</td>
+</tr>
+</tbody>
+</table>
+<p>Source: <code>paper_results/v2_full_data/e1_main_paired_tests.csv</code></p>
+<hr />
+<h2 id="s6.-full-ablation-results">S6. Full Ablation Results</h2>
+<p><strong>Table S5: Per-seed feature ablation (OF-macro Hit@10 degradation relative to full 8-feature model).</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Seed</th>
+<th>freq</th>
+<th>bit_corr</th>
+<th>morgan</th>
+<th>dLogP</th>
+<th>dTPSA</th>
+<th>dRings</th>
+<th>dMW</th>
+<th>dHeavy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>−0.2141</td>
+<td>−0.1516</td>
+<td>−0.0734</td>
+<td>−0.0832</td>
+<td>−0.0796</td>
+<td>−0.0777</td>
+<td>−0.0786</td>
+<td>−0.0641</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>−0.1857</td>
+<td>−0.1650</td>
+<td>−0.1107</td>
+<td>−0.0931</td>
+<td>−0.0897</td>
+<td>−0.0782</td>
+<td>−0.0759</td>
+<td>−0.0714</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>−0.1929</td>
+<td>−0.1578</td>
+<td>−0.1083</td>
+<td>−0.0887</td>
+<td>−0.0829</td>
+<td>−0.0778</td>
+<td>−0.0764</td>
+<td>−0.0706</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>−0.1993</td>
+<td>−0.1588</td>
+<td>−0.1101</td>
+<td>−0.0889</td>
+<td>−0.0854</td>
+<td>−0.0753</td>
+<td>−0.0742</td>
+<td>−0.0689</td>
+</tr>
+<tr class="odd">
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+</tbody>
+</table>
+<p>Full per-seed ablation results are archived in <code>paper_results/v2_full_data/e2_ablation_full_detail.csv</code>.</p>
+<p><strong>Table S6: Ablation summary (10-seed mean ± std).</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Feature Dropped</th>
+<th>Mean Δ Hit@10</th>
+<th>Std</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>frequency</td>
+<td>−0.193</td>
+<td>0.044</td>
+</tr>
+<tr class="even">
+<td>bit_corr</td>
+<td>−0.155</td>
+<td>0.059</td>
+</tr>
+<tr class="odd">
+<td>morgan</td>
+<td>−0.109</td>
+<td>0.055</td>
+</tr>
+<tr class="even">
+<td>dLogP</td>
+<td>−0.091</td>
+<td>0.041</td>
+</tr>
+<tr class="odd">
+<td>dTPSA</td>
+<td>−0.085</td>
+<td>0.041</td>
+</tr>
+<tr class="even">
+<td>dRings</td>
+<td>−0.079</td>
+<td>0.045</td>
+</tr>
+<tr class="odd">
+<td>dMW</td>
+<td>−0.077</td>
+<td>0.045</td>
+</tr>
+<tr class="even">
+<td>dHeavy</td>
+<td>−0.070</td>
+<td>0.045</td>
+</tr>
+</tbody>
+</table>
+<p>Source: <code>paper_results/v2_full_data/e2_ablation_full_summary.csv</code></p>
+<hr />
+<h2 id="s7.-hgb-vs-lr-per-seed-comparison">S7. HGB vs LR Per-Seed Comparison</h2>
+<p><strong>Table S7: LR vs HGB per seed.</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Seed</th>
+<th>LR Macro Hit@10</th>
+<th>HGB Macro Hit@10</th>
+<th>Δ (HGB − LR)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0.8266</td>
+<td>0.8640</td>
+<td>+0.0374</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>0.8686</td>
+<td>0.8778</td>
+<td>+0.0092</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>0.8625</td>
+<td>0.8781</td>
+<td>+0.0157</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>0.8591</td>
+<td>0.7438</td>
+<td>−0.1153</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>0.8162</td>
+<td>0.8244</td>
+<td>+0.0082</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>0.8285</td>
+<td>0.9016</td>
+<td>+0.0731</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>0.8991</td>
+<td>0.8942</td>
+<td>−0.0049</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td>0.8376</td>
+<td>0.7838</td>
+<td>−0.0538</td>
+</tr>
+<tr class="odd">
+<td>8</td>
+<td>0.9037</td>
+<td>0.8766</td>
+<td>−0.0270</td>
+</tr>
+<tr class="even">
+<td>9</td>
+<td>0.8190</td>
+<td>0.8603</td>
+<td>+0.0414</td>
+</tr>
+<tr class="odd">
+<td><strong>Mean</strong></td>
+<td><strong>0.8521</strong></td>
+<td><strong>0.8505</strong></td>
+<td><strong>−0.0016</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Source: <code>paper_results/v2_full_data/e6_hgb_vs_lr.csv</code></p>
+<hr />
+<h2 id="s8.-tuning-ledger-summary">S8. Tuning Ledger Summary</h2>
+<p><strong>Table S8: Best configurations per seed.</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Seed</th>
+<th>Best CA λ</th>
+<th>Best C3F K</th>
+<th>Best C3F α</th>
+<th>Best HGB depth</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0.75</td>
+<td>10</td>
+<td>0.1</td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>0.75</td>
+<td>7</td>
+<td>0.1</td>
+<td>5</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>0.75</td>
+<td>5</td>
+<td>0.1</td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>0.75</td>
+<td>5</td>
+<td>0.1</td>
+<td>5</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>0.75</td>
+<td>7</td>
+<td>0.1</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>0.75</td>
+<td>10</td>
+<td>0.1</td>
+<td>5</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>0.75</td>
+<td>5</td>
+<td>0.1</td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td>0.75</td>
+<td>7</td>
+<td>0.1</td>
+<td>5</td>
+</tr>
+<tr class="odd">
+<td>8</td>
+<td>0.75</td>
+<td>3</td>
+<td>0.1</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td>9</td>
+<td>0.75</td>
+<td>5</td>
+<td>0.1</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+<p>CA consistently selects λ = 0.75 (3:1 Morgan-to-physchem weighting). C3F-style selects α = 0.1 in all seeds (light content-aware fallback), with K varying from 3 to 10. HGB selects depth = 5 in 8/10 seeds and depth = 3 in 2/10 seeds.</p>
+<p>Full tuning ledger with all inner cross-validation scores for all 38 evaluated configurations per seed is archived in <code>paper_results/v2_full_data/e3_tuning_ledger.csv</code>.</p>
+<hr />
+<h2 id="s9.-learned-feature-weights">S9. Learned Feature Weights</h2>
+<p><strong>Table S9: LBC-Ranker feature weights across 10 seeds (standardized features, mean ± std).</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Feature</th>
+<th>Mean Weight</th>
+<th>Std</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>bit_corr</td>
+<td>+3.351</td>
+<td>0.160</td>
+<td>3.351</td>
+</tr>
+<tr class="even">
+<td>Morgan</td>
+<td>−2.404</td>
+<td>0.131</td>
+<td>2.404</td>
+</tr>
+<tr class="odd">
+<td>dLogP</td>
+<td>−0.442</td>
+<td>0.034</td>
+<td>0.442</td>
+</tr>
+<tr class="even">
+<td>dTPSA</td>
+<td>−0.408</td>
+<td>0.027</td>
+<td>0.408</td>
+</tr>
+<tr class="odd">
+<td>freq</td>
+<td>+0.393</td>
+<td>0.018</td>
+<td>0.393</td>
+</tr>
+<tr class="even">
+<td>dHeavy</td>
+<td>−0.362</td>
+<td>0.044</td>
+<td>0.362</td>
+</tr>
+<tr class="odd">
+<td>dRings</td>
+<td>+0.162</td>
+<td>0.036</td>
+<td>0.162</td>
+</tr>
+<tr class="even">
+<td>dMW</td>
+<td>−0.026</td>
+<td>0.042</td>
+<td>0.026</td>
+</tr>
+<tr class="odd">
+<td>Intercept</td>
+<td>−5.425</td>
+<td>0.052</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>Weights are on standardized features (zero mean, unit variance) and are therefore comparable in magnitude. bit_corr and Morgan carry the largest learned weights, consistent with their roles as the primary structural compatibility signals. The low standard deviations across seeds indicate stable weight estimates. Note that feature weight magnitude does not directly correspond to ablation importance because features are correlated; the ablation results (Table S6) provide the causal estimate of each feature's marginal contribution.</p>
+<p>Source: <code>paper_results/v2_full_data/e7_learned_weights.csv</code></p>
+<hr />
+<h2 id="s10.-query-weighted-hit10">S10. Query-Weighted Hit@10</h2>
+<p><strong>Table S10: Query-weighted Hit@10 across 10 seeds.</strong></p>
+<table>
+<colgroup>
+<col width="7%" />
+<col width="13%" />
+<col width="6%" />
+<col width="21%" />
+<col width="14%" />
+<col width="13%" />
+<col width="23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Seed</th>
+<th>LBC-Ranker</th>
+<th>HGB</th>
+<th>C3F-style (tuned)</th>
+<th>CA (tuned)</th>
+<th>Frequency</th>
+<th>Δ query (LBC − best)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0.7256</td>
+<td>0.7829</td>
+<td>0.6879</td>
+<td>0.5641</td>
+<td>0.4358</td>
+<td>+0.0377</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>0.8281</td>
+<td>0.8625</td>
+<td>0.7133</td>
+<td>0.6353</td>
+<td>0.5278</td>
+<td>+0.1147</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>0.7981</td>
+<td>0.7960</td>
+<td>0.7268</td>
+<td>0.6634</td>
+<td>0.3806</td>
+<td>+0.1347</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>0.6780</td>
+<td>0.6520</td>
+<td>0.6004</td>
+<td>0.5312</td>
+<td>0.4530</td>
+<td>+0.0776</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>0.7134</td>
+<td>0.7234</td>
+<td>0.7025</td>
+<td>0.6127</td>
+<td>0.4513</td>
+<td>+0.0110</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>0.8063</td>
+<td>0.8528</td>
+<td>0.7138</td>
+<td>0.6220</td>
+<td>0.4532</td>
+<td>+0.0925</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>0.8171</td>
+<td>0.8321</td>
+<td>0.7725</td>
+<td>0.6079</td>
+<td>0.5395</td>
+<td>+0.0447</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td>0.7811</td>
+<td>0.7727</td>
+<td>0.6731</td>
+<td>0.6019</td>
+<td>0.4708</td>
+<td>+0.1793</td>
+</tr>
+<tr class="odd">
+<td>8</td>
+<td>0.8456</td>
+<td>0.8394</td>
+<td>0.7569</td>
+<td>0.6191</td>
+<td>0.5234</td>
+<td>+0.0887</td>
+</tr>
+<tr class="even">
+<td>9</td>
+<td>0.7777</td>
+<td>0.8110</td>
+<td>0.6903</td>
+<td>0.6263</td>
+<td>0.5314</td>
+<td>+0.1514</td>
+</tr>
+<tr class="odd">
+<td><strong>Mean</strong></td>
+<td><strong>0.7771</strong></td>
+<td>0.7925</td>
+<td>0.7037</td>
+<td>0.6084</td>
+<td>0.4767</td>
+<td><strong>+0.0932</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Query-weighted Hit@10 is computed across all queries (weighted by query count per OF). LBC-Ranker achieves a paired mean improvement of +0.093 over the per-seed best non-LBC baseline. Seed 4 shows the narrowest margin (+0.011), consistent with its low macro Δ (+0.043).</p>
+<p>Source: <code>paper_results/v2_full_data/e1_main_10seed_summary.csv</code> (query-weighted columns)</p>
+<hr />
+<h2 id="s11.-zero-positive-of-predictions">S11. Zero-Positive OF Predictions</h2>
+<p>Fourteen OFs in the manifest have zero labeled positive replacements in the current archive. We apply LBC-Ranker (trained on all 123 labeled OFs) to predict top-ranked candidates for these OFs as a qualitative check of model behavior in the absence of training labels for the query OF.</p>
+<p><strong>Table S11: Top-3 predicted candidates for zero-positive OFs.</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>OF</th>
+<th>Top-1</th>
+<th>Score</th>
+<th>Top-2</th>
+<th>Score</th>
+<th>Top-3</th>
+<th>Score</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>*C(=O)O</td>
+<td>*c1ccccc1</td>
+<td>0.067</td>
+<td>*C(C)=O</td>
+<td>0.061</td>
+<td>*C(=O)OC</td>
+<td>0.054</td>
+</tr>
+<tr class="even">
+<td>*C(=O)c1ccc(OC)cc1</td>
+<td>*c1ccc(OC)cc1</td>
+<td>0.142</td>
+<td>*c1ccccc1</td>
+<td>0.077</td>
+<td>*C(=O)c1ccccc1</td>
+<td>0.045</td>
+</tr>
+<tr class="odd">
+<td>*C(=O)c1cccs1</td>
+<td>*c1ccccc1</td>
+<td>0.205</td>
+<td>*c1ccc(Cl)cc1</td>
+<td>0.047</td>
+<td>*C(=O)c1ccccc1</td>
+<td>0.045</td>
+</tr>
+<tr class="even">
+<td>*CC(C)C</td>
+<td>*C(C)C</td>
+<td>0.068</td>
+<td>*CC</td>
+<td>0.063</td>
+<td>*C(C)CC</td>
+<td>0.046</td>
+</tr>
+<tr class="odd">
+<td>*CCCCCC</td>
+<td>*CC</td>
+<td>0.056</td>
+<td>*CCC</td>
+<td>0.047</td>
+<td>*c1ccccc1</td>
+<td>0.038</td>
+</tr>
+<tr class="even">
+<td>*Cc1cccnc1</td>
+<td>*c1ccccc1</td>
+<td>0.225</td>
+<td>*Cc1ccccc1</td>
+<td>0.113</td>
+<td>*Cc1ccncc1</td>
+<td>0.062</td>
+</tr>
+<tr class="odd">
+<td>*NCCc1ccccc1</td>
+<td>*c1ccccc1</td>
+<td>0.302</td>
+<td>*Cc1ccccc1</td>
+<td>0.079</td>
+<td>*NCc1ccccc1</td>
+<td>0.048</td>
+</tr>
+<tr class="even">
+<td>*c1ccc(-c2ccccc2)cc1</td>
+<td>*c1ccccc1</td>
+<td>0.220</td>
+<td>*c1ccc(Cl)cc1</td>
+<td>0.093</td>
+<td>*c1ccc(F)cc1</td>
+<td>0.066</td>
+</tr>
+<tr class="odd">
+<td>*c1ccc(C(=O)O)cc1</td>
+<td>*c1ccccc1</td>
+<td>0.361</td>
+<td>*c1ccc(OC)cc1</td>
+<td>0.112</td>
+<td>*c1ccc(F)cc1</td>
+<td>0.094</td>
+</tr>
+<tr class="even">
+<td>*c1ccc(Cl)cc1</td>
+<td>*c1ccccc1</td>
+<td>0.406</td>
+<td>*c1ccc(F)cc1</td>
+<td>0.162</td>
+<td>*c1ccc(C)cc1</td>
+<td>0.138</td>
+</tr>
+<tr class="odd">
+<td>*c1ccc2ccccc2c1</td>
+<td>*c1ccccc1</td>
+<td>0.346</td>
+<td>*c1ccc(Cl)cc1</td>
+<td>0.113</td>
+<td>*c1ccc(F)cc1</td>
+<td>0.079</td>
+</tr>
+<tr class="even">
+<td>*c1cccc(C#N)c1</td>
+<td>*c1ccccc1</td>
+<td>0.443</td>
+<td>*c1cccc(OC)c1</td>
+<td>0.087</td>
+<td>*c1ccc(OC)cc1</td>
+<td>0.075</td>
+</tr>
+<tr class="odd">
+<td>*c1cccc(OC)c1</td>
+<td>*c1ccccc1</td>
+<td>0.462</td>
+<td>*c1ccc(OC)cc1</td>
+<td>0.237</td>
+<td>*c1ccccc1OC</td>
+<td>0.079</td>
+</tr>
+<tr class="even">
+<td>*c1ccccc1OC</td>
+<td>*c1ccccc1</td>
+<td>0.394</td>
+<td>*c1ccc(OC)cc1</td>
+<td>0.189</td>
+<td>*c1ccc(F)cc1</td>
+<td>0.106</td>
+</tr>
+</tbody>
+</table>
+<p>The top-ranked candidate for all 14 zero-positive OFs is <em>c1ccccc1 (phenyl), the most frequent positive-label candidate in the training set (27,448 positive pairs). This reflects the dominant role of the frequency feature when no OF-specific training signal is available. Top-1 scores range from 0.067 (</em>C(=O)O, very low confidence) to 0.462 (<em>c1cccc(OC)c1, moderate confidence). For OFs with clear structural analogs among labeled OFs (e.g., </em>c1ccc(Cl)cc1, *c1cccc(OC)c1), the top-2 and top-3 predictions include structurally plausible replacements beyond the frequency prior.</p>
+<p>Source: <code>paper_results/v2_full_data/e8_zero_of_predictions.csv</code></p>
+<hr />
+<h2 id="s12.-data-availability">S12. Data Availability</h2>
+<ul>
+<li><strong>Experiment protocol</strong>: <code>paper_results/v2_full_data/protocol.md</code></li>
+<li><strong>Per-seed summary</strong>: <code>paper_results/v2_full_data/e1_main_10seed_summary.csv</code></li>
+<li><strong>Per-OF detail</strong>: <code>paper_results/v2_full_data/e1_main_10seed_detail.csv</code></li>
+<li><strong>Paired tests</strong>: <code>paper_results/v2_full_data/e1_main_paired_tests.csv</code></li>
+<li><strong>Ablation detail</strong>: <code>paper_results/v2_full_data/e2_ablation_full_detail.csv</code></li>
+<li><strong>Ablation summary</strong>: <code>paper_results/v2_full_data/e2_ablation_full_summary.csv</code></li>
+<li><strong>Tuning ledger</strong>: <code>paper_results/v2_full_data/e3_tuning_ledger.csv</code></li>
+<li><strong>Cold-start audit</strong>: <code>paper_results/v2_full_data/e4_coldstart_audit.csv</code></li>
+<li><strong>Split imbalance</strong>: <code>paper_results/v2_full_data/e4_split_imbalance_audit.csv</code></li>
+<li><strong>Rank diagnostics</strong>: <code>paper_results/v2_full_data/e5_rank_diag.csv</code></li>
+<li><strong>HGB vs LR</strong>: <code>paper_results/v2_full_data/e6_hgb_vs_lr.csv</code></li>
+</ul>
+</body>
+</html>

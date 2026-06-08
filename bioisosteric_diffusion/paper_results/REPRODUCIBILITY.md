@@ -1,12 +1,13 @@
-# LBC-Kernel Reproducibility Archive
+# LBC-Ranker Reproducibility Archive
 
-Date: 2026-06-05
-Lock update: 2026-06-06
+Date: 2026-06-08
 
-Paper: Fragment Replacement Top-10 Candidate Ranking via Learned Bit-Correlation Kernel
+Paper: Learned Candidate–Fragment Compatibility Ranking for Fragment Replacement
 
-Claim-evidence lock:
-`goal/PAPER_CLAIM_EVIDENCE_LOCK/lbc_kernel_20260606/`
+Current evidence: `paper_results/manuscript_v2/` + `paper_results/v2_full_data/`
+
+For detailed protocol, see `paper_results/v2_full_data/protocol.md`.
+For archived 27-OF exploratory results, see `paper_results/archive_27OF_exploratory/`.
 
 ## Environment
 
