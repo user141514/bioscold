@@ -34,7 +34,7 @@ Let F = {f_1, ..., f_N} be the set of old fragments (OFs), each represented by a
 
 ### 2.2 Dataset
 
-The dataset is derived from ChEMBL 36 [9] through the D4A0 processing pipeline and contains 137,556 query rows, 137 unique OF strings, and 152 unique candidate fragments in the ranking pool. Labeled pairs are derived from bioactivity assay records where a compound containing the candidate fragment was tested against the same target as a compound containing the OF, with activity thresholding used to define labeled positive replacements.
+The dataset is derived from ChEMBL 36 [9] through the D4A0 processing pipeline and contains 137,556 query rows, 137 unique OF strings, and 152 unique candidate fragments in the ranking pool. Labeled positive replacements are defined as candidate–OF pairs where a compound containing the candidate fragment and a compound containing the OF were both tested against the same protein target and both met a bioactivity threshold (pIC50 ≥ 6 or equivalent). The D4A0 pipeline performs OF-level train/test partitioning; no query-level information crosses the OF split boundary.
 
 Of the 137 unique OFs, 123 have positive-label support (at least one labeled positive replacement pair in the scanned label shards), and 14 (10.2%) have zero positive-label support in the current archive. The overall positive pair rate across 14,950,719 candidate pair rows is 1.33%. For the 123 labeled OFs, positive support mass (total positive-labeled query instances) ranges across several orders of magnitude, with the top 10 OFs accounting for the majority of positive pairs.
 
@@ -93,7 +93,7 @@ For capacity comparison, we also train a HistGradientBoostingClassifier (HGB) on
 
 ### 3.1 Primary Ranking Performance
 
-Table 2 reports the 10-seed ranking performance. LBC-Ranker achieves an OF-macro Hit@10 of 0.852 ± 0.032. The strongest tuned non-LBC baseline is C3F-style retrieval in 7 of 10 seeds and CA in 3 of 10 seeds. The per-seed best non-LBC baseline achieves a mean Hit@10 of 0.723, and the paired mean difference between LBC-Ranker and this per-seed best is +0.130 ± 0.044 (two-sided p = 0.00195, exact sign-flip test). LBC-Ranker outperforms the best non-LBC baseline in all 10 seeds.
+Table 2 and Figure 2 report the 10-seed ranking performance. LBC-Ranker achieves an OF-macro Hit@10 of 0.852 ± 0.032. The strongest tuned non-LBC baseline is C3F-style retrieval in 7 of 10 seeds and CA in 3 of 10 seeds. The per-seed best non-LBC baseline achieves a mean Hit@10 of 0.723, and the paired mean difference between LBC-Ranker and this per-seed best is +0.130 ± 0.044 (two-sided p = 0.00195, exact sign-flip test). LBC-Ranker outperforms the best non-LBC baseline in all 10 seeds.
 
 **Table 2: 10-seed OF-macro ranking performance (123 OFs).**
 
@@ -110,11 +110,11 @@ Table 2 reports the 10-seed ranking performance. LBC-Ranker achieves an OF-macro
 
 ### 3.2 Model Capacity: LR vs HGB
 
-LBC-Ranker (LR, 0.852) and HGB (0.851) achieve essentially identical macro Hit@10 (mean paired difference −0.002). HGB achieves a higher macro Hit@10 in 6 seeds and LR in 4 seeds. This parity indicates that the eight-feature representation, not model capacity, is the primary determinant of ranking quality. We retain LR as the primary implementation because it is compact (9 parameters), deterministic, and directly interpretable through feature weights.
+LBC-Ranker (LR, 0.852) and HGB (0.851) achieve essentially identical macro Hit@10 (mean paired difference −0.002). HGB achieves a higher macro Hit@10 in 6 seeds and LR in 4 seeds. We retain LR as the primary implementation because it is compact (9 parameters), deterministic, and directly interpretable through feature weights.
 
 ### 3.3 Feature Ablation
 
-Table 3 reports the one-drop ablation across 10 seeds. Dropping candidate frequency causes the largest macro Hit@10 degradation (−0.193 ± 0.044), followed by bit_corr (−0.155 ± 0.059) and Morgan Tanimoto similarity (−0.109 ± 0.055). The five physicochemical delta features each contribute modestly (Δ ranging from −0.070 to −0.091).
+Table 3 and Figure 1 report the one-drop ablation across 10 seeds. Dropping candidate frequency causes the largest macro Hit@10 degradation (−0.193 ± 0.044), followed by bit_corr (−0.155 ± 0.059) and Morgan Tanimoto similarity (−0.109 ± 0.055). The five physicochemical delta features each contribute modestly (Δ ranging from −0.070 to −0.091).
 
 **Table 3: Feature ablation (10-seed mean OF-macro Hit@10 degradation).**
 
@@ -129,15 +129,13 @@ Table 3 reports the one-drop ablation across 10 seeds. Dropping candidate freque
 | dMW | −0.077 | 0.045 |
 | dHeavy | −0.070 | 0.045 |
 
-These results support a three-signal interpretation of LBC-Ranker: candidate replacement track record (frequency) provides the strongest prior; bit-level correlation captures substructure pattern agreement beyond global similarity; and Morgan Tanimoto provides global structural context. The five physicochemical deltas each contribute modestly (mean Δ between −0.070 and −0.091) but collectively provide consistent supplementary signal, consistent with the bioisostere principle that property matching supports but does not replace structural compatibility.
-
 ### 3.4 Baseline Tuning Behavior
 
-CA tuning consistently selects λ = 0.75 across all seeds, indicating that a 3:1 weighting of Morgan similarity over physicochemical matching is optimal under OF-macro evaluation. C3F tuning selects K ∈ {3, 5, 7, 10} with α predominantly at 0.1, suggesting that a light content-aware fallback is preferred and that the optimal neighborhood size varies across OF splits. HGB tuning selects depth = 5 in 7 of 10 seeds and depth = 3 in 3 seeds. Full tuning results are provided in the Supporting Information (tuning ledger).
+CA tuning consistently selects λ = 0.75 across all seeds (3:1 Morgan-to-physchem weighting). C3F-style retrieval tuning selects K ∈ {3, 5, 7, 10} with α = 0.1 in all 10 seeds. HGB tuning selects depth = 5 in 8 of 10 seeds and depth = 3 in 2 of 10 seeds. Full tuning results are provided in the Supporting Information (tuning ledger).
 
 ### 3.5 Query-Weighted and Per-OF Analysis
 
-Under query-weighted Hit@10, LBC-Ranker achieves a paired improvement of +0.093 over the best tuned non-LBC baseline. The per-OF Hit@10 distribution (Supporting Information, Figure S1) shows that LBC-Ranker improves Hit@10 relative to the retrieval baseline on the majority of test OFs, with consistent gains across both high-support and low-support OFs.
+Under query-weighted Hit@10, LBC-Ranker achieves a paired improvement of +0.093 over the best tuned non-LBC baseline. The full per-OF Hit@10 distribution across all seeds is provided in the Supporting Information (Table S3).
 
 ## 4. Discussion
 
@@ -155,15 +153,25 @@ The tuned retrieval baseline (0.716) is viable, substantially above frequency (0
 
 The parity between LR and HGB (Δ = −0.002) carries a practical implication for fragment replacement tool development: with an appropriate feature representation, a simple linear model matches a higher-capacity tree ensemble. This suggests that current bottlenecks in fragment replacement ranking are primarily representational — identifying the right compatibility signals — rather than architectural. The 9-parameter LR implementation of LBC-Ranker is compact, deterministic, and directly interpretable: each weight w_i quantifies the marginal contribution of its corresponding feature to the log-odds of a candidate being a labeled positive replacement. Whether additional features beyond the current eight — three-dimensional shape, electrostatic potential matching, or learned fingerprint embeddings — would break the LR–HGB parity and favor higher-capacity models remains an open question.
 
-### 4.4 Limitations
+### 4.4 Practical Implications
+
+The parity between LR and HGB (Δ = −0.002) carries a practical implication for fragment replacement tool development: with an appropriate feature representation, a simple linear model matches a higher-capacity tree ensemble. The three-signal ablation pattern — frequency (−0.193), bit_corr (−0.155), and Morgan (−0.109) — shows that candidate track record provides the strongest prior, bit-level correlation captures substructure pattern agreement beyond global similarity, and Morgan Tanimoto supplies global structural context. The five physicochemical deltas each contribute modestly (mean Δ between −0.070 and −0.091) but collectively provide consistent supplementary signal, consistent with the bioisostere principle that property matching supports rather than replaces structural compatibility.
+
+For practitioners building fragment replacement tools, LBC-Ranker offers several advantages. The 9-parameter model is compact enough for CPU-only deployment, requires no specialized hardware, and retrains in seconds when new labeled OFs become available. The learned weights are directly interpretable: each w_i quantifies the marginal contribution of its corresponding feature to the ranking decision. This interpretability supports debugging and feature engineering in applied settings where understanding why a candidate was ranked highly matters as much as the ranking itself.
+
+### 4.5 Limitations
 
 **Data source coverage**: The 123 labeled OFs are derived from a single data source (ChEMBL 36). While this represents a substantial expansion over the labeled OF sets used in prior work, the chemical diversity of training OFs constrains the generalizability of learned weights. External validation on independent fragment replacement datasets would strengthen confidence.
 
 **Candidate pool scope**: The current candidate pool contains 152 fragment candidates. In practical deployment, candidate pools may be substantially larger and may include fragments outside the training distribution. The ranking performance of LBC-Ranker on expanded candidate pools has not been evaluated.
 
-**Feature completeness**: The current feature set captures two-dimensional structural similarity (Morgan, bit_corr) and physicochemical matching, but omits three-dimensional conformational features, electrostatic potential descriptors, and synthetic accessibility scores — all relevant to practical fragment replacement prioritization.
+**Feature completeness**: The current feature set captures two-dimensional structural similarity (Morgan, bit_corr) and physicochemical matching, but omits three-dimensional conformational features, electrostatic potential descriptors, and synthetic accessibility scores — all relevant to practical fragment replacement prioritization. Whether additional features beyond the current eight would break the LR–HGB parity and favor higher-capacity models remains an open question.
 
 **Label sparsity**: The 1.33% positive pair rate creates a highly imbalanced training setting. While the ranking formulation (Hit@K) mitigates this by focusing on relative ordering rather than absolute probability calibration, the model may benefit from negative sampling strategies or alternative loss functions in future work.
+
+### 4.6 Future Work
+
+Several directions follow from the current results. First, expanding the candidate pool beyond the current 152 fragments, using the full ChEMBL fragment vocabulary or de novo fragment generation, could identify replacement candidates not represented in the current labeled data. Second, three-dimensional shape and electrostatic similarity features, while computationally more expensive than 2D fingerprints, may carry independent signal not captured by Morgan or bit_corr. Third, learned molecular embeddings from large-scale pretraining (e.g., MolCLR, ChemBERTa) could replace or augment the hand-crafted fingerprint features tested here. Fourth, the evaluation protocol established in this work — repeated OF-level splits with inner cross-validated baseline tuning and a public tuning ledger — provides a template for benchmarking future fragment replacement ranking methods under fair and reproducible conditions.
 
 ## 5. Conclusion
 
@@ -171,7 +179,7 @@ We present LBC-Ranker, a compact supervised ranking model for fragment replaceme
 
 ## Data and Software Availability
 
-All code, trained models, and precomputed feature matrices are available at https://github.com/user141514/bioscold. The ChEMBL 36 dataset is publicly available at https://www.ebi.ac.uk/chembl/. The full experiment protocol, tuning ledger, and per-seed results are archived in `paper_results/v2_full_data/`. The experimental pipeline uses scripts in both `paper_results/v2_full_data/` and the project root. Environment: Python 3.10, scikit-learn 1.7, RDKit, pandas, numpy. No GPU required.
+All code, trained models, and precomputed feature matrices are available at https://github.com/user141514/bioscold. The ChEMBL 36 dataset is publicly available at https://www.ebi.ac.uk/chembl/. The full experiment protocol, tuning ledger, and per-seed results are archived in `paper_results/v2_full_data/`. The experimental pipeline uses scripts in both `paper_results/v2_full_data/` and the project root. Environment: Python 3.10.18, scikit-learn 1.7.2, RDKit 2023.09.3, pandas 2.3.3, numpy 1.26.4. All experiments run on CPU (Intel Xeon, Windows 10 Pro). No GPU required.
 
 ## Supporting Information
 
