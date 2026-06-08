@@ -155,7 +155,7 @@ The tuned retrieval baseline (0.716) is viable, substantially above frequency (0
 
 ### 4.4 Practical Implications
 
-For practical deployment, the LR implementation of LBC-Ranker offers several advantages beyond its ranking accuracy. The three-signal ablation pattern shows that candidate track record provides the strongest prior (frequency, Δ = −0.193), bit-level correlation captures substructure pattern agreement beyond global similarity (Δ = −0.155), and Morgan Tanimoto supplies global structural context (Δ = −0.109). The five physicochemical deltas each contribute modestly (mean Δ between −0.070 and −0.091) but collectively provide consistent supplementary signal, consistent with the bioisostere principle that property matching supports rather than replaces structural compatibility.
+For practical deployment, the LR implementation of LBC-Ranker offers several advantages beyond its ranking accuracy. The three-signal ablation pattern shows that candidate track record provides the strongest prior (frequency, Δ = −0.193), bit-level correlation captures substructure pattern agreement beyond global similarity (Δ = −0.155), and Morgan Tanimoto supplies global structural context (Δ = −0.109). The five physicochemical deltas provide secondary but consistent signal (mean Δ between −0.070 and −0.091), consistent with the bioisostere principle that property matching supports rather than replaces structural compatibility.
 
 For practitioners building fragment replacement tools, LBC-Ranker offers several advantages. The 9-parameter model is compact enough for CPU-only deployment, requires no specialized hardware, and retrains in seconds when new labeled OFs become available. The learned weights are directly interpretable: each w_i quantifies the marginal contribution of its corresponding feature to the ranking decision. This interpretability supports debugging and feature engineering in applied settings where understanding why a candidate was ranked highly matters as much as the ranking itself.
 
@@ -179,7 +179,7 @@ We present LBC-Ranker, a compact supervised ranking model for fragment replaceme
 
 ## Data and Software Availability
 
-All code, trained models, and precomputed feature matrices are available at https://github.com/user141514/bioscold. The ChEMBL 36 dataset is publicly available at https://www.ebi.ac.uk/chembl/. The full experiment protocol, tuning ledger, and per-seed results are archived in `paper_results/v2_full_data/`. The experimental pipeline uses scripts in both `paper_results/v2_full_data/` and the project root. Environment: Python 3.10.18, scikit-learn 1.7.2, RDKit 2023.09.3, pandas 2.3.3, numpy 1.26.4. All experiments run on CPU (Intel Xeon, Windows 10 Pro). No GPU required.
+All code, trained models, and precomputed feature matrices are available at https://github.com/user141514/bioscold. The ChEMBL 36 dataset is publicly available at https://www.ebi.ac.uk/chembl/. The full experiment protocol, tuning ledger, and per-seed results are archived in `paper_results/v2_full_data/`. The experimental pipeline is organized under the repository root, with final protocol scripts and result tables archived in `paper_results/v2_full_data/`. Environment: Python 3.10.18, scikit-learn 1.7.2, RDKit 2023.09.3, pandas 2.3.3, numpy 1.26.4. All experiments run on CPU (Intel Xeon, Windows 10 Pro). No GPU required.
 
 ## Supporting Information
 
