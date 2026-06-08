@@ -192,8 +192,8 @@ for seed_idx in range(10):
     lr = LogisticRegression(C=1.0, max_iter=2000, random_state=SEED)
     lr.fit(X_s, y_tr)
 
-    # Evaluate on test
-    sh10 = {"Freq": [], "CA": [], "Freq+CA": [], "LBC": []}
+    # Evaluate on test — compute BOTH macro and query-weighted
+    per_of_h10 = {k: defaultdict(list) for k in ["Freq", "CA", "Freq+CA", "LBC"]}
     for o in test_ofs:
         queries = of_data[o]["queries"]; yt = of_data[o]["y"]; X7 = of_data[o]["X7"]
         off = 0
@@ -203,13 +203,13 @@ for seed_idx in range(10):
             if sum(ld.values()) == 0:
                 off += nc; continue
             fs = np.array([freq_map.get(c, 0) / max(max_f, 1) for c in cands])
-            sh10["Freq"].append(hit10(ld, fs, cands))
+            per_of_h10["Freq"][o].append(hit10(ld, fs, cands))
             ca_s = best_lam * X7[off:off+nc, 0] + (1 - best_lam) * (1.0 / (1.0 + X7[off:off+nc, 2] + X7[off:off+nc, 3] + X7[off:off+nc, 4] + X7[off:off+nc, 5]))
-            sh10["CA"].append(hit10(ld, ca_s, cands))
+            per_of_h10["CA"][o].append(hit10(ld, ca_s, cands))
             blend_s = best_blend_alpha * fs + (1 - best_blend_alpha) * ca_s
-            sh10["Freq+CA"].append(hit10(ld, blend_s, cands))
+            per_of_h10["Freq+CA"][o].append(hit10(ld, blend_s, cands))
             Xq = np.zeros((nc, 8), dtype=np.float32); Xq[:, :7] = X7[off:off+nc]; Xq[:, 7] = fs
-            sh10["LBC"].append(hit10(ld, lr.predict_proba(scaler.transform(Xq))[:, 1], cands))
+            per_of_h10["LBC"][o].append(hit10(ld, lr.predict_proba(scaler.transform(Xq))[:, 1], cands))
             off += nc
 
     row = {
@@ -217,22 +217,26 @@ for seed_idx in range(10):
         "best_blend_lam": best_blend_lam,
     }
     for k in ["Freq", "CA", "Freq+CA", "LBC"]:
-        row[k] = float(np.mean(sh10[k])) if sh10[k] else 0.0
-    row["Delta_Blend_vs_CA"] = row["Freq+CA"] - row["CA"]
-    row["Delta_LBC_vs_Blend"] = row["LBC"] - row["Freq+CA"]
+        # OF-macro: mean of per-OF means
+        of_means = [float(np.mean(v)) for v in per_of_h10[k].values() if v]
+        row[f"{k}_macro"] = float(np.mean(of_means)) if of_means else 0.0
+        # Query-weighted: flat average across all queries
+        all_q = [x for v in per_of_h10[k].values() for x in v]
+        row[f"{k}_query"] = float(np.mean(all_q)) if all_q else 0.0
+    row["Delta_Blend_vs_CA_macro"] = row["Freq+CA_macro"] - row["CA_macro"]
+    row["Delta_LBC_vs_Blend_macro"] = row["LBC_macro"] - row["Freq+CA_macro"]
+    row["Delta_Blend_vs_CA_query"] = row["Freq+CA_query"] - row["CA_query"]
+    row["Delta_LBC_vs_Blend_query"] = row["LBC_query"] - row["Freq+CA_query"]
     results.append(row)
-    log(f"  S{seed_idx}: Freq={row['Freq']:.4f} CA={row['CA']:.4f} Blend={row['Freq+CA']:.4f} LBC={row['LBC']:.4f} Blend-CA={row['Delta_Blend_vs_CA']:+.4f} LBC-Blend={row['Delta_LBC_vs_Blend']:+.4f} (lam={best_lam} alpha={best_blend_alpha}) ({time.time()-seed_t0:.0f}s)")
+    log(f"  S{seed_idx}: macro Freq={row['Freq_macro']:.4f} CA={row['CA_macro']:.4f} Blend={row['Freq+CA_macro']:.4f} LBC={row['LBC_macro']:.4f} Bl-CA={row['Delta_Blend_vs_CA_macro']:+.4f} LBC-Bl={row['Delta_LBC_vs_Blend_macro']:+.4f} ({time.time()-seed_t0:.0f}s)")
 
 df = pd.DataFrame(results)
-print(f"\n=== 10-SEED COMPONENT LADDER ===")
-print(df.to_string(index=False))
-mean_f = df["Freq"].mean(); mean_ca = df["CA"].mean()
-mean_bl = df["Freq+CA"].mean(); mean_lbc = df["LBC"].mean()
-print(f"\nFreq:      {mean_f:.4f} ± {df['Freq'].std():.4f}")
-print(f"CA:        {mean_ca:.4f} ± {df['CA'].std():.4f}")
-print(f"Freq+CA:   {mean_bl:.4f} ± {df['Freq+CA'].std():.4f}")
-print(f"LBC:       {mean_lbc:.4f} ± {df['LBC'].std():.4f}")
-print(f"Blend-CA:  {df['Delta_Blend_vs_CA'].mean():+.4f} ± {df['Delta_Blend_vs_CA'].std():.4f}")
-print(f"LBC-Blend: {df['Delta_LBC_vs_Blend'].mean():+.4f} ± {df['Delta_LBC_vs_Blend'].std():.4f}")
+print(f"\n=== 10-SEED COMPONENT LADDER (MACRO) ===")
+macro_cols = [c for c in df.columns if c.endswith("_macro") or c in ["seed", "best_lam", "best_blend_alpha"]]
+print(df[macro_cols].to_string(index=False))
+print(f"\nMACRO: Freq={df['Freq_macro'].mean():.4f} CA={df['CA_macro'].mean():.4f} Blend={df['Freq+CA_macro'].mean():.4f} LBC={df['LBC_macro'].mean():.4f}")
+print(f"MACRO Blend-CA={df['Delta_Blend_vs_CA_macro'].mean():+.4f} LBC-Blend={df['Delta_LBC_vs_Blend_macro'].mean():+.4f}")
+print(f"\nQUERY-WT: Freq={df['Freq_query'].mean():.4f} CA={df['CA_query'].mean():.4f} Blend={df['Freq+CA_query'].mean():.4f} LBC={df['LBC_query'].mean():.4f}")
+print(f"QUERY Blend-CA={df['Delta_Blend_vs_CA_query'].mean():+.4f} LBC-Blend={df['Delta_LBC_vs_Blend_query'].mean():+.4f}")
 df.to_csv(OUT / "component_ladder_10seed.csv", index=False)
 log("Done")
