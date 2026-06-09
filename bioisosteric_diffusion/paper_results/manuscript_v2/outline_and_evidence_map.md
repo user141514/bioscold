@@ -9,7 +9,7 @@ Data: 123 OFs, 10-seed repeated OF split, inner 3-fold CV for tuning
 
 ## External Validation Upgrade
 
-Status: pre-specified on 2026-06-09. BindingDB curated-article full matrix construction and a 3-seed feasibility evaluation are complete; manuscript numerical claims remain blocked until the 10-seed result lock and leakage/source audit are complete.
+Status: pre-specified on 2026-06-09. BindingDB curated-article full matrix construction and a 3-seed feasibility evaluation are complete. A follow-up 10k hard-negative diagnostic showed that the easy-negative matrix is too easily solved by CA, so manuscript numerical claims remain blocked until the hard-negative 10-seed result lock and leakage/source audit are complete.
 
 ### Evidence tiers
 
@@ -20,7 +20,7 @@ Status: pre-specified on 2026-06-09. BindingDB curated-article full matrix const
 ### Claim policy
 
 - Current manuscript-level numerical claims remain limited to the locked ChEMBL 36-derived 10-seed OF-level benchmark.
-- BindingDB becomes the primary external benchmark after the full 10-seed `paper_results/v2_external_validation/bindingdb_mmp/results/*summary.csv` is produced and audited.
+- BindingDB becomes the primary external benchmark after the hard-negative full 10-seed `paper_results/v2_external_validation/bindingdb_mmp/results/*summary.csv` is produced and audited.
 - ChEMBL temporal split can support time-robustness only; it should not be described as an independent external data source.
 - SwissBioisostere can support replacement-overlap sanity checks only; it must not be used for training, tuning, or activity-preservation claims.
 
@@ -32,6 +32,7 @@ Status: pre-specified on 2026-06-09. BindingDB curated-article full matrix const
 - BindingDB matrix audit: `paper_results/v2_external_validation/bindingdb_mmp/matrix_audit.md`
 - BindingDB matrix: `paper_results/v2_external_validation/bindingdb_mmp/candidate_matrix.csv.gz` (local generated artifact)
 - BindingDB 3-seed feasibility summary: `paper_results/v2_external_validation/bindingdb_mmp/results_full_3seed_summary.md`
+- BindingDB hard-negative 10k diagnostic: `paper_results/v2_external_validation/bindingdb_mmp/hard_negative_10k_summary.md`
 - BindingDB final results to add: `paper_results/v2_external_validation/bindingdb_mmp/results/bindingdb_mmp_summary.csv`
 - ChEMBL temporal results: `paper_results/v2_external_validation/chembl_temporal/results/chembl_temporal_summary.csv`
 - SwissBioisostere overlap: `paper_results/v2_external_validation/swissbioisostere_overlap/overlap_summary.csv`

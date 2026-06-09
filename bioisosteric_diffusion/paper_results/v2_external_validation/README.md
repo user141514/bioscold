@@ -76,6 +76,18 @@ E:\Anaconda3\envs\accfg\python.exe paper_results/v2_external_validation/build_bi
   --write-fragment-records
 ```
 
+Hard-negative diagnostic build:
+
+```powershell
+E:\Anaconda3\envs\accfg\python.exe paper_results/v2_external_validation/build_bindingdb_mmp_matrix.py `
+  --max-rows 10000 `
+  --negative-mode ca_matched `
+  --hard-negative-pool-size 5000 `
+  --matrix-name candidate_matrix_10k_hard.csv.gz `
+  --manifest-name source_manifest_10k_hard.json `
+  --audit-name matrix_audit_10k_hard.md
+```
+
 Full 3-seed external check:
 
 ```powershell
@@ -100,3 +112,9 @@ Latest full local build, generated from 86,108 BindingDB curated-article rows:
 | Candidate fragments | 24,037 |
 
 The large generated raw files, matrices, and result detail directories are ignored by `.gitignore`; keep or archive them as local artifacts unless a release package explicitly requires them.
+
+## Benchmark Difficulty Note
+
+The initial BindingDB full matrix uses easy unlabeled negatives and should be treated as a feasibility check. A 10k-source-row diagnostic showed that CA reached near-ceiling performance on easy negatives, but dropped from 0.994591 to 0.665755 query Hit@10 when `--negative-mode ca_matched` was used. The hard-negative design is therefore the better candidate for the main external benchmark.
+
+Diagnostic v2 adds FullBlend and LBC no-freq. On the 10k hard-negative matrix, FullBlend slightly exceeded LBC and LBC no-freq was essentially tied with LBC on OF-macro Hit@10. Therefore the full 10-seed BindingDB-hard run should not be framed as an LBC-superiority benchmark unless a later pre-registered diagnostic reverses that ordering.

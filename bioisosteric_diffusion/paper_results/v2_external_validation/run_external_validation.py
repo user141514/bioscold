@@ -19,7 +19,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 import numpy as np
 import pandas as pd
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression, Ridge
 from sklearn.preprocessing import StandardScaler
 
 
@@ -39,6 +39,8 @@ FEATURE_COLUMNS = [
     "dLogP",
     "dTPSA",
 ]
+
+FULLBLEND_ALPHAS = [0.0, 0.25, 0.5, 0.75, 1.0]
 
 
 def read_table(path: Path) -> pd.DataFrame:
@@ -183,7 +185,89 @@ def z_apply(values: pd.Series, train_mean: float, train_std: float) -> pd.Series
     return (values - train_mean) / std
 
 
-def add_scores(train_df: pd.DataFrame, test_df: pd.DataFrame) -> pd.DataFrame:
+def z_by_query(values: pd.Series, query_ids: pd.Series) -> pd.Series:
+    def _z(group: pd.Series) -> pd.Series:
+        std = float(group.std(ddof=0))
+        if std <= 1e-12:
+            return pd.Series(np.zeros(len(group), dtype=np.float32), index=group.index)
+        return (group - float(group.mean())) / std
+
+    return values.groupby(query_ids, sort=False).transform(_z)
+
+
+def query_hit_values(frame: pd.DataFrame, scores: pd.Series, k: int) -> list[int]:
+    hits = []
+    for _qid, g in frame.groupby("query_id", sort=False):
+        labels = np.asarray(g["label"], dtype=np.int8)
+        if labels.sum() == 0:
+            continue
+        hits.append(hit_at_k(labels, np.asarray(scores.loc[g.index], dtype=float), k))
+    return hits
+
+
+def fit_ridge_content(frame: pd.DataFrame) -> tuple[StandardScaler, Ridge]:
+    scaler = StandardScaler()
+    x_scaled = scaler.fit_transform(frame[FEATURE_COLUMNS])
+    model = Ridge(alpha=1.0, random_state=20260609)
+    model.fit(x_scaled, np.asarray(frame["label"], dtype=float))
+    return scaler, model
+
+
+def predict_ridge_content(frame: pd.DataFrame, scaler: StandardScaler, model: Ridge) -> pd.Series:
+    scores = model.predict(scaler.transform(frame[FEATURE_COLUMNS]))
+    return pd.Series(scores, index=frame.index, dtype=float)
+
+
+def frequency_scores_from_train(train_df: pd.DataFrame, frame: pd.DataFrame) -> pd.Series:
+    train_pos = train_df[train_df["label"] == 1]
+    freq_counts = train_pos.groupby("candidate_smiles").size().to_dict()
+    max_freq = max(freq_counts.values()) if freq_counts else 1
+    return frame["candidate_smiles"].map(freq_counts).fillna(0.0).astype(float) / max_freq
+
+
+def choose_fullblend_alpha(train_df: pd.DataFrame, k: int) -> float:
+    ofs = sorted(train_df.loc[train_df["label"] == 1, "old_fragment_smiles"].unique())
+    if len(ofs) < 3:
+        scaler, model = fit_ridge_content(train_df)
+        content = predict_ridge_content(train_df, scaler, model)
+        freq = frequency_scores_from_train(train_df, train_df)
+        scores_by_alpha = {}
+        for alpha in FULLBLEND_ALPHAS:
+            blended = alpha * z_by_query(freq, train_df["query_id"]) + (1.0 - alpha) * z_by_query(
+                content, train_df["query_id"]
+            )
+            hits = query_hit_values(train_df, blended, k)
+            scores_by_alpha[alpha] = float(np.mean(hits)) if hits else 0.0
+        return max(FULLBLEND_ALPHAS, key=lambda alpha: (scores_by_alpha[alpha], -alpha))
+
+    rng = np.random.RandomState(20260609)
+    shuffled = ofs[:]
+    rng.shuffle(shuffled)
+    folds = np.array_split(np.asarray(shuffled, dtype=object), min(3, len(shuffled)))
+    scores_by_alpha: dict[float, list[int]] = {alpha: [] for alpha in FULLBLEND_ALPHAS}
+
+    for fold in folds:
+        val_ofs = set(str(x) for x in fold)
+        inner_train = train_df[~train_df["old_fragment_smiles"].isin(val_ofs)].copy()
+        inner_val = train_df[train_df["old_fragment_smiles"].isin(val_ofs)].copy()
+        if inner_train.empty or inner_val.empty:
+            continue
+        scaler, model = fit_ridge_content(inner_train)
+        content = predict_ridge_content(inner_val, scaler, model)
+        freq = frequency_scores_from_train(inner_train, inner_val)
+        z_content = z_by_query(content, inner_val["query_id"])
+        z_freq = z_by_query(freq, inner_val["query_id"])
+        for alpha in FULLBLEND_ALPHAS:
+            hits = query_hit_values(inner_val, alpha * z_freq + (1.0 - alpha) * z_content, k)
+            scores_by_alpha[alpha].extend(hits)
+
+    return max(
+        FULLBLEND_ALPHAS,
+        key=lambda alpha: (float(np.mean(scores_by_alpha[alpha])) if scores_by_alpha[alpha] else 0.0, -alpha),
+    )
+
+
+def add_scores(train_df: pd.DataFrame, test_df: pd.DataFrame, k: int = 10) -> pd.DataFrame:
     train_pos = train_df[train_df["label"] == 1]
     freq_counts = train_pos.groupby("candidate_smiles").size().to_dict()
     max_freq = max(freq_counts.values()) if freq_counts else 1
@@ -215,6 +299,19 @@ def add_scores(train_df: pd.DataFrame, test_df: pd.DataFrame) -> pd.DataFrame:
     clf = LogisticRegression(C=1.0, max_iter=2000, random_state=20260609)
     clf.fit(x_train_s, np.asarray(train_df["label"]))
 
+    scaler_nofreq = StandardScaler()
+    x_train_nofreq_s = scaler_nofreq.fit_transform(train_df[FEATURE_COLUMNS])
+    x_test_nofreq_s = scaler_nofreq.transform(test_df[FEATURE_COLUMNS])
+    clf_nofreq = LogisticRegression(C=1.0, max_iter=2000, random_state=20260609)
+    clf_nofreq.fit(x_train_nofreq_s, np.asarray(train_df["label"]))
+
+    fullblend_alpha = choose_fullblend_alpha(train_df, k)
+    content_scaler, content_model = fit_ridge_content(train_df)
+    test_fullcontent = predict_ridge_content(test_df, content_scaler, content_model)
+    test_fullblend = fullblend_alpha * z_by_query(test_freq, test_df["query_id"]) + (
+        1.0 - fullblend_alpha
+    ) * z_by_query(test_fullcontent, test_df["query_id"])
+
     out = test_df.copy()
     out["score_freq"] = np.asarray(test_freq)
     out["score_ca"] = np.asarray(test_ca)
@@ -222,7 +319,11 @@ def add_scores(train_df: pd.DataFrame, test_df: pd.DataFrame) -> pd.DataFrame:
         0.25 * z_apply(test_freq, float(train_freq.mean()), float(train_freq.std(ddof=0)))
         + 0.75 * z_apply(test_ca, float(train_ca.mean()), float(train_ca.std(ddof=0)))
     )
+    out["score_fullcontent"] = np.asarray(test_fullcontent)
+    out["score_fullblend"] = np.asarray(test_fullblend)
     out["score_lbc"] = clf.predict_proba(x_test_s)[:, 1]
+    out["score_lbc_nofreq"] = clf_nofreq.predict_proba(x_test_nofreq_s)[:, 1]
+    out["fullblend_alpha"] = float(fullblend_alpha)
     return out
 
 
@@ -232,7 +333,9 @@ def summarize_scored(scored: pd.DataFrame, k: int, seed: int | str) -> tuple[dic
         "freq": "score_freq",
         "ca": "score_ca",
         "blend": "score_blend",
+        "fullblend": "score_fullblend",
         "lbc": "score_lbc",
+        "lbc_nofreq": "score_lbc_nofreq",
     }
     for qid, g in scored.groupby("query_id", sort=False):
         labels = np.asarray(g["label"], dtype=np.int8)
@@ -254,6 +357,8 @@ def summarize_scored(scored: pd.DataFrame, k: int, seed: int | str) -> tuple[dic
         raise ValueError("No positive-label queries in evaluation split.")
 
     summary = {"seed": seed, "n_eval_queries": int(len(detail)), "n_eval_of": int(detail["old_fragment_smiles"].nunique())}
+    if "fullblend_alpha" in scored.columns:
+        summary["fullblend_alpha"] = float(scored["fullblend_alpha"].iloc[0])
     for method in methods:
         col = f"{method}_hit@{k}"
         query_score = float(detail[col].mean())
@@ -262,6 +367,18 @@ def summarize_scored(scored: pd.DataFrame, k: int, seed: int | str) -> tuple[dic
         summary[f"{method}_of_macro_hit@{k}"] = of_score
     summary[f"delta_lbc_vs_blend_of_macro@{k}"] = summary[f"lbc_of_macro_hit@{k}"] - summary[f"blend_of_macro_hit@{k}"]
     summary[f"delta_lbc_vs_blend_query@{k}"] = summary[f"lbc_query_hit@{k}"] - summary[f"blend_query_hit@{k}"]
+    summary[f"delta_lbc_vs_fullblend_of_macro@{k}"] = (
+        summary[f"lbc_of_macro_hit@{k}"] - summary[f"fullblend_of_macro_hit@{k}"]
+    )
+    summary[f"delta_lbc_vs_fullblend_query@{k}"] = (
+        summary[f"lbc_query_hit@{k}"] - summary[f"fullblend_query_hit@{k}"]
+    )
+    summary[f"delta_lbc_vs_lbc_nofreq_of_macro@{k}"] = (
+        summary[f"lbc_of_macro_hit@{k}"] - summary[f"lbc_nofreq_of_macro_hit@{k}"]
+    )
+    summary[f"delta_lbc_vs_lbc_nofreq_query@{k}"] = (
+        summary[f"lbc_query_hit@{k}"] - summary[f"lbc_nofreq_query_hit@{k}"]
+    )
     return summary, detail
 
 
@@ -284,7 +401,7 @@ def run_repeated_of_split(df: pd.DataFrame, args: argparse.Namespace) -> tuple[p
         train_ofs, test_ofs = split_ofs(df, split_seed, args.train_fraction)
         train_df = df[df["old_fragment_smiles"].isin(train_ofs)].copy()
         test_df = df[df["old_fragment_smiles"].isin(test_ofs)].copy()
-        scored = add_scores(train_df, test_df)
+        scored = add_scores(train_df, test_df, args.k)
         summary, detail = summarize_scored(scored, args.k, i)
         summary.update({"split_seed": split_seed, "n_train_of": len(train_ofs), "n_test_of": len(test_ofs)})
         summaries.append(summary)
@@ -293,7 +410,7 @@ def run_repeated_of_split(df: pd.DataFrame, args: argparse.Namespace) -> tuple[p
 
 
 def run_external_holdout(train_df: pd.DataFrame, test_df: pd.DataFrame, args: argparse.Namespace) -> tuple[pd.DataFrame, pd.DataFrame]:
-    scored = add_scores(train_df, test_df)
+    scored = add_scores(train_df, test_df, args.k)
     summary, detail = summarize_scored(scored, args.k, "external")
     return pd.DataFrame([summary]), detail
 

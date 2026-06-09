@@ -120,3 +120,72 @@ def test_build_candidate_matrix_from_fragments_labels_active_active_replacements
     assert set(query["label"]) == {0, 1}
     positives = set(query.loc[query["label"] == 1, "candidate_smiles"])
     assert positives == {"*C(=O)CC"}
+
+
+def test_ca_matched_negative_mode_prefers_same_target_similar_decoys():
+    fragment_records = [
+        {
+            "target_key": "P_TEST",
+            "target_name": "Synthetic target",
+            "endpoint": "Ki",
+            "core_key": "core_a",
+            "core_smiles": "*Nc1ccccc1",
+            "attachment_signature": "C|N",
+            "fragment_smiles": "*C(C)=O",
+            "canonical_smiles": "CC(=O)Nc1ccccc1",
+            "bindingdb_monomer_id": "a1",
+            "pactivity": 7.0,
+        },
+        {
+            "target_key": "P_TEST",
+            "target_name": "Synthetic target",
+            "endpoint": "Ki",
+            "core_key": "core_a",
+            "core_smiles": "*Nc1ccccc1",
+            "attachment_signature": "C|N",
+            "fragment_smiles": "*C(=O)CC",
+            "canonical_smiles": "CCC(=O)Nc1ccccc1",
+            "bindingdb_monomer_id": "a2",
+            "pactivity": 7.1,
+        },
+        {
+            "target_key": "P_TEST",
+            "target_name": "Synthetic target",
+            "endpoint": "Ki",
+            "core_key": "core_b",
+            "core_smiles": "*Nc1ccncc1",
+            "attachment_signature": "C|N",
+            "fragment_smiles": "*C(=O)OC",
+            "canonical_smiles": "COC(=O)Nc1ccncc1",
+            "bindingdb_monomer_id": "b1",
+            "pactivity": 7.2,
+        },
+        {
+            "target_key": "P_TEST",
+            "target_name": "Synthetic target",
+            "endpoint": "Ki",
+            "core_key": "core_b",
+            "core_smiles": "*Nc1ccncc1",
+            "attachment_signature": "C|N",
+            "fragment_smiles": "*c1ccccc1Br",
+            "canonical_smiles": "Brc1ccccc1Nc1ccncc1",
+            "bindingdb_monomer_id": "b2",
+            "pactivity": 7.3,
+        },
+    ]
+
+    matrix, audit = build_candidate_matrix_from_fragments(
+        fragment_records,
+        dataset="bindingdb_test_hard",
+        min_active_fragments_per_group=2,
+        negative_ratio=1,
+        min_candidates_per_query=2,
+        negative_mode="ca_matched",
+        random_seed=13,
+    )
+
+    query = matrix[matrix["old_fragment_smiles"] == "*C(C)=O"]
+    negatives = query.loc[query["label"] == 0, "candidate_smiles"].tolist()
+
+    assert audit["negative_mode"] == "ca_matched"
+    assert negatives == ["*C(=O)OC"]

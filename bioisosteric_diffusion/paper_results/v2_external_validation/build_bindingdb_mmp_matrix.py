@@ -25,8 +25,8 @@ from typing import Iterable
 import pandas as pd
 
 try:
-    from rdkit import Chem, RDLogger
-    from rdkit.Chem import BRICS
+    from rdkit import Chem, DataStructs, RDLogger
+    from rdkit.Chem import AllChem, BRICS, Descriptors
 
     RDLogger.DisableLog("rdApp.*")
 except Exception:  # pragma: no cover - tested in the execution environment
@@ -48,6 +48,17 @@ DIRECT_MD5_URL = "https://www.bindingdb.org/rwd/bind/downloads/BindingDB_Binding
 
 def stable_hash(text: str, n: int = 16) -> str:
     return hashlib.md5(text.encode("utf-8")).hexdigest()[:n]
+
+
+def dedupe_preserve_order(values: Iterable[str]) -> list[str]:
+    seen: set[str] = set()
+    out: list[str] = []
+    for value in values:
+        if value in seen:
+            continue
+        seen.add(value)
+        out.append(value)
+    return out
 
 
 def parse_bindingdb_nm(raw: object) -> tuple[str, float] | None:
@@ -206,6 +217,50 @@ def fragment_smiles_brics(
     return records
 
 
+def fragment_ca_features(smiles: str, cache: dict[str, tuple[object, tuple[float, ...]] | None]):
+    _require_rdkit()
+    if smiles in cache:
+        return cache[smiles]
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        cache[smiles] = None
+        return None
+    try:
+        fp = AllChem.GetMorganFingerprintAsBitVect(mol, 2, 2048)
+        props = (
+            float(mol.GetNumHeavyAtoms()),
+            float(Descriptors.RingCount(mol)),
+            float(Descriptors.MolWt(mol)),
+            float(Descriptors.MolLogP(mol)),
+            float(Descriptors.TPSA(mol)),
+        )
+    except Exception:
+        cache[smiles] = None
+        return None
+    cache[smiles] = (fp, props)
+    return cache[smiles]
+
+
+def ca_proxy_score(
+    old_fragment: str,
+    candidate_fragment: str,
+    cache: dict[str, tuple[object, tuple[float, ...]] | None],
+) -> float:
+    old_features = fragment_ca_features(old_fragment, cache)
+    candidate_features = fragment_ca_features(candidate_fragment, cache)
+    if old_features is None or candidate_features is None:
+        return -1.0
+
+    old_fp, old_props = old_features
+    candidate_fp, candidate_props = candidate_features
+    tanimoto = float(DataStructs.TanimotoSimilarity(old_fp, candidate_fp))
+    d_heavy = abs(candidate_props[0] - old_props[0])
+    d_rings = abs(candidate_props[1] - old_props[1])
+    d_mw = abs(candidate_props[2] - old_props[2]) / max(old_props[2], 1.0)
+    d_logp = abs(candidate_props[3] - old_props[3]) / max(abs(old_props[3]) + 1.0, 1.0)
+    return 0.75 * tanimoto + 0.25 * (1.0 / (1.0 + d_heavy + d_rings + d_mw + d_logp))
+
+
 def _clean_text(value: object) -> str:
     return " ".join(str(value or "").strip().split())
 
@@ -336,11 +391,17 @@ def build_candidate_matrix_from_fragments(
     min_candidates_per_query: int = 20,
     max_groups: int | None = None,
     max_queries: int | None = None,
+    negative_mode: str = "easy",
+    hard_negative_pool_size: int = 5000,
     random_seed: int = 20260609,
 ) -> tuple[pd.DataFrame, dict[str, object]]:
+    if negative_mode not in {"easy", "same_target", "ca_matched"}:
+        raise ValueError(f"Unsupported negative_mode: {negative_mode}")
+
     rng = random.Random(random_seed)
     by_group: dict[tuple[str, str, str, str], list[dict[str, object]]] = defaultdict(list)
     fragments_by_attachment: dict[str, set[str]] = defaultdict(set)
+    fragments_by_target_endpoint_attachment: dict[tuple[str, str, str], set[str]] = defaultdict(set)
     all_fragments: set[str] = set()
 
     for rec in fragment_records:
@@ -354,6 +415,7 @@ def build_candidate_matrix_from_fragments(
         fragment = str(rec["fragment_smiles"])
         attach = str(rec["attachment_signature"])
         fragments_by_attachment[attach].add(fragment)
+        fragments_by_target_endpoint_attachment[(key[0], key[1], attach)].add(fragment)
         all_fragments.add(fragment)
 
     eligible: list[tuple[tuple[str, str, str, str], list[dict[str, object]], dict[str, set[str]]]] = []
@@ -372,14 +434,28 @@ def build_candidate_matrix_from_fragments(
     query_seen: set[tuple[str, str]] = set()
     queries_written = 0
     skipped_without_negatives = 0
+    target_endpoint_negative_rows = 0
+    ca_feature_cache: dict[str, tuple[object, tuple[float, ...]] | None] = {}
 
     for (target_key, endpoint, core_key, attach), records, frag_ligands in eligible:
         rep = records[0]
         active_fragments = sorted(frag_ligands)
+        same_target_endpoint_pool = sorted(
+            fragments_by_target_endpoint_attachment[(target_key, endpoint, attach)] - set(active_fragments)
+        )
         same_attach_pool = sorted(fragments_by_attachment[attach] - set(active_fragments))
         global_pool = sorted(all_fragments - set(active_fragments) - set(same_attach_pool))
-        negative_pool = same_attach_pool + global_pool
-        rng.shuffle(negative_pool)
+        if negative_mode == "easy":
+            negative_pool = same_attach_pool + global_pool
+            rng.shuffle(negative_pool)
+        elif negative_mode == "same_target":
+            fallback_pool = dedupe_preserve_order([f for f in same_attach_pool + global_pool if f not in same_target_endpoint_pool])
+            rng.shuffle(same_target_endpoint_pool)
+            rng.shuffle(fallback_pool)
+            negative_pool = same_target_endpoint_pool + fallback_pool
+        else:
+            negative_pool = dedupe_preserve_order(same_target_endpoint_pool + same_attach_pool + global_pool)
+            rng.shuffle(negative_pool)
 
         for old_fragment in active_fragments:
             positives = [f for f in active_fragments if f != old_fragment]
@@ -391,6 +467,16 @@ def build_candidate_matrix_from_fragments(
                 0,
             )
             negatives = [f for f in negative_pool if f != old_fragment and f not in positives]
+            if negative_mode == "ca_matched":
+                if len(negatives) > hard_negative_pool_size:
+                    negatives = rng.sample(negatives, hard_negative_pool_size)
+                negatives.sort(
+                    key=lambda candidate: (
+                        ca_proxy_score(old_fragment, candidate, ca_feature_cache),
+                        stable_hash(candidate),
+                    ),
+                    reverse=True,
+                )
             negatives = negatives[:requested_negatives]
             if not negatives:
                 skipped_without_negatives += 1
@@ -419,8 +505,11 @@ def build_candidate_matrix_from_fragments(
                         "n_active_fragments_in_group": len(active_fragments),
                         "n_support_ligands_for_old_fragment": len(frag_ligands[old_fragment]),
                         "n_positive_candidates": len(positives),
+                        "negative_mode": negative_mode,
                     }
                 )
+                if label == 0 and candidate in same_target_endpoint_pool:
+                    target_endpoint_negative_rows += 1
             queries_written += 1
             if max_queries is not None and queries_written >= max_queries:
                 break
@@ -439,6 +528,9 @@ def build_candidate_matrix_from_fragments(
         "old_fragments": int(matrix["old_fragment_smiles"].nunique()) if not matrix.empty else 0,
         "candidate_fragments": int(matrix["candidate_smiles"].nunique()) if not matrix.empty else 0,
         "skipped_queries_without_negatives": skipped_without_negatives,
+        "target_endpoint_negative_rows": target_endpoint_negative_rows,
+        "negative_mode": negative_mode,
+        "hard_negative_pool_size": hard_negative_pool_size if negative_mode == "ca_matched" else None,
         "random_seed": random_seed,
     }
     return matrix, audit
@@ -526,6 +618,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--out-dir", type=Path, default=paths["out_dir"])
     parser.add_argument("--dataset", default="bindingdb_mmp_202606_articles")
     parser.add_argument("--matrix-name", default="candidate_matrix.csv.gz")
+    parser.add_argument("--manifest-name", default="source_manifest.json")
+    parser.add_argument("--audit-name", default="matrix_audit.md")
     parser.add_argument("--active-threshold", type=float, default=6.0)
     parser.add_argument("--max-rows", type=int, default=None)
     parser.add_argument("--max-groups", type=int, default=None)
@@ -537,6 +631,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--mol-max-heavy", type=int, default=80)
     parser.add_argument("--min-active-fragments-per-group", type=int, default=2)
     parser.add_argument("--negative-ratio", type=int, default=5)
+    parser.add_argument("--negative-mode", choices=["easy", "same_target", "ca_matched"], default="easy")
+    parser.add_argument("--hard-negative-pool-size", type=int, default=5000)
     parser.add_argument("--min-candidates-per-query", type=int, default=20)
     parser.add_argument("--random-seed", type=int, default=20260609)
     parser.add_argument("--write-fragment-records", action="store_true")
@@ -565,6 +661,8 @@ def main() -> None:
         min_candidates_per_query=args.min_candidates_per_query,
         max_groups=args.max_groups,
         max_queries=args.max_queries,
+        negative_mode=args.negative_mode,
+        hard_negative_pool_size=args.hard_negative_pool_size,
         random_seed=args.random_seed,
     )
 
@@ -599,15 +697,17 @@ def main() -> None:
             "mol_max_heavy": args.mol_max_heavy,
             "min_active_fragments_per_group": args.min_active_fragments_per_group,
             "negative_ratio": args.negative_ratio,
+            "negative_mode": args.negative_mode,
+            "hard_negative_pool_size": args.hard_negative_pool_size,
             "min_candidates_per_query": args.min_candidates_per_query,
             "random_seed": args.random_seed,
         },
         "parse_audit": parse_audit,
         "matrix_audit": matrix_audit,
     }
-    manifest_path = args.out_dir / "source_manifest.json"
+    manifest_path = args.out_dir / args.manifest_name
     manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True), encoding="utf-8")
-    write_audit_markdown(args.out_dir / "matrix_audit.md", manifest)
+    write_audit_markdown(args.out_dir / args.audit_name, manifest)
 
     print(json.dumps({"matrix": str(matrix_path), "manifest": str(manifest_path), **matrix_audit}, indent=2))
 

@@ -2,3 +2,5 @@ bindingdb_mmp/raw/
 bindingdb_mmp/*.csv.gz
 bindingdb_mmp/results*/
 bindingdb_mmp/active_fragment_records.csv.gz
+bindingdb_mmp/source_manifest_*hard*.json
+bindingdb_mmp/matrix_audit_*hard*.md

@@ -46,6 +46,7 @@ MMP construction:
 Evaluation:
 
 - Main external BindingDB benchmark: repeated OF-level 70/30 split within BindingDB, using the same locked model family, fixed feature set, and locked baseline definitions.
+- The first easy-negative BindingDB matrix is a feasibility check only if CA reaches near-ceiling performance. The candidate main benchmark must use a pre-registered hard-negative policy, preferably same-target/same-endpoint/attachment-compatible candidates ranked by CA-matched similarity.
 - Cross-source transfer diagnostic: train on the locked ChEMBL internal matrix and evaluate on BindingDB without any BindingDB label-derived tuning. Candidate frequency must come only from the training source.
 - Report OF-macro Hit@10 as primary and query-weighted Hit@10 as secondary.
 - Report dataset size, positive rate, OF coverage, candidate coverage, and zero-positive OF exclusions.
@@ -142,6 +143,33 @@ python paper_results/v2_external_validation/run_external_validation.py `
   --n-seeds 10 `
   --out-dir paper_results/v2_external_validation/bindingdb_mmp/results
 ```
+
+BindingDB hard-negative diagnostic:
+
+```powershell
+E:\Anaconda3\envs\accfg\python.exe paper_results/v2_external_validation/build_bindingdb_mmp_matrix.py `
+  --max-rows 10000 `
+  --negative-mode ca_matched `
+  --hard-negative-pool-size 5000 `
+  --matrix-name candidate_matrix_10k_hard.csv.gz `
+  --manifest-name source_manifest_10k_hard.json `
+  --audit-name matrix_audit_10k_hard.md
+```
+
+```powershell
+E:\Anaconda3\envs\accfg\python.exe paper_results/v2_external_validation/run_external_validation.py `
+  --matrix paper_results/v2_external_validation/bindingdb_mmp/candidate_matrix_10k_hard.csv.gz `
+  --dataset-name bindingdb_mmp_10k_hard `
+  --protocol repeated_of_split `
+  --n-seeds 3 `
+  --out-dir paper_results/v2_external_validation/bindingdb_mmp/results_10k_hard
+```
+
+Diagnostic v2 decision rule:
+
+- If `LBC > FullBlend > Frequency / CA` on the 10k hard-negative diagnostic, proceed to the full hard-negative 10-seed benchmark as an LBC external superiority test.
+- If `Frequency ~= LBC`, retain the full benchmark but frame the claim as transferable candidate support dominating BindingDB-hard ranking.
+- If `FullBlend ~= LBC` and both exceed Frequency/CA, do not claim LBC-specific superiority; frame the result as learned transferable content support dominating hand-crafted CA and raw frequency.
 
 Current large-scale feasibility check:
 
