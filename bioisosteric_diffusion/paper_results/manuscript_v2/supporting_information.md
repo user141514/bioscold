@@ -248,7 +248,21 @@ Source: `paper_results/v2_full_data/e8_zero_of_predictions.csv`
 
 ---
 
-## S12. Data Availability
+## S12. External Validation Extension
+
+External validation is pre-specified in `paper_results/v2_external_validation/protocol.md`. The extension separates three evidence roles:
+
+- **BindingDB-derived MMP replacement benchmark**: main external dataset after source files, standardized matrix, and result CSVs are locked.
+- **ChEMBL temporal split**: auxiliary time-robustness validation, not an independent external data source.
+- **SwissBioisostere overlap / sanity check**: external replacement-reference overlap analysis only; not used for training, tuning, or activity-preservation claims.
+
+The standardized external candidate matrix has one row per query-candidate pair and requires `query_id`, `old_fragment_smiles`, `candidate_smiles`, and `label`. Optional precomputed features are `morgan`, `bit_corr`, `dHeavy`, `dRings`, `dMW`, `dLogP`, and `dTPSA`; otherwise the evaluator computes them with RDKit. The locked evaluator is `paper_results/v2_external_validation/run_external_validation.py`.
+
+Before any BindingDB, temporal-split, or SwissBioisostere result is promoted to the main manuscript, the corresponding source release, matrix construction script, matrix hash, result CSV, and leakage audit must be archived.
+
+---
+
+## S13. Data Availability
 
 - **Experiment protocol**: `paper_results/v2_full_data/protocol.md`
 - **Per-seed summary**: `paper_results/v2_full_data/e1_main_10seed_summary.csv`
@@ -261,3 +275,5 @@ Source: `paper_results/v2_full_data/e8_zero_of_predictions.csv`
 - **Split imbalance**: `paper_results/v2_full_data/e4_split_imbalance_audit.csv`
 - **Rank diagnostics**: `paper_results/v2_full_data/e5_rank_diag.csv`
 - **HGB vs LR**: `paper_results/v2_full_data/e6_hgb_vs_lr.csv`
+- **External validation protocol**: `paper_results/v2_external_validation/protocol.md`
+- **External validation evaluator**: `paper_results/v2_external_validation/run_external_validation.py`

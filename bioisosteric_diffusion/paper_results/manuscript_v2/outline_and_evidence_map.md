@@ -7,6 +7,37 @@ Data: 123 OFs, 10-seed repeated OF split, inner 3-fold CV for tuning
 
 ---
 
+## External Validation Upgrade
+
+Status: pre-specified on 2026-06-09. BindingDB curated-article full matrix construction and a 3-seed feasibility evaluation are complete; manuscript numerical claims remain blocked until the 10-seed result lock and leakage/source audit are complete.
+
+### Evidence tiers
+
+1. Main external dataset: BindingDB-derived MMP replacement benchmark.
+2. Auxiliary validation: ChEMBL temporal split.
+3. External replacement reference: SwissBioisostere overlap / sanity check.
+
+### Claim policy
+
+- Current manuscript-level numerical claims remain limited to the locked ChEMBL 36-derived 10-seed OF-level benchmark.
+- BindingDB becomes the primary external benchmark after the full 10-seed `paper_results/v2_external_validation/bindingdb_mmp/results/*summary.csv` is produced and audited.
+- ChEMBL temporal split can support time-robustness only; it should not be described as an independent external data source.
+- SwissBioisostere can support replacement-overlap sanity checks only; it must not be used for training, tuning, or activity-preservation claims.
+
+### Evidence files to add
+
+- Protocol: `paper_results/v2_external_validation/protocol.md`
+- Evaluator: `paper_results/v2_external_validation/run_external_validation.py`
+- BindingDB source manifest: `paper_results/v2_external_validation/bindingdb_mmp/source_manifest.json`
+- BindingDB matrix audit: `paper_results/v2_external_validation/bindingdb_mmp/matrix_audit.md`
+- BindingDB matrix: `paper_results/v2_external_validation/bindingdb_mmp/candidate_matrix.csv.gz` (local generated artifact)
+- BindingDB 3-seed feasibility summary: `paper_results/v2_external_validation/bindingdb_mmp/results_full_3seed_summary.md`
+- BindingDB final results to add: `paper_results/v2_external_validation/bindingdb_mmp/results/bindingdb_mmp_summary.csv`
+- ChEMBL temporal results: `paper_results/v2_external_validation/chembl_temporal/results/chembl_temporal_summary.csv`
+- SwissBioisostere overlap: `paper_results/v2_external_validation/swissbioisostere_overlap/overlap_summary.csv`
+
+---
+
 ## 1. Abstract
 
 ### Claim stack

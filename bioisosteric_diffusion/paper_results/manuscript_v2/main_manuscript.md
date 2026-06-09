@@ -6,7 +6,7 @@ A natural question in fragment replacement ranking is whether a candidate's hist
 
 ## 1. Introduction
 
-Bioisosteric replacement substitutes one molecular fragment with another that preserves biological activity while modulating physicochemical properties. It is a fundamental strategy in medicinal chemistry and lead optimization [1, 2]. Computational tools that rank candidate replacements for a query fragment can accelerate the design-make-test cycle by prioritizing the most promising analogs for synthesis [3, 4]. Early computational approaches searched fragment databases for bioisosteric replacements using pharmacophore fingerprints and molecular field similarity; the matched molecular pair framework later enabled systematic mining of replacement pairs from bioactivity databases [11]. SwissBioisostere, a knowledge base containing over 25 million molecular replacements derived from ChEMBL, provides a data foundation for fragment replacement analysis [12]. SwissBioisostere, a knowledge base containing over 25 million molecular replacements derived from ChEMBL, provides a data foundation for fragment replacement analysis [12]. BioSTAR, a recent data-driven workflow, quantitatively evaluates bioisosteric replacements using MMP analysis across multiple property dimensions [13].
+Bioisosteric replacement substitutes one molecular fragment with another that preserves biological activity while modulating physicochemical properties. It is a fundamental strategy in medicinal chemistry and lead optimization [1, 2]. Computational tools that rank candidate replacements for a query fragment can accelerate the design-make-test cycle by prioritizing the most promising analogs for synthesis [3, 4]. Early computational approaches searched fragment databases for bioisosteric replacements using pharmacophore fingerprints and molecular field similarity; the matched molecular pair framework later enabled systematic mining of replacement pairs from bioactivity databases [11]. SwissBioisostere, a knowledge base containing over 25 million molecular replacements derived from ChEMBL, provides a data foundation for fragment replacement analysis [12]. BioSTAR, a recent data-driven workflow, quantitatively evaluates bioisosteric replacements using MMP analysis across multiple property dimensions [13].
 
 The ranking problem can be stated as follows: given an old fragment (OF) and a pool of candidate fragments, rank candidates so that those known to be labeled positive replacements appear at the top. This problem is challenging for two reasons. First, most OFs have relatively few experimentally validated positive replacements, limiting the training signal available from any single OF. Second, the candidate pool is large and the labeled positive rate is low (1.33% in the current archive), which places a premium on scoring functions that can separate rare positives from abundant negatives.
 
@@ -94,6 +94,12 @@ For capacity comparison, we also train a HistGradientBoostingClassifier (HGB) on
 **Feature ablation**: For each of the 8 features, we retrain LBC-Ranker with that feature removed (same 10 outer splits, same hyperparameters) and report the mean degradation in OF-macro Hit@10 relative to the full 8-feature model.
 
 **Tuning ledger**: All inner cross-validation results for all evaluated configurations are recorded and included as Supporting Information.
+
+### 2.7 External Validation Extension
+
+We pre-specify an external validation extension but do not use it for the numerical claims reported in the current result lock. The main external dataset will be a BindingDB-derived matched-molecular-pair replacement benchmark constructed with the same fragmentation, feature, and Hit@10 evaluation conventions used for the ChEMBL 36 archive. To preserve independence from the ChEMBL-derived internal benchmark, the preferred BindingDB source is the BindingDB-curated article subset; if the full BindingDB dump is used, ChEMBL-derived rows must be removed before MMP construction.
+
+Two auxiliary checks are defined separately. A ChEMBL temporal split will evaluate time robustness within the ChEMBL source family, and SwissBioisostere overlap will be used only as a replacement-reference sanity check for top-ranked candidates. SwissBioisostere records are not used for training, hyperparameter tuning, label construction, or activity-preservation claims. The full external protocol and evaluator are archived in `paper_results/v2_external_validation/`. No BindingDB, temporal-split, or SwissBioisostere performance value should be interpreted as part of the present ChEMBL result lock until the corresponding result files and leakage audits are generated.
 
 ## 3. Results
 
@@ -184,7 +190,7 @@ For practitioners building fragment replacement tools, LBC-Ranker offers several
 
 ### 4.6 Limitations
 
-**Data source coverage**: The 123 labeled OFs are derived from a single data source (ChEMBL 36). While this represents a substantial expansion over the labeled OF sets used in prior work, the chemical diversity of training OFs constrains the generalizability of learned weights. External validation on independent fragment replacement datasets would strengthen confidence.
+**Data source coverage**: The locked numerical results in this manuscript are derived from a single data source (ChEMBL 36). While this represents a substantial expansion over the labeled OF sets used in prior work, the chemical diversity of training OFs constrains the generalizability of learned weights. We therefore pre-specify BindingDB-derived MMP replacement ranking as the main external benchmark, with ChEMBL temporal splitting and SwissBioisostere overlap reserved for auxiliary checks. External numerical claims should be added only after those result files and leakage audits are locked.
 
 **Candidate pool scope**: The current candidate pool contains 152 fragment candidates. In practical deployment, candidate pools may be substantially larger and may include fragments outside the training distribution. The ranking performance of LBC-Ranker on expanded candidate pools has not been evaluated.
 
@@ -196,7 +202,7 @@ For practitioners building fragment replacement tools, LBC-Ranker offers several
 
 ### 4.7 Future Work
 
-Several directions follow from the current results. First, expanding the candidate pool beyond the current 152 fragments could identify replacement candidates not represented in the current labeled data. However, as shown in our pool-expansion experiment (Section 4.6), LBC-Ranker's advantage requires train-derived frequency estimates; for unlabeled candidates, estimating candidate priors from cross-OF transfer or external databases (e.g., SwissBioisostere) would be necessary to retain the feature-resolved gain. Second, three-dimensional shape and electrostatic similarity features may carry independent signal not captured by Morgan or bit_corr. Third, learned molecular embeddings from large-scale pretraining could replace or augment the hand-crafted fingerprint features tested here. Fourth, the evaluation protocol established in this work (repeated OF-level splits with inner cross-validated baseline tuning and a public tuning ledger) provides a template for benchmarking future fragment replacement ranking methods under fair and reproducible conditions.
+Several directions follow from the current results. First, expanding the candidate pool beyond the current 152 fragments could identify replacement candidates not represented in the current labeled data. However, as shown in our pool-expansion experiment (Section 4.6), LBC-Ranker's advantage requires train-derived frequency estimates; for unlabeled candidates, estimating candidate priors from cross-OF transfer or external replacement references would be necessary to retain the feature-resolved gain. Second, the pre-specified BindingDB-derived MMP benchmark should be used as the main external test of whether the learned compatibility signal transfers beyond ChEMBL-derived replacement labels. Third, three-dimensional shape and electrostatic similarity features may carry independent signal not captured by Morgan or bit_corr. Fourth, learned molecular embeddings from large-scale pretraining could replace or augment the hand-crafted fingerprint features tested here. Fifth, the evaluation protocol established in this work (repeated OF-level splits with inner cross-validated baseline tuning and a public tuning ledger) provides a template for benchmarking future fragment replacement ranking methods under fair and reproducible conditions.
 
 ## 5. Conclusion
 
@@ -204,7 +210,7 @@ We present LBC-Ranker, a compact supervised ranking model that learns feature-re
 
 ## Data and Software Availability
 
-All code, trained models, and precomputed feature matrices are available at https://github.com/user141514/bioscold. The ChEMBL 36 dataset is publicly available at https://www.ebi.ac.uk/chembl/. The full experiment protocol, tuning ledger, and per-seed results are archived in `paper_results/v2_full_data/`. The experimental pipeline is organized under the repository root, with final protocol scripts and result tables archived in `paper_results/v2_full_data/`. Environment: Python 3.10.18, scikit-learn 1.7.2, RDKit 2023.09.3, pandas 2.3.3, numpy 1.26.4. All experiments run on CPU (Intel Xeon, Windows 10 Pro). No GPU required.
+All code, trained models, and precomputed feature matrices are available at https://github.com/user141514/bioscold. The ChEMBL 36 dataset is publicly available at https://www.ebi.ac.uk/chembl/. The full experiment protocol, tuning ledger, and per-seed results are archived in `paper_results/v2_full_data/`. The pre-specified external validation protocol for BindingDB-derived MMP benchmarking, ChEMBL temporal splitting, and SwissBioisostere overlap sanity checks is archived in `paper_results/v2_external_validation/`. The experimental pipeline is organized under the repository root, with final protocol scripts and result tables archived in `paper_results/v2_full_data/`. Environment: Python 3.10.18, scikit-learn 1.7.2, RDKit 2023.09.3, pandas 2.3.3, numpy 1.26.4. All experiments run on CPU (Intel Xeon, Windows 10 Pro). No GPU required.
 
 ## Supporting Information
 
@@ -215,6 +221,7 @@ All code, trained models, and precomputed feature matrices are available at http
 - Ablation detail: `paper_results/v2_full_data/e2_ablation_full_detail.csv`
 - HGB vs LR: `paper_results/v2_full_data/e6_hgb_vs_lr.csv`
 - Cold-start audit: `paper_results/v2_full_data/e4_coldstart_audit.csv`
+- External validation protocol and evaluator: `paper_results/v2_external_validation/`
 - Split imbalance diagnostics: train/test positive-pair mass and query count per outer split
 
 ## References
