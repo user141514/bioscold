@@ -73,7 +73,7 @@ For capacity comparison, we also train a HistGradientBoostingClassifier (HGB) on
 
 **Frequency**: Rank candidates by their count among positive labels in the training set, min-max normalized. A pure prior without OF-specific structural information.
 
-**Content-Aware (CA)**: Hand-crafted linear combination s_CA(c | f) = λ × Morgan(c, f) + (1 − λ) × PhysChem. The PhysChem term is defined as 1/(1 + ΣΔphyschem) where ΣΔphyschem = ΔHeavy + ΔRings + ΔMW/OF_MW + ΔlogP/(|OF_logP| + 1). This form maps the sum of (unnormalized or OF-normalized) property differences to a similarity-like score in [0, 1], following conventional practice in ligand-based virtual screening. The weight λ is tuned via inner cross-validation from {0, 0.25, 0.5, 0.75, 1.0}.
+**Content-Aware (CA)**: Hand-crafted linear combination s_CA(c | f) = λ × Morgan(c, f) + (1 − λ) × PhysChem. The PhysChem term is defined as 1/(1 + ΣΔphyschem) where ΣΔphyschem = ΔHeavy + ΔRings + ΔMW/OF_MW + ΔlogP/(|OF_logP| + 1). This form maps the sum of (unnormalized or OF-normalized) property differences to a similarity-like score in [0, 1], following conventional practice in ligand-based virtual screening [7]. The weight λ is tuned via inner cross-validation from {0, 0.25, 0.5, 0.75, 1.0}. The CA baseline includes four physicochemical terms and excludes ΔTPSA; LBC-Ranker includes ΔTPSA as a separate feature. The performance gap between CA and LBC-Ranker therefore reflects both the feature-resolution advantage and the additional ΔTPSA signal (ablation Δ = −0.085). The Freq+CA blend inherits the same four-term PhysChem definition.
 
 **Frequency–Content Blend (diagnostic)**: To test whether the two main signal families can be combined by a global scalar weight, we define s_blend(c | f) = α · z(freq(c)) + (1 − α) · z(s_CA(c | f)), where z denotes fold-local standardization (zero mean, unit variance). The blend weight α is selected via inner cross-validation from {0, 0.25, 0.5, 0.75, 1.0}, and CA uses its independently tuned λ = 0.75. This baseline is diagnostic: it uses the same information (candidate frequency and content similarity) as CA plus a frequency prior, but compresses all structural dimensions into a single CA scalar before blending, unlike LBC-Ranker which retains individual structural features.
 
@@ -112,7 +112,7 @@ Table 2 and Figure 2 report the 10-seed ranking performance. LBC-Ranker achieves
 | CA (tuned) | 0.661 | +0.191 | [+0.164, +0.218] | 0.00195 |
 | Frequency | 0.462 | +0.390 | [+0.363, +0.414] | 0.00195 |
 
-^a^ All Δ values are paired differences (LBC − method), with 95% bootstrap confidence intervals (10,000 resamples). The Freq+CA blend (α = 0.25 in all seeds, inner 3-fold CV tuned) is the strongest non-LBC baseline. HGB achieves Hit@10 within 0.002 of LBC-Ranker; the 95% CI spans zero, confirming the difference is not statistically distinguishable. All baselines were tuned under the same inner 3-fold CV protocol. Exact sign-flip test p-values are reported; all remain significant after Bonferroni correction (α = 0.05/5 = 0.01).
+^a^ The ±0.032 for LBC-Ranker is the 10-seed standard deviation of absolute performance. All Δ values are paired differences (LBC − method), with 95% bootstrap confidence intervals (10,000 resamples). The Freq+CA blend (α = 0.25 in all seeds, inner 3-fold CV tuned) is the strongest non-LBC baseline. HGB achieves Hit@10 within 0.002 of LBC-Ranker; the 95% CI spans zero, confirming the difference is not statistically distinguishable. All baselines were tuned under the same inner 3-fold CV protocol. Exact sign-flip test p-values are reported; all remain significant after Bonferroni correction (α = 0.05/5 = 0.01).
 
 ### 3.2 Component Ladder: Feature Resolution Beyond Blending
 
@@ -150,11 +150,11 @@ Table 4 and Figure 1 report the one-drop ablation across 10 seeds. Dropping cand
 
 ### 3.5 Baseline Tuning Behavior
 
-CA tuning consistently selects λ = 0.75 across all seeds (3:1 Morgan-to-physchem weighting). The Freq+CA blend tuning consistently selects α = 0.25. C3F-style retrieval tuning selects K ∈ {3, 5, 7, 10} with α = 0.1 in all 10 seeds. HGB tuning selects depth = 5 in 8 of 10 seeds and depth = 3 in 2 of 10 seeds. Full tuning results are provided in the Supporting Information (tuning ledger).
+CA tuning consistently selects λ = 0.75 across all seeds (3:1 Morgan-to-physchem weighting). The Freq+CA blend tuning consistently selects α = 0.25. C3F-style retrieval tuning selects α = 0.1 in all 10 seeds, with K = 5 (8/10 seeds) or K = 3 (2/10 seeds). HGB tuning selects depth = 5 in 8 of 10 seeds and depth = 3 in 2 of 10 seeds. Full tuning results are provided in the Supporting Information (tuning ledger).
 
 ### 3.6 Query-Weighted and Per-OF Analysis
 
-Under query-weighted Hit@10, LBC-Ranker achieves a paired improvement of +0.093 over the best tuned non-LBC baseline. The full per-OF Hit@10 distribution across all seeds is provided in the Supporting Information (Table S3).
+Under query-weighted Hit@10, LBC-Ranker achieves a paired improvement of +0.050 over the Freq+CA blend (Table 3, query-weighted column). The full per-OF Hit@10 distribution across all seeds is provided in the Supporting Information (Table S3).
 
 ## 4. Discussion
 
