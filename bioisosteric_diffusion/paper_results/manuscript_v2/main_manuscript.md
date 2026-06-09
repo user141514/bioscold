@@ -18,7 +18,7 @@ We propose the **Learned Binary-fingerprint Compatibility Ranker (LBC-Ranker)**,
 
 1. **Feature-resolved compatibility**: Rather than compressing structural information into a single content-similarity score and then blending with frequency (Freq+CA), LBC-Ranker retains individual structural dimensions (Morgan, bit_corr, five physicochemical deltas) and learns their joint calibration against candidate frequency. This preserves information that coarse blending discards.
 
-2. **Bit-level correlation feature**: Beyond global Tanimoto similarity, we compute the Pearson correlation between L1-normalized candidate and OF fingerprint bit vectors. Two fragments may share many bits (high Tanimoto) but differ in which specific bits co-occur (low bit_corr), or vice versa.
+2. **Bit-level correlation feature**: Beyond global Tanimoto similarity, we compute the Pearson correlation between candidate and OF fingerprint bit vectors. Two fragments may share many bits (high Tanimoto) but differ in which specific bits co-occur (low bit_corr), or vice versa.
 
 3. **Train-only candidate frequency**: Candidate frequency among positive training labels serves as a replacement track-record prior. This feature is computed strictly from training OFs, preventing label leakage across the OF split boundary.
 
@@ -36,7 +36,7 @@ Let F = {f_1, ..., f_N} be the set of old fragments (OFs), each represented by a
 
 The dataset is constructed from ChEMBL 36 [9] through the following pipeline (designated D4A0 in our archive). First, compounds with bioactivity data against protein targets are filtered to retain those with pIC50, pKi, or pKd ≥ 6 (a conventional threshold for meaningful binding activity). Second, compounds are fragmented at acyclic single bonds using the Hussain–Rea matched molecular pair algorithm [11], producing old fragments (OFs, the substructure to be replaced) and candidate fragments (the potential replacements). Third, a candidate–OF pair is labeled positive if at least one compound pair exists where the OF-containing compound and the candidate-containing compound were both tested against the same protein target and both exceeded the activity threshold. Pairs where this condition is not met are labeled negative, with the caveat that some negative labels may reflect missing experimental data rather than genuine non-replacements. Fourth, all queries are partitioned at the OF level into training and test sets, with zero query-level overlap across the split boundary. The final archive contains 137,556 query rows, 137 unique OF strings, and 152 unique candidate fragments in the ranking pool.
 
-Of the 137 unique OFs, 123 have positive-label support (at least one labeled positive replacement pair), and 14 (10.2%) have zero positive-label support. The overall positive pair rate across 14,950,719 candidate pair rows is 1.33%. Positive support mass ranges across several orders of magnitude (98 to 27,448 positive pairs per OF), with the top 10 OFs accounting for approximately 48% of all positive pairs. The 152 candidates constitute a fixed pool used for all ranking experiments; we return to the implications of pool size for practical deployment in Sections 4.6 and 4.7.
+Of the 137 unique OFs, 123 have positive-label support (at least one labeled positive replacement pair), and 14 (10.2%) have zero positive-label support. The 14 zero-support OFs are excluded from all ranking experiments because Hit@K is undefined when no positive labels are present; we analyze LBC-Ranker predictions on these OFs in the Supporting Information (Table S11). The overall positive pair rate across 14,950,719 candidate pair rows is 1.33%. Positive support mass ranges across several orders of magnitude (98 to 27,448 positive pairs per OF), with the top 10 OFs accounting for approximately 48% of all positive pairs. The 152 candidates constitute a fixed pool used for all ranking experiments; we return to the implications of pool size for practical deployment in Sections 4.6 and 4.7.
 
 ### 2.3 Feature Design
 
@@ -99,20 +99,20 @@ For capacity comparison, we also train a HistGradientBoostingClassifier (HGB) on
 
 ### 3.1 Primary Ranking Performance
 
-Table 2 and Figure 2 report the 10-seed ranking performance. LBC-Ranker achieves an OF-macro Hit@10 of 0.852 ± 0.032. The strongest tuned non-LBC baseline is Freq+CA blend in all 10 seeds (0.797). The paired mean difference between LBC-Ranker and the blend is +0.055 ± 0.030 (p = 0.00195, exact sign-flip test), with LBC-Ranker outperforming the blend in all 10 seeds. The retrieval baseline (C3F-style, 0.716) and hand-crafted CA (0.661) both score below the blend.
+Table 2 and Figure 2 report the 10-seed ranking performance. LBC-Ranker achieves an OF-macro Hit@10 of 0.852 ± 0.032 (10-seed mean ± std). The strongest tuned non-LBC baseline is the Freq+CA blend in all 10 seeds (0.797). The paired mean difference between LBC-Ranker and the blend is +0.055 (95% CI [+0.038, +0.072], p = 0.00195), with LBC-Ranker outperforming the blend in all 10 seeds. The retrieval baseline (C3F-style, 0.716) and hand-crafted CA (0.661) both score below the blend. HGB achieves 0.851, within 0.002 of LBC-Ranker (95% CI [−0.028, +0.035], spanning zero).
 
 **Table 2: 10-seed OF-macro ranking performance (123 OFs).**
 
-| Method | Macro Hit@10 | Δ (LBC − method) | Two-sided p |
-|--------|-------------|-------------------|-------------|
-| **LBC-Ranker** | **0.852 ± 0.032** | — | — |
-| HGB | 0.851 | +0.002 | — |
-| Freq+CA blend (tuned) | 0.797 | +0.055 ± 0.030 | 0.00195 |
-| C3F-style retrieval (tuned) | 0.716 | +0.136 | 0.00195 |
-| CA (tuned) | 0.661 | +0.191 | 0.00195 |
-| Frequency | 0.462 | +0.390 | 0.00195 |
+| Method | Macro Hit@10 | Δ (LBC − method) | 95% CI | Two-sided p |
+|--------|-------------|-------------------|--------|-------------|
+| **LBC-Ranker** | **0.852 ± 0.032** | — | — | — |
+| HGB | 0.851 | +0.002 | [−0.028, +0.035] | — |
+| Freq+CA blend (tuned) | 0.797 | +0.055 | [+0.038, +0.072] | 0.00195 |
+| C3F-style retrieval (tuned) | 0.716 | +0.136 | [+0.107, +0.161] | 0.00195 |
+| CA (tuned) | 0.661 | +0.191 | [+0.164, +0.218] | 0.00195 |
+| Frequency | 0.462 | +0.390 | [+0.363, +0.414] | 0.00195 |
 
-^a^ The Freq+CA blend (α = 0.25 in all seeds, inner 3-fold CV tuned) is the strongest non-LBC baseline. HGB achieves Hit@10 within 0.002 of LBC-Ranker; the difference is not statistically distinguishable under the current HGB hyperparameter grid. All baselines were tuned under the same inner 3-fold CV protocol.
+^a^ All Δ values are paired differences (LBC − method), with 95% bootstrap confidence intervals (10,000 resamples). The Freq+CA blend (α = 0.25 in all seeds, inner 3-fold CV tuned) is the strongest non-LBC baseline. HGB achieves Hit@10 within 0.002 of LBC-Ranker; the 95% CI spans zero, confirming the difference is not statistically distinguishable. All baselines were tuned under the same inner 3-fold CV protocol. Exact sign-flip test p-values are reported; all remain significant after Bonferroni correction (α = 0.05/5 = 0.01).
 
 ### 3.2 Component Ladder: Feature Resolution Beyond Blending
 
@@ -180,7 +180,7 @@ LBC-Ranker is not a generative or physics-based design engine: it does not perfo
 
 Because the tuned frequency–content blend is a natural and strong baseline, we include it in the primary comparison rather than treating it as a post hoc diagnostic only. This constrains the apparent performance gap but strengthens the credibility of the feature-resolved gain. The three-signal ablation pattern shows that candidate track record provides the strongest prior (frequency, Δ = −0.193), bit-level correlation captures substructure pattern agreement beyond global similarity (Δ = −0.155), and Morgan Tanimoto supplies global structural context (Δ = −0.109). The five physicochemical deltas provide secondary but consistent signal (mean Δ between −0.070 and −0.091), consistent with the bioisostere principle that property matching supports rather than replaces structural compatibility.
 
-For practitioners building fragment replacement tools, LBC-Ranker offers several advantages. The 9-parameter model is compact enough for CPU-only deployment, requires no specialized hardware, and retrains in seconds when new labeled OFs become available. The learned weights are directly interpretable (Table S9, Supporting Information): across 10 seeds, bit_corr carries the largest mean standardized weight (+3.35), followed by Morgan (−2.40), with frequency (+0.39) and the five physicochemical deltas (−0.44 to +0.16) contributing smaller but stable weights. The low standard deviations across seeds confirm stable weight estimation. Each w_i quantifies the marginal contribution of its corresponding feature to the ranking decision, supporting debugging and feature engineering in applied settings.
+For practitioners building fragment replacement tools, LBC-Ranker offers several advantages. The 9-parameter model is compact enough for CPU-only deployment, requires no specialized hardware, and retrains in seconds when new labeled OFs become available. The learned weights are directly interpretable (Table S9, Supporting Information): across 10 seeds, bit_corr carries the largest mean standardized weight (+3.35), followed by Morgan (−2.40), with frequency (+0.39) and the five physicochemical deltas (−0.44 to +0.16) contributing smaller but stable weights. The negative standardized weight of Morgan (−2.40) reflects collinearity with bit_corr; the ablation result (Δ = −0.109) confirms that Morgan carries independent signal despite its negative coefficient in the full model. The low standard deviations across seeds confirm stable weight estimation.
 
 ### 4.6 Limitations
 
