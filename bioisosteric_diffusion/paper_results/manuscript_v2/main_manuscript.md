@@ -6,7 +6,7 @@ A natural question in fragment replacement ranking is whether a candidate's hist
 
 ## 1. Introduction
 
-Bioisosteric replacement substitutes one molecular fragment with another that preserves biological activity while modulating physicochemical properties. It is a fundamental strategy in medicinal chemistry and lead optimization [1, 2]. Computational tools that rank candidate replacements for a query fragment can accelerate the design-make-test cycle by prioritizing the most promising analogs for synthesis [3, 4].
+Bioisosteric replacement substitutes one molecular fragment with another that preserves biological activity while modulating physicochemical properties. It is a fundamental strategy in medicinal chemistry and lead optimization [1, 2]. Computational tools that rank candidate replacements for a query fragment can accelerate the design-make-test cycle by prioritizing the most promising analogs for synthesis [3, 4]. Early computational approaches used pharmacophore fingerprints to search fragment databases for bioisosteric replacements [10], and the matched molecular pair framework enabled systematic mining of replacement pairs from bioactivity databases [11]. SwissBioisostere, a knowledge base containing over 25 million molecular replacements derived from ChEMBL, provides a data foundation for fragment replacement analysis [12]. BioSTAR, a recent data-driven workflow, quantitatively evaluates bioisosteric replacements using MMP analysis across multiple property dimensions [13].
 
 The ranking problem can be stated as follows: given an old fragment (OF) and a pool of candidate fragments, rank candidates so that those known to be labeled positive replacements appear at the top. This problem is challenging for two reasons. First, most OFs have relatively few experimentally validated positive replacements, limiting the training signal available from any single OF. Second, the candidate pool is large and the labeled positive rate is low (1.33% in the current archive), which places a premium on scoring functions that can separate rare positives from abundant negatives.
 
@@ -79,7 +79,7 @@ For capacity comparison, we also train a HistGradientBoostingClassifier (HGB) on
 
 ### 2.6 Evaluation Protocol
 
-**Outer split**: Ten independent random 70/30 splits of the 123 labeled OFs into training and test sets (seed ∈ {0, ..., 9}). OFs are split without stratification; per-split imbalance diagnostics (positive-pair count distribution in train vs test) are provided in the Supporting Information.
+**Outer split**: Ten independent random 70/30 splits of the 123 labeled OFs into training and test sets (seed ∈ {0, ..., 9}). OFs are split without stratification; per-split imbalance diagnostics (positive-pair count distribution in train vs test) are provided in the Supporting Information. We adopt OF-level (rather than query-level) splitting to prevent information leakage across the OF boundary, following recent work showing that random and scaffold-based splits can substantially overestimate model performance in molecular tasks [22, 23] and that out-of-distribution evaluation protocols are critical for realistic assessment of generalization [24].
 
 **Inner tuning**: For each outer split, hyperparameters for CA, the Freq+CA blend, the retrieval baseline, and HGB are selected via 3-fold GroupKFold cross-validation over the training OFs. Configurations are ranked by mean inner OF-macro Hit@10; ties within 0.005 are broken by model complexity (lower K, lower α, lower depth preferred).
 
@@ -112,7 +112,7 @@ Table 2 and Figure 2 report the 10-seed ranking performance. LBC-Ranker achieves
 
 ### 3.2 Component Ladder: Feature Resolution Beyond Blending
 
-To isolate LBC-Ranker's advantage beyond simple feature blending, we construct a component ladder under the same 10-seed protocol with inner 3-fold CV tuning for both CA (λ) and the Freq+CA blend weight (α) (Table 3). Under OF-macro Hit@10, frequency alone achieves 0.462. Tuned content similarity (CA, λ = 0.75) reaches 0.661. A tuned linear blend of frequency and CA (α = 0.25 in all seeds) substantially improves over CA, reaching 0.797 (+0.136). This demonstrates that combining track record and content similarity is already a strong baseline. LBC-Ranker achieves 0.852, further improving over the blend by +0.055, and outperforms it in all 10 seeds. Under query-weighted Hit@10, the same pattern holds: Blend improves over CA by +0.118, and LBC-Ranker improves over Blend by +0.050. The consistent LBC–Blend gap across both metrics indicates that LBC-Ranker's feature-resolved compatibility — retaining individual structural dimensions (bit_corr, five physicochemical deltas) rather than compressing them into a single CA scalar — captures information that coarse blending discards.
+To isolate LBC-Ranker's advantage beyond simple feature blending, we construct a component ladder under the same 10-seed protocol with inner 3-fold CV tuning for both CA (λ) and the Freq+CA blend weight (α) (Table 3). Under OF-macro Hit@10, frequency alone achieves 0.462. Tuned content similarity (CA, λ = 0.75) reaches 0.661. A tuned linear blend of frequency and CA (α = 0.25 in all seeds) substantially improves over CA, reaching 0.797 (+0.136). This demonstrates that combining track record and content similarity is already a strong baseline. LBC-Ranker achieves 0.852, further improving over the blend by +0.055, and outperforms it in all 10 seeds (Figure 3). Under query-weighted Hit@10, the same pattern holds: Blend improves over CA by +0.118, and LBC-Ranker improves over Blend by +0.050. The consistent LBC–Blend gap across both metrics indicates that LBC-Ranker's feature-resolved compatibility — retaining individual structural dimensions (bit_corr, five physicochemical deltas) rather than compressing them into a single CA scalar — captures information that coarse blending discards.
 
 **Table 3: Component ladder (10-seed mean Hit@10, inner 3-fold CV tuned).**
 
@@ -166,11 +166,11 @@ The tuned retrieval baseline (0.716) is viable, substantially above frequency (0
 
 ### 4.3 Scope and Positioning
 
-LBC-Ranker is not a generative or physics-based design engine: it does not perform de novo molecule generation, 3D diffusion, FEP binding free energy calculations, or active learning synthesis cycles. It is a supervised candidate-reranking layer for fragment replacement workflows. Its contribution lies in demonstrating that (a) a compact, interpretable model achieves ceiling performance on 2D fingerprint features, (b) learning feature-resolved compatibility improves consistently over the strongest tuned blend baseline, and (c) an OF-level evaluation protocol with inner cross-validated baseline tuning provides a transparent benchmark for future fragment replacement ranking methods. Recent work on active-learning FEP with 3D-QSAR for bioisostere prioritization and generative 3D diffusion models for bioisosteric design are complementary approaches that address different stages of the fragment replacement pipeline.
+LBC-Ranker is not a generative or physics-based design engine: it does not perform de novo molecule generation, 3D diffusion, FEP binding free energy calculations, or active learning synthesis cycles. It is a supervised candidate-reranking layer for fragment replacement workflows. Its contribution lies in demonstrating that (a) a compact, interpretable model achieves ceiling performance on 2D fingerprint features, (b) learning feature-resolved compatibility improves consistently over the strongest tuned blend baseline, and (c) an OF-level evaluation protocol with inner cross-validated baseline tuning provides a transparent benchmark for future fragment replacement ranking methods. Recent work on active-learning FEP with 3D-QSAR for bioisostere prioritization [19], 3D shape and electrostatic similarity-guided fragment replacement [20], and generative 3D diffusion models for bioisosteric design [21] are complementary approaches that address different stages of the fragment replacement pipeline.
 
 ### 4.4 Representation, Not Capacity
 
-**LR and HGB achieve comparable performance on the current eight features.** LR (0.852) and HGB (0.851) differ by a mean paired Δ of +0.002 (LBC minus HGB). Under the HGB hyperparameter grid tested here (max_depth ∈ {3, 5}, max_iter = 100, learning_rate = 0.05), increasing model capacity beyond a linear model did not yield measurable improvement. This does not imply that model capacity is irrelevant in general: with substantially more training OFs or additional feature dimensions, higher-capacity models might outperform linear ones. The 9-parameter LR implementation of LBC-Ranker is compact, deterministic, and directly interpretable: each weight w_i quantifies the marginal contribution of its corresponding feature to the log-odds of a candidate being a labeled positive replacement. Whether additional features beyond the current eight (three-dimensional shape, electrostatic potential matching, or learned fingerprint embeddings) would break the LR–HGB parity remains an open question.
+**LR and HGB achieve comparable performance on the current eight features.** LR (0.852) and HGB (0.851) differ by a mean paired Δ of +0.002 (LBC minus HGB). Under the HGB hyperparameter grid tested here (max_depth ∈ {3, 5}, max_iter = 100, learning_rate = 0.05), increasing model capacity beyond a linear model did not yield measurable improvement. This parity is consistent with recent molecular machine learning benchmarks: across 26 endpoints and 156 fold-mean comparisons, classical ML models (RF with ECFP4 fingerprints, ExtraTrees with RDKit descriptors) won 116 comparisons versus 25 for GNNs and only 3 for LLM-based SAR baselines [14]. Similarly, simple topological baselines [15] and fingerprint-based models [16] have been shown to match or exceed modern graph neural networks on molecular property prediction tasks, and a large-scale activity cliff benchmark found that ECFP4 fingerprints outperformed 16 deep learning models on most data subsets [17]. This growing body of evidence suggests that, for fingerprint-based molecular tasks under realistic data splits, compact models with well-chosen features remain highly competitive [18]. The 9-parameter LR implementation of LBC-Ranker is compact, deterministic, and directly interpretable: each weight w_i quantifies the marginal contribution of its corresponding feature to the log-odds of a candidate being a labeled positive replacement. Whether additional features beyond the current eight (three-dimensional shape, electrostatic potential matching, or learned fingerprint embeddings) would break the LR–HGB parity remains an open question.
 
 ### 4.5 Practical Implications
 
@@ -230,3 +230,33 @@ All code, trained models, and precomputed feature matrices are available at http
 [8] Ertl, P.; Schuffenhauer, A. Estimation of Synthetic Accessibility Score of Drug-like Molecules Based on Molecular Complexity and Fragment Contributions. *J. Cheminform.* **2009**, 1, 8.
 
 [9] Gaulton, A.; et al. ChEMBL: A Large-Scale Bioactivity Database for Drug Discovery. *Nucleic Acids Res.* **2017**, 45 (D1), D945–D954.
+
+[10] Wagener, M.; Lommerse, J. P. M. The Quest for Bioisosteric Replacements. *J. Chem. Inf. Model.* **2006**, 46 (2), 677–685.
+
+[11] Hussain, J.; Rea, C. Computationally Efficient Algorithm to Identify Matched Molecular Pairs (MMPs) in Large Data Sets. *J. Chem. Inf. Model.* **2010**, 50 (3), 339–348.
+
+[12] Cuozzo, A.; Daina, A.; Perez, M. A. S.; Michielin, O.; Zoete, V. SwissBioisostere 2021: Updated Structural, Bioactivity and Physicochemical Data Delivered by a Reshaped Web Interface. *Nucleic Acids Res.* **2022**, 50 (D1), D1382–D1390.
+
+[13] Hernández-Lladó, P.; Meanwell, N. A.; Russell, A. J. A Data-Driven Perspective on Bioisostere Evaluation: Mapping the Benzene Bioisostere Landscape with BioSTAR. *J. Med. Chem.* **2025**, 68, 16921–16939.
+
+[14] Guo, J. Do Larger Models Really Win in Drug Discovery? A Benchmark Assessment of Model Scaling in AI-Driven Molecular Property and Activity Prediction. *arXiv* **2026**, 2604.26498.
+
+[15] Adamczyk, J.; Czech, W. Molecular Topological Profile (MOLTOP) — Simple and Strong Baseline for Molecular Graph Classification. *Proceedings of ECAI 2024*, 1575–1582.
+
+[16] Ludynia, P.; et al. Molecular Fingerprints Are Strong Models for Peptide Function Prediction. *arXiv* **2025**, 2501.17901.
+
+[17] Zhang, Z.; Zhao, B.; Xie, A.; Bian, Y.; Zhou, S. Activity Cliff Prediction: Dataset and Benchmark. *arXiv* **2023**, 2302.07541.
+
+[18] Praski, P.; Adamczyk, J. Benchmarking Pretrained Molecular Embedding Models for Molecular Representation Learning. *arXiv* **2025**, 2508.06199.
+
+[19] Ramaswamy, V. K.; Habgood, M.; Mackey, M. D. Active Learning FEP Using 3D-QSAR for Prioritizing Bioisosteres in Medicinal Chemistry. *ACS Med. Chem. Lett.* **2025**, 16 (6), 984–990.
+
+[20] Bolcato, G.; Heid, E.; Boström, J. On the Value of Using 3D Shape and Electrostatic Similarities in Deep Generative Methods. *J. Chem. Inf. Model.* **2022**, 62 (6), 1388–1398.
+
+[21] Adams, K.; Abeywardane, K.; Fromer, J.; Coley, C. W. ShEPhERD: Diffusing Shape, Electrostatics, and Pharmacophores for Bioisosteric Drug Design. *Proceedings of ICLR 2025* (Oral).
+
+[22] Guo, Q.; Hernández-Hernández, S.; Ballester, P. J. Scaffold Splits Overestimate Virtual Screening Performance. *Proceedings of ICANN 2024*, LNCS 15025, 58–72.
+
+[23] Saha, U. S.; Vendruscolo, M.; Carpenter, A. E.; Singh, S.; Bender, A.; Seal, S. Step Forward Cross Validation for Bioactivity Prediction: Out of Distribution Validation in Drug Discovery. *bioRxiv* **2024**, 2024.07.02.601740.
+
+[24] Fernández-Díaz, R.; Hoang, T. L.; Lopez, V.; Shields, D. C. A New Framework for Evaluating Model Out-of-Distribution Generalisation for the Biochemical Domain. *Proceedings of ICLR 2025*.
