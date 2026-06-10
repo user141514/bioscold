@@ -1,0 +1,18 @@
+{
+  "dataset_name": "selftest",
+  "protocol": "repeated_of_split",
+  "matrix": "C:\\Users\\Administrator\\AppData\\Local\\Temp\\lbc_external_selftest_f_ppw1bw\\selftest_matrix.csv",
+  "train_matrix": null,
+  "k": 10,
+  "n_rows": 120,
+  "n_queries": 24,
+  "n_of": 6,
+  "candidate_cluster_threshold": 0.6,
+  "cf_c3_variants": [
+    "cf_c3",
+    "cf_c3_no_ca_bucket",
+    "cf_c3_no_context",
+    "cf_c3_no_ca_match",
+    "cf_c3_no_target"
+  ]
+}

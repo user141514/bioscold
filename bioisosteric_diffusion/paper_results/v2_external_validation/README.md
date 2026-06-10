@@ -19,10 +19,12 @@ This directory is the entry point for the new external evidence tier.
 ## Current Files
 
 - `protocol.md`: pre-specified source policy, matrix contract, commands, and claim boundaries.
+- `candidate_heldout_content_calibration_paper_design.md`: design seed for the separate candidate-heldout content-calibration paper.
 - `run_external_validation.py`: locked evaluator for standardized candidate matrices.
 - `build_bindingdb_mmp_matrix.py`: BindingDB curated-article TSV to target-conditioned MMP candidate matrix builder.
 - `bindingdb_mmp/source_manifest.json`: latest local BindingDB build manifest.
 - `bindingdb_mmp/matrix_audit.md`: latest local BindingDB matrix audit.
+- `bindingdb_mmp/diagnostic_v4_cf_c3_summary.md`: first CF-C3 10k algorithm-gate result.
 
 ## Required Next Files
 
@@ -118,3 +120,7 @@ The large generated raw files, matrices, and result detail directories are ignor
 The initial BindingDB full matrix uses easy unlabeled negatives and should be treated as a feasibility check. A 10k-source-row diagnostic showed that CA reached near-ceiling performance on easy negatives, but dropped from 0.994591 to 0.665755 query Hit@10 when `--negative-mode ca_matched` was used. The hard-negative design is therefore the better candidate for the main external benchmark.
 
 Diagnostic v2 adds FullBlend and LBC no-freq. On the 10k hard-negative matrix, FullBlend slightly exceeded LBC and LBC no-freq was essentially tied with LBC on OF-macro Hit@10. Therefore the full 10-seed BindingDB-hard run should not be framed as an LBC-superiority benchmark unless a later pre-registered diagnostic reverses that ordering.
+
+Diagnostic v3 adds candidate-heldout, strict candidate-heldout, core-heldout, stable Hit@K tie-breaking, matched inner FullBlend tuning, and candidate-heldout metrics beyond Hit@10. After audit, weak candidate-heldout removes positive candidate frequency support, but FullBlend selects pure learned content (`alpha=0`) and remains a strong baseline. Strict candidate-heldout has zero candidate-frequency signal, but raw Hit@10 is near the random expectation because the candidate pool is small; use Hit@1, Hit@5, MRR, NDCG@10, random-normalized Hit@10, and enrichment. CTCR is only marginally above LBC no-freq and near FullBlend, so the evidence supports transferable learned-content support rather than a CTCR-specific superiority claim.
+
+Diagnostic v4 implements CF-C3, a counterfactual context-calibrated content ranker. On the 10k BindingDB-hard weak candidate-heldout diagnostic, CF-C3 exceeds the strongest learned baseline by +0.095154 OF-macro MRR and +0.117359 OF-macro NDCG@10. This passes the first algorithm gate; the next required diagnostics are candidate-cluster-heldout and CF-C3 ablations before any full huge run.

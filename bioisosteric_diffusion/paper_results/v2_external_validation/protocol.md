@@ -171,6 +171,60 @@ Diagnostic v2 decision rule:
 - If `Frequency ~= LBC`, retain the full benchmark but frame the claim as transferable candidate support dominating BindingDB-hard ranking.
 - If `FullBlend ~= LBC` and both exceed Frequency/CA, do not claim LBC-specific superiority; frame the result as learned transferable content support dominating hand-crafted CA and raw frequency.
 
+Diagnostic v3 CTCR kill tests:
+
+Evaluator requirements:
+
+- If the outer split holds out candidates, FullBlend alpha must be tuned by an inner candidate-heldout split inside the training set.
+- If the outer split holds out cores, FullBlend alpha must be tuned by an inner core-heldout split inside the training set.
+- Hit@K ties must use the evaluator's stable query/candidate tie-breaker, not row order.
+- Report both weak and strict candidate-heldout definitions when making a novel-candidate claim.
+- For candidate-heldout protocols, report Hit@1, Hit@5, Hit@10, MRR, NDCG@10, random Hit@10 expectation, random-normalized Hit@10, and Hit@10 enrichment over random.
+
+```powershell
+E:\Anaconda3\envs\accfg\python.exe paper_results/v2_external_validation/run_external_validation.py `
+  --matrix paper_results/v2_external_validation/bindingdb_mmp/candidate_matrix_10k_hard.csv.gz `
+  --dataset-name bindingdb_mmp_10k_hard_candidate_v3_tuned `
+  --protocol candidate_heldout `
+  --n-seeds 3 `
+  --out-dir paper_results/v2_external_validation/bindingdb_mmp/results_10k_hard_candidate_v3_tuned
+```
+
+```powershell
+E:\Anaconda3\envs\accfg\python.exe paper_results/v2_external_validation/run_external_validation.py `
+  --matrix paper_results/v2_external_validation/bindingdb_mmp/candidate_matrix_10k_hard.csv.gz `
+  --dataset-name bindingdb_mmp_10k_hard_candidate_strict_v3 `
+  --protocol candidate_strict_heldout `
+  --n-seeds 3 `
+  --out-dir paper_results/v2_external_validation/bindingdb_mmp/results_10k_hard_candidate_strict_v3
+```
+
+```powershell
+E:\Anaconda3\envs\accfg\python.exe paper_results/v2_external_validation/run_external_validation.py `
+  --matrix paper_results/v2_external_validation/bindingdb_mmp/candidate_matrix_10k_hard.csv.gz `
+  --dataset-name bindingdb_mmp_10k_hard_core_v3_tuned `
+  --protocol core_heldout `
+  --n-seeds 3 `
+  --out-dir paper_results/v2_external_validation/bindingdb_mmp/results_10k_hard_core_v3_tuned
+```
+
+- If CTCR beats LBC no-freq and FullBlend under candidate-heldout and core-heldout, promote CTCR to a full 10-seed algorithm candidate.
+- If CTCR only ties LBC no-freq, keep the claim at frequency-free transferable content support and improve the algorithm before full runs.
+- If Frequency remains strong under candidate-heldout, audit the split because candidate support memory may still leak.
+- If strict candidate-heldout produces high Frequency with zero nonzero frequency scores, treat it as a leakage audit rather than a hard-ranking benchmark and report candidates/query plus positives/query.
+- In strict candidate-heldout, judge all-zero or tied baselines by random-normalized Hit@10 and enrichment, not raw Hit@10 alone.
+
+Distribution audit:
+
+```powershell
+E:\Anaconda3\envs\accfg\python.exe paper_results/v2_external_validation/analyze_score_distributions.py `
+  --matrix paper_results/v2_external_validation/bindingdb_mmp/candidate_matrix_10k_hard.csv.gz `
+  --dataset-name bindingdb_mmp_10k_hard_candidate_v3_tuned `
+  --protocol candidate_heldout `
+  --n-seeds 3 `
+  --out-dir paper_results/v2_external_validation/bindingdb_mmp/audit_10k_hard_candidate_v3_tuned
+```
+
 Current large-scale feasibility check:
 
 ```powershell
